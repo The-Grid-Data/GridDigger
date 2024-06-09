@@ -3,10 +3,13 @@
   "filters_queries": {
       "profileType": "profileTypes {name id}",
       "profileSector": "profileSectors {name id}",
-      "entities": "entities {name id}"
+      "entities": "entities {name id}",
+      "profileSectors": "profileSectors {name id}"
   },
   "profile_filters": {
     "root": "profiles",
+    "profileNameSearch": "{ name: { _ilike: \"%value%\" } }",
+    "profileDeepSearch": "{_or: [{ descriptionShort: { _ilike: \"%value%\" } }, { descriptionLong: { _ilike: \"%value%\" } }]}",
     "profileType": "{profileType: {id: {_eq: value}}}",
     "profileSector": "{profileSector: {id: {_eq: value}}}",
     "entities": "{entities: {id: {_eq: value}}}"

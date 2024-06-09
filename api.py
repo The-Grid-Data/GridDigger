@@ -22,16 +22,46 @@ with open('filters.json', 'r') as f:
     filters_config = json.load(f)
 
 
-# Function to generate GraphQL query for a given filter
-def generate_query(filter_name, value):
+# Function to apply filters and send GraphQL query
+def apply_filters(filter_name, value):
     where_clause = filters_config["profile_filters"].get(filter_name)
     if where_clause:
         # Construct full GraphQL request
         query = f"query {{ profiles (where: {where_clause.replace('value', str(value))}) {{ name id }} }}"
-        return query
+
+        # Send the GraphQL request
+        response = requests.post(url, headers=headers, json={'query': query})
+        response_data = response.json()
+
+        # Log the request and response
+        logging.info(f"Query: {query}")
+        logging.info(f"Response: {response_data}")
+
+        return response_data
     else:
         logging.warning(f"Filter '{filter_name}' not found.")
         return None
+
+
+# Function to fetch data for all filters_queries
+def fetch_all_filter_queries():
+    results = {}
+    for filter_name, query in filters_config["filters_queries"].items():
+        # Construct GraphQL query
+        full_query = f"query {{ {query} }}"
+
+        # Send the GraphQL request
+        response = requests.post(url, headers=headers, json={'query': full_query})
+        response_data = response.json()
+
+        # Log the request and response
+        logging.info(f"Query: {full_query}")
+        logging.info(f"Response: {response_data}")
+
+        # Store the results
+        results[filter_name] = response_data
+
+    return results
 
 
 # Example values to be used for generating dynamic requests
@@ -41,16 +71,12 @@ example_values = {
     "entities": 11
 }
 
-# Generate and send GraphQL requests for each filter
+# Apply filters and fetch data
 for filter_name, value in example_values.items():
-    # Generate GraphQL query
-    query = generate_query(filter_name, value)
-    if query is None:
-        continue
+    apply_filters(filter_name, value)
 
-    # Send the GraphQL request
-    response = requests.post(url, headers=headers, json={'query': query})
+# Fetch data for all filters_queries
+all_filter_queries_data = fetch_all_filter_queries()
 
-    # Log the request and response
-    logging.info(f"Query: {query}")
-    logging.info(f"Response: {response.json()}")
+# Print the fetched data
+#print(json.dumps(all_filter_queries_data, indent=2))
