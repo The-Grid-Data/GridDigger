@@ -64,25 +64,25 @@ def fetch_all_filter_queries():
     return results
 
 
-# Example values to be used for generating dynamic requests
-example_values = {
-    "profileType": 1,
-    "profileSector": 10,
-    "entities": 11
-}
-
-# Apply filters and fetch data
-for filter_name, value in example_values.items():
-    apply_filters(filter_name, value)
-
-# Fetch data for all filters_queries
-all_filter_queries_data = fetch_all_filter_queries()
+# # Example values to be used for generating dynamic requests
+# example_values = {
+#     "profileType": 1,
+#     "profileSector": 10,
+#     "entities": 11
+# }
+#
+# # Apply filters and fetch data
+# for filter_name, value in example_values.items():
+#     apply_filters(filter_name, value)
+#
+# # Fetch data for all filters_queries
+# all_filter_queries_data = fetch_all_filter_queries()
 
 # Print the fetched data
 #print(json.dumps(all_filter_queries_data, indent=2))
 def get_profiles(data):
     example_values = {
-        "profileNameSearch": data["profileNameSearch"],
+        "profileNameSearch": data["profileNameSearch"] if data.get("profileNameSearch") else "",
     }
 
     # Apply filters and fetch data
