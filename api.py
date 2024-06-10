@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import logging
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 # Load environment variables from .env file
 load_dotenv(".env")
@@ -80,3 +80,71 @@ all_filter_queries_data = fetch_all_filter_queries()
 
 # Print the fetched data
 #print(json.dumps(all_filter_queries_data, indent=2))
+def get_profiles(data):
+    example_values = {
+        "profileNameSearch": data["profileNameSearch"],
+    }
+
+    # Apply filters and fetch data
+    for filter_name, value in example_values.items():
+        return apply_filters(filter_name, value)["data"]["profiles"]
+
+
+
+def get_profile_data_by_id(profile_id):
+    query = f"""
+    query {{
+        profiles(where: {{ id: {{ _eq: {profile_id} }} }}) {{
+            name
+            id
+            profileSector {{ name }}
+            products {{ name }}
+            assets {{ name }}
+            tagLine
+            descriptionShort
+            logo
+            urlMain
+            urlDocumentation
+            socials {{ url }}
+        }}
+    }}
+    """
+    response = requests.post(url, headers=headers, json={'query': query})
+    response_data = response.json()
+
+    if 'errors' in response_data:
+        logging.error(f"GraphQL query error: {response_data['errors']}")
+        return {}
+
+    profile_data = response_data.get('data', {}).get('profiles', [])
+    return profile_data[0] if profile_data else {}
+
+
+def get_full_profile_data_by_id(profile_id):
+    query = f"""
+    query {{
+        profiles(where: {{ id: {{ _eq: {profile_id} }} }}) {{
+            name
+            id
+            profileSector {{ name }}
+            products {{ name }}
+            assets {{ name }}
+            tagLine
+            descriptionShort
+            descriptionLong
+            logo
+            urlMain
+            urlDocumentation
+            socials {{ url }}
+        }}
+    }}
+    """
+    response = requests.post(url, headers=headers, json={'query': query})
+    response_data = response.json()
+
+    if 'errors' in response_data:
+        logging.error(f"GraphQL query error: {response_data['errors']}")
+        return {}
+
+    profile_data = response_data.get('data', {}).get('profiles', [])
+    return profile_data[0] if profile_data else {}
