@@ -11,12 +11,6 @@ from handlers.search_results_handler import profile_result_handler
 SEARCH_READY, MAIN_FILTERS_MENU, SUB_FILTERS_MENU, TYPING, SEARCH_RESULTS = range(5)
 END = ConversationHandler.END
 
-
-def generate_pattern(current_state):
-    # Define a pattern that excludes the current state
-    return re.compile(f'^(?!{current_state}).*')
-
-
 def setup(application):
     conv_handler = ConversationHandler(
         entry_points=[
