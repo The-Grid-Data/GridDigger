@@ -35,6 +35,9 @@ jobs:
       - name: Verify AWS S3 Bucket Secret
         run: echo ${{ secrets.AWS_S3_BUCKET }}
 
+      - name: Print Environment Variables
+        run: printenv
+
       - name: Package Lambda function
         run: |
           zip -r function.zip . -x ".git/*" ".github/*" "*.zip"
