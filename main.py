@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, \
     ConversationHandler, filters
 
-from handlers import setup_handler
+from handlers import setup
 
 
 # Enable logging
@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     """Run the bot."""
-    application = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()
-    setup_handler.setup(application)
+    application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
+    setup.setup(application)
 
 
 if __name__ == "__main__":
