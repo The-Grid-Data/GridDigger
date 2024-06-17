@@ -35,7 +35,7 @@ jobs:
       - name: Package Lambda function
         run: |
           sam build
-          sam package --output-template-file packaged.yaml --s3-bucket ${{ secrets.AWS_S3_BUCKET }}
+          sam package --template-file .aws-sam/build/template.yaml --output-template-file packaged.yaml --s3-bucket ${{ secrets.AWS_S3_BUCKET }}
 
       - name: Upload to S3
         run: aws s3 cp function.zip s3://id.thegrid.dev/lambdas/telegram_the_grid_bot/lambda.zip
