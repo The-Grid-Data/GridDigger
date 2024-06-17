@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Set this to your Python version
+          python-version: '3.8'  # Use the Python version required by your bot
 
       - name: Cache Python dependencies
         uses: actions/cache@v2
@@ -29,13 +29,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install flask[async]~=2.3.2 uvicorn~=0.23.2 asgiref~=3.7.2
           pip install -r requirements.txt -t ./
-          pip install awscli
+          pip install awscli aws-sam-cli  # Ensure AWS SAM CLI is installed
 
       - name: Package Lambda function
         run: |
-          zip -r function.zip . -x ".git/*" ".github/*" "*.zip"
+          sam build
+          sam package --output-template-file packaged.yaml --s3-bucket ${{ secrets.AWS_S3_BUCKET }}
 
       - name: Upload to S3
         run: aws s3 cp function.zip s3://id.thegrid.dev/lambdas/telegram_the_grid_bot/lambda.zip
