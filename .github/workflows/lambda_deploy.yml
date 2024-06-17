@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Use the Python version required by your bot
+          python-version: '3.12'  # Set this to your Python version
 
       - name: Cache Python dependencies
         uses: actions/cache@v2
@@ -30,27 +30,21 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt -t ./
-          pip install awscli aws-sam-cli  # Ensure AWS SAM CLI is installed
-
-      - name: Print Environment Variables
-        run: printenv
+          pip install awscli
 
       - name: Package Lambda function
         run: |
-          sam build
-          sam package --template-file .aws-sam/build/template.yaml --output-template-file packaged.yaml --s3-bucket $AWS_S3_BUCKET
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          zip -r function.zip . -x ".git/*" ".github/*" "*.zip"
 
       - name: Upload to S3
-        run: aws s3 cp function.zip s3://id.thegrid.dev/lambdas/telegram_the_grid_bot/lambda.zip
+        run: aws s3 cp function.zip s3://id.thegrid.dev/lambdas/GridDigger/lambda.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-central-1
 
       - name: Update Lambda function code from S3
-        run: aws lambda update-function-code --function-name telegram_the_grid_bot --s3-bucket id.thegrid.dev --s3-key lambdas/telegram_the_grid_bot/lambda.zip --region eu-central-1
+        run: aws lambda update-function-code --function-name telegram_the_grid_bot --s3-bucket id.thegrid.dev --s3-key lambdas/GridDigger/lambda.zip --region eu-central-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
