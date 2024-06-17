@@ -23,6 +23,7 @@ def main() -> None:
     application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
     setup.setup(application)
 
+    application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
 
 if __name__ == "__main__":
     main()
