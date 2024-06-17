@@ -1,3 +1,5 @@
+# api.py
+
 import json
 import requests
 import os
@@ -22,74 +24,65 @@ with open('filters.json', 'r') as f:
     filters_config = json.load(f)
 
 
-# Function to apply filters and send GraphQL query
-def apply_filters(filter_name, value):
-    where_clause = filters_config["profile_filters"].get(filter_name)
-    if where_clause:
-        # Construct full GraphQL request
-        query = f"query {{ profiles (where: {where_clause.replace('value', str(value))}) {{ name id }} }}"
+def apply_filters(filters):
+    combined_clauses = []
 
-        # Send the GraphQL request
+    for filter_name, value in filters:
+        where_clause = filters_config["profile_filters"].get(filter_name)
+        if where_clause:
+            clause = where_clause.replace('value', f'{value}')
+            combined_clauses.append(clause)
+        else:
+            logging.warning(f"Filter '{filter_name}' not found.")
+
+    if combined_clauses:
+        combined_where_clause = ", ".join(combined_clauses)
+        print("combined_clauses", combined_clauses)
+        where_clause = f"{{ {combined_where_clause} }}"
+        query = f"query queryName {{ profiles (where: {where_clause}) {{ name id }} }}"
+        print("GraphQL Query:", query)  # Debug statement
         response = requests.post(url, headers=headers, json={'query': query})
         response_data = response.json()
-
-        # Log the request and response
         logging.info(f"Query: {query}")
         logging.info(f"Response: {response_data}")
-
         return response_data
     else:
-        logging.warning(f"Filter '{filter_name}' not found.")
+        logging.warning("No valid filters found.")
         return None
 
 
-# Function to fetch data for all filters_queries
 def fetch_all_filter_queries():
     results = {}
     for filter_name, query in filters_config["filters_queries"].items():
-        # Construct GraphQL query
         full_query = f"query {{ {query} }}"
-
-        # Send the GraphQL request
         response = requests.post(url, headers=headers, json={'query': full_query})
         response_data = response.json()
-
-        # Log the request and response
         logging.info(f"Query: {full_query}")
         logging.info(f"Response: {response_data}")
-
-        # Store the results
         results[filter_name] = response_data
-
     return results
 
 
-# # Example values to be used for generating dynamic requests
-# example_values = {
-#     "profileType": 1,
-#     "profileSector": 10,
-#     "entities": 11
-# }
-#
-# # Apply filters and fetch data
-# for filter_name, value in example_values.items():
-#     apply_filters(filter_name, value)
-#
-# # Fetch data for all filters_queries
-# all_filter_queries_data = fetch_all_filter_queries()
-
-# Print the fetched data
-#print(json.dumps(all_filter_queries_data, indent=2))
 def get_profiles(data):
-    example_values = {
-        "profileNameSearch": data["profileNameSearch"] if data.get("profileNameSearch") else "",
-    }
+    # Initialize a dictionary to hold filter names and values
+    data.setdefault("FILTERS", {})
 
-    # Apply filters and fetch data
-    for filter_name, value in example_values.items():
-        return apply_filters(filter_name, value)["data"]["profiles"]
+    filters = {}
 
+    for key, value in data["FILTERS"].items():
+        if key.endswith('_id'):
+            filter_name = key.replace('_id', '')
+            filters[filter_name] = value
+    print("filters", filters)
 
+    if not filters:
+        filters = {
+            "profileNameSearch": "",
+            #"profileType": 1,
+        }
+
+    filters_list = [(filter_name, value) for filter_name, value in filters.items()]
+    return apply_filters(filters_list)['data']['profiles']
 
 def get_profile_data_by_id(profile_id):
     query = f"""
@@ -111,11 +104,9 @@ def get_profile_data_by_id(profile_id):
     """
     response = requests.post(url, headers=headers, json={'query': query})
     response_data = response.json()
-
     if 'errors' in response_data:
         logging.error(f"GraphQL query error: {response_data['errors']}")
         return {}
-
     profile_data = response_data.get('data', {}).get('profiles', [])
     return profile_data[0] if profile_data else {}
 
@@ -141,10 +132,35 @@ def get_full_profile_data_by_id(profile_id):
     """
     response = requests.post(url, headers=headers, json={'query': query})
     response_data = response.json()
-
     if 'errors' in response_data:
         logging.error(f"GraphQL query error: {response_data['errors']}")
         return {}
-
     profile_data = response_data.get('data', {}).get('profiles', [])
     return profile_data[0] if profile_data else {}
+
+
+def get_sub_filters(filter_type):
+    return filters_config["sub_filters"].get(filter_type, [])
+
+
+def fetch_filter_options(query):
+    full_query = f"query {{ {query} }}"
+    response = requests.post(url, headers=headers, json={'query': full_query})
+    response_data = response.json()
+    if 'errors' in response_data:
+        logging.error(f"GraphQL query error: {response_data['errors']}")
+        return []
+    return response_data.get('data', {}).get(query.split()[0], [])
+
+
+#print(len(get_profiles({})))
+# # Example usage:
+# data = {
+#     "FILTERS": {
+#         "profileType_id": 8,
+#         "profileSector_id": 825
+#     }
+# }
+# all = []
+# for filter_name, value in data["FILTERS"].items():
+#     all = apply_filters(filter_name, value)["data"]["profiles"]
