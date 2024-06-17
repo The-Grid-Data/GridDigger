@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 # Define configuration constants
 URL = os.getenv("LAMBDA_WEBHOOK_URL")
-ADMIN_CHAT_ID = 1823406139
+ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
 PORT = os.getenv("PORT", 8000)
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
@@ -104,6 +104,7 @@ async def webhook_update(update: WebhookUpdate, context: CustomContext) -> None:
 async def main() -> None:
     """Set up PTB application and a web application for handling the incoming requests."""
     context_types = ContextTypes(context=CustomContext)
+
     # Here we set updater to None because we want our custom webhook server to handle the updates
     # and hence we don't need an Updater instance
     application = (
@@ -113,6 +114,8 @@ async def main() -> None:
     # register handlers
     #handlers.setup.setup(application)
     application.add_handler(CommandHandler("start", start))
+
+
     application.add_handler(TypeHandler(type=WebhookUpdate, callback=webhook_update))
 
     # Pass webhook settings to telegram
@@ -171,4 +174,10 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    if os.getenv("LOCAL"):
+        application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
+        handlers.setup.setup(application)
+        print("polling...")
+        application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
+    else:
+        asyncio.run(main()) #webhook
