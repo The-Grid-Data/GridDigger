@@ -1,18 +1,3 @@
-#!/usr/bin/env python
-# This program is dedicated to the public domain under the CC0 license.
-# pylint: disable=import-error,unused-argument
-"""
-Simple example of a bot that uses a custom webhook setup and handles custom updates.
-For the custom webhook setup, the libraries `flask`, `asgiref` and `uvicorn` are used. Please
-install them as `pip install flask[async]~=2.3.2 uvicorn~=0.23.2 asgiref~=3.7.2`.
-Note that any other `asyncio` based web server framework can be used for a custom webhook setup
-just as well.
-
-Usage:
-Set bot Token, URL, admin CHAT_ID and PORT after the imports.
-You may also need to change the `listen` value in the uvicorn configuration to match your setup.
-Press Ctrl-C on the command line or send a signal to the process to stop the bot.
-"""
 import asyncio
 import html
 import logging
@@ -49,9 +34,8 @@ logger = logging.getLogger(__name__)
 # Define configuration constants
 URL = os.getenv("LAMBDA_WEBHOOK_URL")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
-PORT = os.getenv("PORT", 8000)
+PORT = int(os.getenv("PORT", 8000))
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-
 
 @dataclass
 class WebhookUpdate:
@@ -59,7 +43,6 @@ class WebhookUpdate:
 
     user_id: int
     payload: str
-
 
 class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
     """
@@ -77,7 +60,6 @@ class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
             return cls(application=application, user_id=update.user_id)
         return super().from_update(update, application)
 
-
 async def start(update: Update, context: CustomContext) -> None:
     """Display a message with instructions on how to use this bot."""
     payload_url = html.escape(f"{URL}/submitpayload?user_id=<your user id>&payload=<payload>")
@@ -86,7 +68,6 @@ async def start(update: Update, context: CustomContext) -> None:
         f"To post a custom update, call <code>{payload_url}</code>."
     )
     await update.message.reply_html(text=text)
-
 
 async def webhook_update(update: WebhookUpdate, context: CustomContext) -> None:
     """Handle custom updates."""
@@ -99,7 +80,6 @@ async def webhook_update(update: WebhookUpdate, context: CustomContext) -> None:
         f"So far they have sent the following payloads: \n\n• <code>{combined_payloads}</code>"
     )
     await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=text, parse_mode=ParseMode.HTML)
-
 
 async def main() -> None:
     """Set up PTB application and a web application for handling the incoming requests."""
@@ -114,7 +94,6 @@ async def main() -> None:
     # register handlers
     #handlers.setup.setup(application)
     application.add_handler(CommandHandler("start", start))
-
 
     application.add_handler(TypeHandler(type=WebhookUpdate, callback=webhook_update))
 
@@ -162,7 +141,7 @@ async def main() -> None:
             app=WsgiToAsgi(flask_app),
             port=PORT,
             use_colors=False,
-            host="127.0.0.1",
+            host="0.0.0.0",
         )
     )
 
@@ -172,6 +151,9 @@ async def main() -> None:
         await webserver.serve()
         await application.stop()
 
+def lambda_handler(event, context):
+    """Lambda handler function to trigger the main function."""
+    asyncio.run(main())
 
 if __name__ == "__main__":
     if os.getenv("LOCAL"):
@@ -180,4 +162,4 @@ if __name__ == "__main__":
         print("polling...")
         application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
     else:
-        asyncio.run(main()) #webhook
+        lambda_handler(None, None)

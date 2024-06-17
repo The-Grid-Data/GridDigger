@@ -54,3 +54,7 @@ def is_supported_image_format(url):
     path = urlparse(url).path
     _, ext = os.path.splitext(path)
     return ext.lower() in supported_formats
+
+
+def reset_filters(data):
+    data['FILTERS'] = {}

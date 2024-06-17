@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler
 
 import api
-from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING
+from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING, utils
 from api import get_profiles
 from handlers.utils import show_profiles
 
@@ -71,7 +71,9 @@ async def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAU
         return await show_filters_main_menu(update, context)
     elif query.data.startswith("show"):  # could be more precise
         return await show_profiles(data, update, context)
-
+    elif query.data.startswith('reset'):
+        utils.reset_filters(data)
+        return await show_sub_filters(update, context)
     query_data = query.data.split("_", 1)
     filter_type = query_data[0]
     sub_filter = query_data[1]
@@ -208,7 +210,7 @@ async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                                                 callback_data=f"show_{filter_type}_filters")])
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.edit_message_text(f"Applied filters: {generate_applied_filters_text(data)}", reply_markup=reply_markup)
+        await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(data)}", reply_markup=reply_markup)
         return FILTER_SUB
 
 
