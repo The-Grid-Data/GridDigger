@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  TelegramBotFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler  # Make sure this points to your Python file and handler function
+      Runtime: python3.8
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+      Events:
+        TelegramBotApi:
+          Type: Api
+          Properties:
+            Path: /telegram
+            Method: post
+Parameters:
+  TelegramBotToken:
+    Type: String
+    Description: Telegram Bot Token
