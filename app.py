@@ -92,8 +92,8 @@ async def main() -> None:
     )
 
     # register handlers
-    #handlers.setup.setup(application)
-    application.add_handler(CommandHandler("start", start))
+    handlers.setup.setup(application)
+    #application.add_handler(CommandHandler("start", start))
 
     application.add_handler(TypeHandler(type=WebhookUpdate, callback=webhook_update))
 
@@ -160,4 +160,7 @@ if __name__ == "__main__":
         print("polling...")
         application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
     else:
-        asyncio.run(main())
+        try:
+            asyncio.run(main())
+        except Exception as e:
+            raise e
