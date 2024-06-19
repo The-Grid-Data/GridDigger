@@ -65,6 +65,7 @@ async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYP
         await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                        reply_markup=reply_markup)
 
+
 def is_valid_url(url):
     print("url", url)
     regex = re.compile(
@@ -95,6 +96,8 @@ def is_convertible_image_format(url):
 # for measuring execution time
 import time
 import psutil
+
+
 # def convert_image(url):
 #     start_time = time.time()
 #
@@ -159,12 +162,12 @@ def convert_image(url):
     return None
 
 
-
 def reset_filters(data) -> bool:
     if not data.get('FILTERS'):
         return False
     data['FILTERS'] = {}
     return True
+
 
 def generate_applied_filters_text(data):
     data.setdefault("FILTERS", {})
@@ -181,3 +184,10 @@ def generate_applied_filters_text(data):
     result = '\n'.join(f"{key}: {value}" for key, value in filters_text.items())
 
     return result
+
+
+def toggle_inc_search(data):
+    # Toggle the 'inc_search' flag
+    data.setdefault('inc_search', False)
+    data['inc_search'] = not data['inc_search']
+    print("inc_search:", data['inc_search'])

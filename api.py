@@ -63,6 +63,7 @@ def apply_filters(filters):
         logging.warning("No valid filters found.")
         return None
 
+
 def fetch_all_filter_queries():
     results = {}
     for filter_name, query in filters_config["filters_queries"].items():
@@ -94,6 +95,7 @@ def get_profiles(data):
         }
 
     filters_list = [(filter_name, value) for filter_name, value in filters.items()]
+
     filtered_profiles = apply_filters(filters_list)
     print("filters_list", filtered_profiles)
     return filtered_profiles['data']['profiles'] #here
@@ -167,7 +169,7 @@ def fetch_filter_options(query):
     return response_data.get('data', {}).get(query.split()[0], [])
 
 
-# Example usage
+# # Example usage
 # filters = [
 #     ("profileNameSearch", "Noice"),
 #     ("entityTypes", 4),
