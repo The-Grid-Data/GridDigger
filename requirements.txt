@@ -1,8 +1,6 @@
 anyio==4.4.0
 asgiref==3.7.2
 blinker==1.8.2
-cairocffi==1.7.1
-CairoSVG==2.7.1
 certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
@@ -34,4 +32,4 @@ webencodings==0.5.1
 Werkzeug==3.0.3
 zipp==3.19.2
 cairosvg==2.5.2
-cairocffi==1.4.0
+cairocffi>=1.4.0
