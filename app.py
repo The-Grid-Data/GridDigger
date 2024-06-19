@@ -21,6 +21,7 @@ from telegram.ext import (
 )
 
 import handlers.setup
+import lambda_function
 
 # Enable logging
 logging.basicConfig(
@@ -151,9 +152,7 @@ async def main() -> None:
         await webserver.serve()
         await application.stop()
 
-def lambda_handler(event, context):
-    """Lambda handler function to trigger the main function."""
-    asyncio.run(main())
+
 
 if __name__ == "__main__":
     if os.getenv("LOCAL"):
@@ -162,4 +161,4 @@ if __name__ == "__main__":
         print("polling...")
         application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
     else:
-        lambda_handler(None, None)
+        lambda_function.lambda_handler(None, None)
