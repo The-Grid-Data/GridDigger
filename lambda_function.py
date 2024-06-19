@@ -1,18 +1,15 @@
 import asyncio
-import sys
-import traceback
-
+from http import HTTPStatus
 import app
-import log
+import json
 
 
 def lambda_handler(event, context):
-    """Lambda handler function to trigger the main function."""
-    try:
-       asyncio.run(app.main())
-    except Exception as e:
-        log.log("lambda_handler", f"Error: {e}")
-        tb_str = traceback.format_exception(*sys.exc_info())
-        traceback_str = "".join(tb_str)
-        log.log("lambda_handler", f"{traceback_str}")
+    """Lambda handler function."""
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(app.handle_update(event, context))
 
+    return {
+        "statusCode": HTTPStatus.OK,
+        "body": json.dumps({"message": "Update processed"}),
+    }
