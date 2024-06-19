@@ -90,8 +90,8 @@ def is_convertible_image_format(url):
 
 
 # for measuring execution time
-import time
-import psutil
+# import time
+# import psutil
 
 
 # def convert_image(url):
