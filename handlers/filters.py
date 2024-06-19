@@ -1,4 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
 
 import api
@@ -10,21 +11,27 @@ from handlers.utils import show_profiles
 async def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     user_data = context.user_data
-    results_count = len(
-        api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
+    results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(f'Show profiles ({results_count})', callback_data='show')],
-        [InlineKeyboardButton('🟡Profile filters', callback_data='profile_filters'),
+    # Limit the number of results shown on the button text to 20
+    display_results_count = min(results_count, 20)
+
+    # Create buttons
+    keyboard_buttons = [
+        [InlineKeyboardButton('🟢Profile filters', callback_data='profile_filters'),
          InlineKeyboardButton('🟢Product filters', callback_data='product_filters')],
         [InlineKeyboardButton('🟢Asset filters', callback_data='asset_filters'),
          InlineKeyboardButton('🟢Entity filters', callback_data='entity_filters')],
         [InlineKeyboardButton('🔄Reset Filters', callback_data='reset_all'),
          InlineKeyboardButton('🔘Inc search', callback_data='inc_search')]
-    ])
+    ]
 
-    # update the filter message
-    await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}", reply_markup=keyboard)
+    # Add "Show profiles" button if results_count > 0
+    if results_count > 0:
+        keyboard_buttons.insert(0, [InlineKeyboardButton(f'Show profiles ({display_results_count})', callback_data='show')])
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+    await query.edit_message_text(f"Applied filters: {generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
@@ -39,19 +46,26 @@ async def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_
     results = get_profiles(data)
     results_count = len(results)
 
-    # todo neatly place informative emojis here
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(f'Show profiles ({results_count})', callback_data='show')],
-        [InlineKeyboardButton('🟡Profile filters', callback_data='profile_filters'),
+    # Limit the number of results shown on the button text to 20
+    display_results_count = min(results_count, 20)
+
+    # Create buttons
+    keyboard_buttons = [
+        [InlineKeyboardButton('🟢Profile filters', callback_data='profile_filters'),
          InlineKeyboardButton('🟢Product filters', callback_data='product_filters')],
         [InlineKeyboardButton('🟢Asset filters', callback_data='asset_filters'),
          InlineKeyboardButton('🟢Entity filters', callback_data='entity_filters')],
         [InlineKeyboardButton('🔄Reset Filters', callback_data='reset_all'),
          InlineKeyboardButton('🔘Inc search', callback_data='inc_search')]
-    ])
+    ]
 
-    await update.message.reply_text(f"Applied filters:\n{generate_applied_filters_text(data)}",
-                                    reply_markup=keyboard)
+    # Add "Show profiles" button if results_count > 0
+    if results_count > 0:
+        keyboard_buttons.insert(0, [InlineKeyboardButton(f'Show profiles ({display_results_count})', callback_data='show')])
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+
+    await update.message.reply_text(f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
@@ -72,8 +86,11 @@ async def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAU
     elif query.data.startswith("show"):  # could be more precise
         return await show_profiles(data, update, context)
     elif query.data.startswith('reset'):
-        utils.reset_filters(data)
-        return await show_sub_filters(update, context)
+        if utils.reset_filters(data):
+            return await show_sub_filters(update, context)
+        else:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
+            return FILTER_SUB
     query_data = query.data.split("_", 1)
     filter_type = query_data[0]
     sub_filter = query_data[1]
@@ -173,12 +190,53 @@ async def handle_filter_choices_callback(update: Update, context: ContextTypes.D
         return await show_sub_filters(update, context)
 
 
-async def handle_filter_filling_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    query = update.callback_query
-    await query.answer()
-
+async def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     data = context.user_data
-    return 0
+
+    data["FILTERS"][data["current_filter"]] = update.message.text
+    data["FILTERS"][data["current_filter"]+'_id'] = update.message.text
+    await update.message.reply_text(f"Value '{update.message.text}' saved for {data['current_filter']}.")
+
+    filter_type = data.setdefault('filter_type', 'None')
+
+    data.setdefault("FILTERS", {})
+    for key, value in data["FILTERS"].items():
+        print(f"Key: {key}, Value: {value}")
+    if filter_type == "None":
+
+        return await show_filters_main_menu(update, context) # it'll show an error if reached here
+    else:
+
+        profiles = api.get_profiles(data)
+        profile_count = len(profiles)
+        display_results_count = min(profile_count, 20)
+
+        # Fetch sub-filters dynamically based on filter_type
+        sub_filters = api.get_sub_filters(filter_type)
+
+        # Extract labels from sub_filters and create buttons
+        buttons = [
+            [InlineKeyboardButton(f"🟢{sub_filter['label']}", callback_data=f"{filter_type}_{sub_filter['query']}")]
+            for sub_filter in sub_filters]
+
+        # Add "Show profiles" button if profile_count > 0
+        if profile_count > 0:
+            buttons.insert(0, [InlineKeyboardButton("Reset", callback_data=f"reset_{filter_type}_filters"),
+                               InlineKeyboardButton(f"Show profiles ({display_results_count})",
+                                                    callback_data=f"show_{filter_type}_filters")])
+        else:
+            buttons.insert(0, [InlineKeyboardButton("Reset", callback_data=f"reset_{filter_type}_filters")])
+
+        buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        await context.bot.send_message(chat_id=update.message.chat_id,
+                                       text=f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {profile_count}",
+                                       reply_markup=reply_markup)
+        return FILTER_SUB
+
+
+
 
 
 async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

@@ -10,8 +10,12 @@ import api
 
 async def show_profiles(data, update, context):
     profiles = api.get_profiles(data)
-    for profile in profiles:
-        await send_profile_message(update, context, profile)
+    try:
+        for profile in profiles[:20]:
+            await send_profile_message(update, context, profile)
+    except Exception as e:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
+        return ConversationHandler.END
     return ConversationHandler.END
 
 
@@ -56,5 +60,8 @@ def is_supported_image_format(url):
     return ext.lower() in supported_formats
 
 
-def reset_filters(data):
+def reset_filters(data) -> bool:
+    if not data.get('FILTERS'):
+        return False
     data['FILTERS'] = {}
+    return True

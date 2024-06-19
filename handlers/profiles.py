@@ -1,7 +1,7 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler
 import api
-from handlers import utils
+from handlers import utils, FILTER_MAIN
 from handlers.filters import show_sub_filters, show_filters_main_menu
 from handlers.utils import show_profiles
 
@@ -14,9 +14,11 @@ async def handle_filter_main_callback(update: Update, context: ContextTypes.DEFA
     if query.data == "show":
         return await show_profiles(data, update, context)
     if query.data.startswith('reset'):
-        #if data['FILTERS'] = {}
-        utils.reset_filters(data)
-        return await show_filters_main_menu(update, context)
+        if utils.reset_filters(data):
+            return await show_filters_main_menu(update, context)
+        else:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
+            return FILTER_MAIN
     if query.data.endswith("_filters"):
         filter_type = query.data.split("_")[0]
         data['filter_type'] = {}  # to avoid stupid errors

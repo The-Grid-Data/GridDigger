@@ -24,20 +24,33 @@ with open('filters.json', 'r') as f:
     filters_config = json.load(f)
 
 
-def apply_filters(filters):
-    combined_clauses = []
 
+
+def apply_filters(filters):
+    combined_clauses = {}
     for filter_name, value in filters:
         where_clause = filters_config["profile_filters"].get(filter_name)
         if where_clause:
             clause = where_clause.replace('value', f'{value}')
-            combined_clauses.append(clause)
+            field = clause.split(":")[0].strip()
+            if field in combined_clauses:
+                combined_clauses[field].append(clause)
+            else:
+                combined_clauses[field] = [clause]
         else:
             logging.warning(f"Filter '{filter_name}' not found.")
 
     if combined_clauses:
-        combined_where_clause = ", ".join(combined_clauses)
-        print("combined_clauses", combined_clauses)
+        final_clauses = []
+        for field, clauses in combined_clauses.items():
+            if len(clauses) > 1:
+                # Correctly combine clauses without repeating the field name
+                combined_field_clause = f"{field}: {{ _and: [{', '.join([clause.split(':', 1)[1].strip() for clause in clauses])}] }}"
+            else:
+                combined_field_clause = clauses[0]
+            final_clauses.append(combined_field_clause)
+
+        combined_where_clause = ", ".join(final_clauses)
         where_clause = f"{{ {combined_where_clause} }}"
         query = f"query queryName {{ profiles (where: {where_clause}) {{ name id }} }}"
         print("GraphQL Query:", query)  # Debug statement
@@ -49,7 +62,6 @@ def apply_filters(filters):
     else:
         logging.warning("No valid filters found.")
         return None
-
 
 def fetch_all_filter_queries():
     results = {}
@@ -82,7 +94,9 @@ def get_profiles(data):
         }
 
     filters_list = [(filter_name, value) for filter_name, value in filters.items()]
-    return apply_filters(filters_list)['data']['profiles']
+    filtered_profiles = apply_filters(filters_list)
+    print("filters_list", filtered_profiles)
+    return filtered_profiles['data']['profiles'] #here
 
 def get_profile_data_by_id(profile_id):
     query = f"""
@@ -152,6 +166,14 @@ def fetch_filter_options(query):
         return []
     return response_data.get('data', {}).get(query.split()[0], [])
 
+
+# Example usage
+# filters = [
+#     ("profileNameSearch", "Noice"),
+#     ("entityTypes", 4),
+#     ("entityName", "O"),
+# ]
+# apply_filters(filters)
 
 #print(len(get_profiles({})))
 # # Example usage:

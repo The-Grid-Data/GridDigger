@@ -22,20 +22,29 @@ async def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
     user_data["profileNameSearch"] = {}
 
+    # Limit the number of results shown on the button text to 20
+    display_results_count = min(results_count, 20)
+
     # Create buttons
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(f'Show profiles ({results_count})', callback_data='show')],
-        [InlineKeyboardButton('🟡Profile filters', callback_data='profile_filters'),
+    keyboard_buttons = [
+        [InlineKeyboardButton('🟢Profile filters', callback_data='profile_filters'),
          InlineKeyboardButton('🟢Product filters', callback_data='product_filters')],
         [InlineKeyboardButton('🟢Asset filters', callback_data='asset_filters'),
          InlineKeyboardButton('🟢Entity filters', callback_data='entity_filters')],
         [InlineKeyboardButton('🔄Reset Filters', callback_data='reset_all'),
          InlineKeyboardButton('🔘Inc search', callback_data='inc_search')]
-    ])
+    ]
+
+    # Add "Show profiles" button if results_count > 0
+    if results_count > 0:
+        keyboard_buttons.insert(0, [InlineKeyboardButton(f'Show profiles ({display_results_count})', callback_data='show')])
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
 
     # Send the filter message
-    await update.message.reply_text(f"Applied filtres: {generate_applied_filters_text(user_data)}", reply_markup=keyboard)
+    await update.message.reply_text(f"Applied filters: {generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
+
 
 
 
