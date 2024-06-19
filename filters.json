@@ -1,0 +1,56 @@
+{
+  "filters": ["profileType", "profileSector", "entities", "assets"],
+  "filters_queries": {
+    "profileNameSearch": "profileTypes { name id }",
+    "profileType": "profileTypes { name id }",
+    "profileSector": "profileSectors { name id }",
+    "profileStatuses": "profileStatuses { name id }",
+    "profileFoundingDates": "profiles { foundingDate id }",
+    "productTypes": "productTypes { name id }",
+    "productStatuses": "productStatus { name id }",
+    "productLaunchingData": "products { id launchDate }",
+    "assetTypes": "assetType { name id }",
+    "assetTickers": "assets { id ticker }",
+    "assetStandards": "assetStandardSupport { name id }",
+    "entityTypes": "entityTypes { name id }",
+    "entityName": "entities { name id }",
+    "entityCountry": "entities { id name country { Name id } }"
+  },
+  "profile_filters": {
+    "root": "profiles",
+    "profileNameSearch": "name: { _ilike: \"%value%\" }",
+    "profileDeepSearch": "_or: [{ descriptionShort: { _ilike: \"%value%\" } }, { descriptionLong: { _ilike: \"%value%\" } }]",
+    "profileType": "profileType: { id: { _eq: value } }",
+    "profileSector": "profileSector: { id: { _eq: value } }",
+    "profileStatuses": "entities: { id: { _eq: value } }",
+    "productTypes": "products: {productType: {id: {_eq: value}}}",
+    "productStatuses": "products: {productStatus: {id: {_eq: value}}}",
+    "entityTypes": "entities: {entityType: {id: {_eq: value}}}",
+    "entityName": "entities: {name: {_ilike: \"%value%\"}}",
+    "assetTickers": "assets: {ticker: {_ilike: \"%value%\"}}",
+    "assetTypes": "assets: {assetType: {id: {_eq: value}}}",
+    "assetStandards": "assets: {assetStandardSupport: {id: {_eq: value}}}"
+  },
+  "sub_filters": {
+    "profile": [
+      { "label": "Profile Name", "type": "searchable", "query": "profileNameSearch" },
+      { "label": "Profile Type", "type": "multiple", "query": "profileType" },
+      { "label": "Profile Sector", "type": "multiple", "query": "profileSector" },
+      { "label": "Profile Status", "type": "multiple", "query": "profileStatuses" }
+    ],
+    "product": [
+      { "label": "Product Type", "type": "multiple", "query": "productTypes" },
+      { "label": "Product Sector", "type": "multiple", "query": "productStatuses" }
+    ],
+    "entity": [
+      { "label": "Entity Type", "type": "multiple", "query": "entityTypes" },
+      { "label": "Entity Name", "type": "searchable", "query": "entityName" }
+
+    ],
+    "asset": [
+      { "label": "Ticker", "type": "searchable", "query": "assetTickers" },
+      { "label": "Asset Type", "type": "multiple", "query": "assetTypes" },
+      { "label": "Asset Standard", "type": "multiple", "query": "assetStandards" }
+    ]
+  }
+}
