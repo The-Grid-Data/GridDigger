@@ -19,6 +19,12 @@ async def handle_filter_main_callback(update: Update, context: ContextTypes.DEFA
         else:
             await context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
             return FILTER_MAIN
+    if query.data == 'inc_search':
+        utils.toggle_inc_search(data)
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Inc search: {data['inc_search']}\n"
+                                                                              f"\nEnabling this will search for both "
+                                                                              f"profile titles and descriptions.")
+        return FILTER_MAIN
     if query.data.endswith("_filters"):
         filter_type = query.data.split("_")[0]
         data['filter_type'] = {}  # to avoid stupid errors

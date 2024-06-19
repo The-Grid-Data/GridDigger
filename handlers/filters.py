@@ -37,6 +37,7 @@ async def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_T
 async def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     data = context.user_data
     data.setdefault("FILTERS", {})
+
     data["FILTERS"]["profileNameSearch"] = update.message.text
     data["FILTERS"]["profileNameSearch_id"] = update.message.text
 
