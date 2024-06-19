@@ -2,6 +2,7 @@ import os
 import re
 from io import BytesIO
 from urllib.parse import urlparse
+
 from PIL import Image
 import cairosvg
 import requests
@@ -85,11 +86,58 @@ def is_supported_image_format(url):
 
 
 def is_convertible_image_format(url):
-    convertible_formats = {'.svg', '.webp'}
+    convertible_formats = {}  # {'.svg', '.webp'} here where you turn it on
     path = urlparse(url).path
     _, ext = os.path.splitext(path)
     return ext.lower() in convertible_formats
 
+
+# for measuring execution time
+import time
+import psutil
+# def convert_image(url):
+#     start_time = time.time()
+#
+#     process = psutil.Process(os.getpid())
+#     start_cpu_times = process.cpu_times()
+#     start_memory_info = process.memory_info()
+#
+#     response = requests.get(url)
+#     if response.status_code == 200:
+#         image_data = response.content
+#         path = urlparse(url).path
+#         _, ext = os.path.splitext(path)
+#         ext = ext.lower()
+#
+#         if ext == '.svg':
+#             png_image = cairosvg.svg2png(bytestring=image_data)
+#             result = BytesIO(png_image)
+#         elif ext == '.webp':
+#             image = Image.open(BytesIO(image_data)).convert("RGB")
+#             output = BytesIO()
+#             image.save(output, format="PNG")
+#             output.seek(0)
+#             result = output
+#         else:
+#             result = None
+#
+#     else:
+#         result = None
+#
+#     end_time = time.time()
+#     end_cpu_times = process.cpu_times()
+#     end_memory_info = process.memory_info()
+#
+#     execution_time = end_time - start_time
+#     cpu_time_user = end_cpu_times.user - start_cpu_times.user
+#     cpu_time_system = end_cpu_times.system - start_cpu_times.system
+#     total_cpu_time = cpu_time_user + cpu_time_system
+#     memory_usage = (end_memory_info.rss - start_memory_info.rss) / (1024 * 1024)
+#
+#     print(f"Execution Time: {execution_time:.2f} seconds, Total CPU Time: {total_cpu_time:.2f} seconds, Memory Usage: {memory_usage:.2f} MB")
+#
+#     return result
+#
 
 def convert_image(url):
     response = requests.get(url)
