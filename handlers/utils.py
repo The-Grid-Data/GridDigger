@@ -4,7 +4,6 @@ from io import BytesIO
 from urllib.parse import urlparse
 
 from PIL import Image
-import cairosvg
 import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, ContextTypes
@@ -142,23 +141,24 @@ import psutil
 #     return result
 #
 
+#import cairosvg
 def convert_image(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        image_data = response.content
-        path = urlparse(url).path
-        _, ext = os.path.splitext(path)
-        ext = ext.lower()
-
-        if ext == '.svg':
-            png_image = cairosvg.svg2png(bytestring=image_data)
-            return BytesIO(png_image)
-        elif ext == '.webp':
-            image = Image.open(BytesIO(image_data)).convert("RGB")
-            output = BytesIO()
-            image.save(output, format="PNG")
-            output.seek(0)
-            return output
+    # response = requests.get(url)
+    # if response.status_code == 200:
+    #     image_data = response.content
+    #     path = urlparse(url).path
+    #     _, ext = os.path.splitext(path)
+    #     ext = ext.lower()
+    #
+    #     if ext == '.svg':
+    #         png_image = cairosvg.svg2png(bytestring=image_data)
+    #         return BytesIO(png_image)
+    #     elif ext == '.webp':
+    #         image = Image.open(BytesIO(image_data)).convert("RGB")
+    #         output = BytesIO()
+    #         image.save(output, format="PNG")
+    #         output.seek(0)
+    #         return output
     return None
 
 
