@@ -59,8 +59,17 @@ async def expand_profile_callback(update: Update, context: ContextTypes.DEFAULT_
             buttons.append([InlineKeyboardButton("Social", url=social['url'])])
     reply_markup = InlineKeyboardMarkup(buttons) if buttons else None
 
-    # Update the message with full profile details
-    await query.edit_message_text(text=message_text, parse_mode='Markdown', reply_markup=reply_markup)
+    # Check if the original message has an image
+    if message_contains_media(query.message):
+        # Update the caption for a media message
+        await query.edit_message_caption(caption=message_text, parse_mode='Markdown', reply_markup=reply_markup)
+    else:
+        # Update the text for a non-media message
+        await query.edit_message_text(text=message_text, parse_mode='Markdown', reply_markup=reply_markup)
 
 
+def message_contains_media(message):
+    # print("message", message)
+    # print("message photo", message.photo)
+    return bool(message.photo)
 
