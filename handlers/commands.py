@@ -6,8 +6,8 @@ from handlers import FILTER_MAIN
 from handlers.utils import generate_applied_filters_text
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    await update.message.reply_text("Try something cool like 'solana'\n\nOr hit /filter to get started.")
+def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    update.message.reply_text("Try something cool like 'solana'\n\nOr hit /filter to get started.")
     return -1 #SEARCH_READY
 
 
@@ -17,7 +17,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 # including descriptions. finally, show four buttons for each filter type {profile filters, product filters,
 # entity filters, assets filters}, list each two a row
 # finally, create a button handler for when the user selects a filter type or just the "Show all results" button or
-async def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user_data = context.user_data
     results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
     user_data["profileNameSearch"] = {}
@@ -42,14 +42,14 @@ async def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
 
     # Send the filter message
-    await update.message.reply_text(f"Applied filters: {generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
+    update.message.reply_text(f"Applied filters: {generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
 
 
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Use /start to test this bot.")
+def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    update.message.reply_text("Use /start to test this bot.")
 
 

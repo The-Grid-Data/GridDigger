@@ -7,7 +7,7 @@ Flask==3.0.3
 httpcore==1.0.5
 requests==2.32.3
 python-dotenv==1.0.1
-python-telegram-bot==21.3
+python-telegram-bot==13.7
 
 #blinker==1.8.2
 #certifi==2024.6.2
