@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes
 
 import api
 from handlers import FILTER_MAIN
-from handlers.filters import generate_applied_filters_text
+from handlers.utils import generate_applied_filters_text
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

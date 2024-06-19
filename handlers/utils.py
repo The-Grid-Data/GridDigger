@@ -8,14 +8,21 @@ from telegram.ext import ConversationHandler, ContextTypes
 import api
 
 
-async def show_profiles(data, update, context):
+async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
     profiles = api.get_profiles(data)
-    try:
-        for profile in profiles[:20]:
+    # edit the message and remove the buttons
+    await context.bot.edit_message_text(
+        chat_id=update.effective_chat.id,
+        message_id=update.effective_message.message_id,
+        text=f"Showing profiles with applied filters: \n\n {generate_applied_filters_text(data)}",
+        reply_markup=None
+    )
+    for profile in profiles[:20]:
+        try:
             await send_profile_message(update, context, profile)
-    except Exception as e:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
-        return ConversationHandler.END
+        except Exception as e:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
+
     return ConversationHandler.END
 
 
@@ -42,6 +49,7 @@ async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 def is_valid_url(url):
+    print("url", url)
     regex = re.compile(
         r'^(?:http|ftp)s?://'  # http:// or https://
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -65,3 +73,19 @@ def reset_filters(data) -> bool:
         return False
     data['FILTERS'] = {}
     return True
+
+def generate_applied_filters_text(data):
+    data.setdefault("FILTERS", {})
+
+    # Initialize a dictionary to hold filter names and values
+    filters_text = {}
+
+    # Iterate through the filters and extract the values
+    for key, value in data["FILTERS"].items():
+        if not key.endswith('_id'):
+            filters_text[key] = value
+
+    # Generate the output text
+    result = '\n'.join(f"{key}: {value}" for key, value in filters_text.items())
+
+    return result

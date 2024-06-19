@@ -1,11 +1,10 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
 
 import api
 from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING, utils
 from api import get_profiles
-from handlers.utils import show_profiles
+from handlers.utils import show_profiles, generate_applied_filters_text
 
 
 async def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -236,9 +235,6 @@ async def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAU
         return FILTER_SUB
 
 
-
-
-
 async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     await query.answer()
@@ -272,18 +268,3 @@ async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return FILTER_SUB
 
 
-def generate_applied_filters_text(data):
-    data.setdefault("FILTERS", {})
-
-    # Initialize a dictionary to hold filter names and values
-    filters_text = {}
-
-    # Iterate through the filters and extract the values
-    for key, value in data["FILTERS"].items():
-        if not key.endswith('_id'):
-            filters_text[key] = value
-
-    # Generate the output text
-    result = '\n'.join(f"{key}: {value}" for key, value in filters_text.items())
-
-    return result
