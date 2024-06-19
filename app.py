@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 # Define configuration constants
 URL = os.getenv("LAMBDA_WEBHOOK_URL")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
-PORT = int(os.getenv("PORT", 8000))
+PORT = int(os.getenv("PORT", 5000))
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 @dataclass
@@ -154,7 +154,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    if os.getenv("LOCAL"):
+    if os.getenv("LOCAL1"):
         application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
         handlers.setup.setup(application)
         print("polling...")
