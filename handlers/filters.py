@@ -7,7 +7,7 @@ from api import get_profiles
 from handlers.utils import show_profiles, generate_applied_filters_text
 
 
-def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def show_filters_main_menu(update: Update, context) -> int:
     query = update.callback_query
     user_data = context.user_data
     results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
@@ -34,7 +34,7 @@ def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     return FILTER_MAIN
 
 
-def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_filter_main_text(update: Update, context) -> int:
     data = context.user_data
     data.setdefault("FILTERS", {})
 
@@ -69,13 +69,13 @@ def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     return FILTER_MAIN
 
 
-def start_over_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def start_over_handler(update: Update, context) -> int:
     query = update.callback_query
     query.edit_message_text(f"This menu has expired, start over please. /filters")
     return ConversationHandler.END
 
 
-def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_filter_sub_callback(update: Update, context) -> int:
     query = update.callback_query
     query.answer()
 
@@ -139,7 +139,7 @@ def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         return FILTER_CHOICES
 
 
-def handle_text_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_text_input(update: Update, context) -> int:
     user_input = update.message.text
     data = context.user_data
     current_filter = data.get('current_filter')
@@ -153,7 +153,7 @@ def handle_text_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         return FILTER_MAIN
 
 
-def handle_choice_selection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_choice_selection(update: Update, context) -> int:
     query = update.callback_query
     query.answer()
     data = context.user_data
@@ -165,7 +165,7 @@ def handle_choice_selection(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     return FILTER_MAIN
 
 
-def handle_filter_choices_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_filter_choices_callback(update: Update, context) -> int:
     query = update.callback_query
     query.answer()
 
@@ -190,7 +190,7 @@ def handle_filter_choices_callback(update: Update, context: ContextTypes.DEFAULT
         return show_sub_filters(update, context)
 
 
-def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_filter_filling_text(update: Update, context) -> int:
     data = context.user_data
 
     data["FILTERS"][data["current_filter"]] = update.message.text
@@ -236,7 +236,7 @@ def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAULT_TYP
         return FILTER_SUB
 
 
-def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def show_sub_filters(update: Update, context) -> int:
     query = update.callback_query
     query.answer()
     data = context.user_data

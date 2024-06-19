@@ -6,7 +6,7 @@ from handlers import FILTER_MAIN
 from handlers.utils import generate_applied_filters_text
 
 
-def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def start(update: Update, context) -> int:
     update.message.reply_text("Try something cool like 'solana'\n\nOr hit /filter to get started.")
     return -1 #SEARCH_READY
 
@@ -17,7 +17,7 @@ def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 # including descriptions. finally, show four buttons for each filter type {profile filters, product filters,
 # entity filters, assets filters}, list each two a row
 # finally, create a button handler for when the user selects a filter type or just the "Show all results" button or
-def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def filter(update: Update, context) -> int:
     user_data = context.user_data
     results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
     user_data["profileNameSearch"] = {}
@@ -49,7 +49,7 @@ def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 
-def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def help_command(update: Update, context) -> None:
     update.message.reply_text("Use /start to test this bot.")
 
 

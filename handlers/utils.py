@@ -8,7 +8,7 @@ from telegram.ext import ConversationHandler, ContextTypes
 import api
 
 
-def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
+def show_profiles(data, update: Update, context):
     profiles = api.get_profiles(data)
     # edit the message and remove the buttons
     context.bot.edit_message_text(
@@ -26,7 +26,7 @@ def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYPE, profile):
+def send_profile_message(update: Update, context, profile):
     profile_id = profile['id']
     profile_data = api.get_profile_data_by_id(profile_id)
 

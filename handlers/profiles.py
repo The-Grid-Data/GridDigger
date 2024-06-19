@@ -6,7 +6,7 @@ from handlers.filters import show_sub_filters, show_filters_main_menu
 from handlers.utils import show_profiles
 
 
-def handle_filter_main_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def handle_filter_main_callback(update: Update, context) -> int:
     query = update.callback_query
     query.answer()
     data = context.user_data
@@ -37,7 +37,7 @@ def handle_filter_main_callback(update: Update, context: ContextTypes.DEFAULT_TY
     return ConversationHandler.END
 
 
-def expand_profile_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def expand_profile_callback(update: Update, Context):
     query = update.callback_query
     query.answer()
 
