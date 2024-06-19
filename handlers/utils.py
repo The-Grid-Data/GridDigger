@@ -8,10 +8,10 @@ from telegram.ext import ConversationHandler, ContextTypes
 import api
 
 
-async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
+def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
     profiles = api.get_profiles(data)
     # edit the message and remove the buttons
-    await context.bot.edit_message_text(
+    context.bot.edit_message_text(
         chat_id=update.effective_chat.id,
         message_id=update.effective_message.message_id,
         text=f"Showing profiles with applied filters: \n\n {generate_applied_filters_text(data)}",
@@ -19,14 +19,14 @@ async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE
     )
     for profile in profiles[:20]:
         try:
-            await send_profile_message(update, context, profile)
+            send_profile_message(update, context, profile)
         except Exception as e:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
+            context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
 
     return ConversationHandler.END
 
 
-async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYPE, profile):
+def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYPE, profile):
     profile_id = profile['id']
     profile_data = api.get_profile_data_by_id(profile_id)
 
@@ -42,23 +42,23 @@ async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYP
     logo_url = profile_data.get('logo')
     if logo_url and is_valid_url(logo_url):
         if is_supported_image_format(logo_url):
-            await context.bot.send_photo(chat_id=update.effective_chat.id, photo=logo_url, caption=message_text,
+            context.bot.send_photo(chat_id=update.effective_chat.id, photo=logo_url, caption=message_text,
                                          parse_mode='Markdown', reply_markup=reply_markup)
         elif is_convertible_image_format(logo_url):
             converted_image = convert_image(logo_url)
             if converted_image:
-                await context.bot.send_photo(chat_id=update.effective_chat.id, photo=converted_image,
+                context.bot.send_photo(chat_id=update.effective_chat.id, photo=converted_image,
                                              caption=message_text,
                                              parse_mode='Markdown', reply_markup=reply_markup)
             else:
-                await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text,
+                context.bot.send_message(chat_id=update.effective_chat.id, text=message_text,
                                                parse_mode='Markdown',
                                                reply_markup=reply_markup)
         else:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
+            context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                            reply_markup=reply_markup)
     else:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
+        context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                        reply_markup=reply_markup)
 
 

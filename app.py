@@ -1,166 +1,72 @@
-import asyncio
-import html
 import logging
+import logging.config
 import os
-from dataclasses import dataclass
-from http import HTTPStatus
+import sys
+from telegram.ext import MessageHandler, Updater, CallbackQueryHandler
 
-import uvicorn
-from asgiref.wsgi import WsgiToAsgi
-from flask import Flask, Response, abort, make_response, request
 
-from telegram import Update
-from telegram.constants import ParseMode
-from telegram.ext import (
-    Application,
-    CallbackContext,
-    CommandHandler,
-    ContextTypes,
-    ExtBot,
-    TypeHandler,
-)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from dotenv import load_dotenv
 
-import handlers.setup
+from handlers.setup import setup
 
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-# set higher logging level for httpx to avoid all GET and POST requests being logged
-logging.getLogger("httpx").setLevel(logging.WARNING)
+# Load environment variables from a .env file
+load_dotenv("bot/.env")
 
-logger = logging.getLogger(__name__)
 
-# Define configuration constants
-URL = os.getenv("LAMBDA_WEBHOOK_URL")
-ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
-PORT = int(os.getenv("PORT", 5000))
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+def error(update, context):
+    """Log Errors caused by Updates."""
 
-@dataclass
-class WebhookUpdate:
-    """Simple dataclass to wrap a custom update type"""
+    logging.warning('Update "%s" ', update)
+    logging.exception(context.error)
 
-    user_id: int
-    payload: str
 
-class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
-    """
-    Custom CallbackContext class that makes `user_data` available for updates of type
-    `WebhookUpdate`.
-    """
 
-    @classmethod
-    def from_update(
-        cls,
-        update: object,
-        application: "Application",
-    ) -> "CustomContext":
-        if isinstance(update, WebhookUpdate):
-            return cls(application=application, user_id=update.user_id)
-        return super().from_update(update, application)
+def main():
+    updater = Updater(DefaultConfig.TELEGRAM_TOKEN, use_context=True)
+    dp = updater.dispatcher
 
-async def start(update: Update, context: CustomContext) -> None:
-    """Display a message with instructions on how to use this bot."""
-    payload_url = html.escape(f"{URL}/submitpayload?user_id=<your user id>&payload=<payload>")
-    text = (
-        f"To check if the bot is still running, call <code>{URL}/healthcheck</code>.\n\n"
-        f"To post a custom update, call <code>{payload_url}</code>."
-    )
-    await update.message.reply_html(text=text)
+    # setup
+    setup(dp)
 
-async def webhook_update(update: WebhookUpdate, context: CustomContext) -> None:
-    """Handle custom updates."""
-    chat_member = await context.bot.get_chat_member(chat_id=update.user_id, user_id=update.user_id)
-    payloads = context.user_data.setdefault("payloads", [])
-    payloads.append(update.payload)
-    combined_payloads = "</code>\n• <code>".join(payloads)
-    text = (
-        f"The user {chat_member.user.mention_html()} has sent a new payload. "
-        f"So far they have sent the following payloads: \n\n• <code>{combined_payloads}</code>"
-    )
-    await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=text, parse_mode=ParseMode.HTML)
+    # log all errors
+    dp.add_error_handler(error)
 
-async def main() -> None:
-    """Set up PTB application and a web application for handling the incoming requests."""
-    context_types = ContextTypes(context=CustomContext)
-
-    # Here we set updater to None because we want our custom webhook server to handle the updates
-    # and hence we don't need an Updater instance
-    application = (
-        Application.builder().token(TOKEN).updater(None).context_types(context_types).build()
-    )
-
-    # register handlers
-    handlers.setup.setup(application)
-    #application.add_handler(CommandHandler("start", start))
-
-    application.add_handler(TypeHandler(type=WebhookUpdate, callback=webhook_update))
-
-    # Pass webhook settings to telegram
-    await application.bot.set_webhook(url=f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
-
-    # Set up webserver
-    flask_app = Flask(__name__)
-
-    @flask_app.post("/telegram")  # type: ignore[misc]
-    async def telegram() -> Response:
-        """Handle incoming Telegram updates by putting them into the `update_queue`"""
-        await application.update_queue.put(Update.de_json(data=request.json, bot=application.bot))
-        return Response(status=HTTPStatus.OK)
-
-    @flask_app.route("/submitpayload", methods=["GET", "POST"])  # type: ignore[misc]
-    async def custom_updates() -> Response:
-        """
-        Handle incoming webhook updates by also putting them into the `update_queue` if
-        the required parameters were passed correctly.
-        """
-        try:
-            user_id = int(request.args["user_id"])
-            payload = request.args["payload"]
-        except KeyError:
-            abort(
-                HTTPStatus.BAD_REQUEST,
-                "Please pass both `user_id` and `payload` as query parameters.",
-            )
-        except ValueError:
-            abort(HTTPStatus.BAD_REQUEST, "The `user_id` must be a string!")
-
-        await application.update_queue.put(WebhookUpdate(user_id=user_id, payload=payload))
-        return Response(status=HTTPStatus.OK)
-
-    @flask_app.get("/healthcheck")  # type: ignore[misc]
-    async def health() -> Response:
-        """For the health endpoint, reply with a simple plain text message."""
-        response = make_response("The bot is still running fine :)", HTTPStatus.OK)
-        response.mimetype = "text/plain"
-        return response
-
-    webserver = uvicorn.Server(
-        config=uvicorn.Config(
-            app=WsgiToAsgi(flask_app),
-            port=PORT,
-            use_colors=False,
-            host="0.0.0.0",
+    # Start the Bot
+    if DefaultConfig.MODE == "webhook":
+        updater.start_webhook(
+            listen="0.0.0.0",
+            port=int(DefaultConfig.PORT),
+            url_path=DefaultConfig.TELEGRAM_TOKEN,
+            webhook_url=DefaultConfig.WEBHOOK_URL + '/' + DefaultConfig.TELEGRAM_TOKEN
         )
-    )
 
-    # Run application and webserver together
-    async with application:
-        await application.start()
-        await webserver.serve()
-        await application.stop()
+        logging.info(f"Start webhook mode on port {DefaultConfig.PORT}")
+    else:
+        updater.start_polling()
+        logging.info(f"Start polling mode")
 
+    updater.idle()
+
+
+class DefaultConfig:
+    PORT = int(os.environ.get("PORT", 5000))
+    TELEGRAM_TOKEN = os.environ.get("API_TELEGRAM", "")
+    MODE = os.environ.get("MODE", "webhook")
+    WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://427e-219-92-138-126.ngrok-free.app")
+    LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
+
+    @staticmethod
+    def init_logging():
+        logging.basicConfig(
+            format="%(asctime)s - %(levelname)s - %(message)s",
+            level=DefaultConfig.LOG_LEVEL,
+        )
 
 
 if __name__ == "__main__":
-    if os.getenv("LOCAL1"):
-        application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
-        handlers.setup.setup(application)
-        print("polling...")
-        application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)
-    else:
-        try:
-            asyncio.run(main())
-        except Exception as e:
-            raise e
+    # Enable logging
+    DefaultConfig.init_logging()
+    logging.info(f"PORT: {DefaultConfig.PORT}")
+    main()
+    # API.run_API()
