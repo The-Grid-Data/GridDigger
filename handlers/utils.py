@@ -1,10 +1,7 @@
 import os
 import re
-from io import BytesIO
 from urllib.parse import urlparse
 
-from PIL import Image
-import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, ContextTypes
 

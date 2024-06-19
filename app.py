@@ -111,7 +111,7 @@ async def main() -> None:
     )
 
     # register handlers
-    await handlers.setup.setup(application)
+    handlers.setup.setup(application)
     #application.add_handler(CommandHandler("start", start))
     application.add_handler(TypeHandler(type=WebhookUpdate, callback=webhook_update))
 

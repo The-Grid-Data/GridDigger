@@ -1,6 +1,4 @@
-from telegram import Update
 from telegram.ext import ConversationHandler, CommandHandler, filters, MessageHandler, CallbackQueryHandler
-import re
 
 from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING
 from handlers.commands import start, help_command, filter
