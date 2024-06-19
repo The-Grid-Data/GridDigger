@@ -1,5 +1,3 @@
-import telegram
-
 import tg
 
 
