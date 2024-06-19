@@ -1,7 +1,10 @@
 import os
 import re
+from io import BytesIO
 from urllib.parse import urlparse
-
+from PIL import Image
+import cairosvg
+import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, ContextTypes
 
@@ -40,13 +43,26 @@ async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYP
 
     # Check if the logo URL is valid and in a supported format
     logo_url = profile_data.get('logo')
-    if logo_url and is_valid_url(logo_url) and is_supported_image_format(logo_url):
-        await context.bot.send_photo(chat_id=update.effective_chat.id, photo=logo_url, caption=message_text,
-                                     parse_mode='Markdown', reply_markup=reply_markup)
+    if logo_url and is_valid_url(logo_url):
+        if is_supported_image_format(logo_url):
+            await context.bot.send_photo(chat_id=update.effective_chat.id, photo=logo_url, caption=message_text,
+                                         parse_mode='Markdown', reply_markup=reply_markup)
+        elif is_convertible_image_format(logo_url):
+            converted_image = convert_image(logo_url)
+            if converted_image:
+                await context.bot.send_photo(chat_id=update.effective_chat.id, photo=converted_image,
+                                             caption=message_text,
+                                             parse_mode='Markdown', reply_markup=reply_markup)
+            else:
+                await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text,
+                                               parse_mode='Markdown',
+                                               reply_markup=reply_markup)
+        else:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
+                                           reply_markup=reply_markup)
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                        reply_markup=reply_markup)
-
 
 def is_valid_url(url):
     print("url", url)
@@ -66,6 +82,34 @@ def is_supported_image_format(url):
     path = urlparse(url).path
     _, ext = os.path.splitext(path)
     return ext.lower() in supported_formats
+
+
+def is_convertible_image_format(url):
+    convertible_formats = {'.svg', '.webp'}
+    path = urlparse(url).path
+    _, ext = os.path.splitext(path)
+    return ext.lower() in convertible_formats
+
+
+def convert_image(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        image_data = response.content
+        path = urlparse(url).path
+        _, ext = os.path.splitext(path)
+        ext = ext.lower()
+
+        if ext == '.svg':
+            png_image = cairosvg.svg2png(bytestring=image_data)
+            return BytesIO(png_image)
+        elif ext == '.webp':
+            image = Image.open(BytesIO(image_data)).convert("RGB")
+            output = BytesIO()
+            image.save(output, format="PNG")
+            output.seek(0)
+            return output
+    return None
+
 
 
 def reset_filters(data) -> bool:
