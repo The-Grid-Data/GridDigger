@@ -1,11 +1,14 @@
+import os
+
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
 import api
 from handlers import utils, FILTER_MAIN
 from handlers.filters import show_sub_filters, show_filters_main_menu
-from handlers.utils import show_profiles
+from handlers.utils import show_profiles, escape_markdown
 
+MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
 
 # Define a function to split the message text
 def split_message(text, max_length):
@@ -44,7 +47,7 @@ def handle_filter_main_callback(update: Update, context) -> int:
     return ConversationHandler.END
 
 
-def expand_profile_callback(update: Update, Context):
+def expand_profile_callback(update: Update, context):
     query = update.callback_query
     query.answer()
 
@@ -53,6 +56,15 @@ def expand_profile_callback(update: Update, Context):
 
     # Fetch the full profile data
     profile_data = api.get_full_profile_data_by_id(profile_id)
+
+    # Send a monitoring message with user details
+    user = update.effective_user
+    user_link = f"[{user.username}](tg://user?id={user.id})"
+    monitoring_message_text = (
+        f"User {user.id} ({user_link}) expanded profile {profile_id} of name {profile_data['name']}"
+    )
+    context.bot.send_message(text=monitoring_message_text, parse_mode='Markdown', chat_id=MONITORING_GROUP_ID)
+
 
     # Construct full profile message text
     message_text = f"*ID:* {profile_data['id']}\n"
