@@ -7,9 +7,22 @@ from telegram.ext import ConversationHandler, ContextTypes
 
 import api
 
+MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
+
 
 def show_profiles(data, update: Update, context):
     profiles = api.get_profiles(data)
+
+    # Send a monitoring message with user details
+    user = update.effective_user
+    monitoring_message_text = (
+        f"User {user.id} ({user.username}) showed "
+        f"{min(len(profiles), 20)} of these settings:\n{generate_applied_filters_text(data)}"
+    )
+    context.bot.send_message(
+        text=monitoring_message_text,
+        chat_id=MONITORING_GROUP_ID
+    )
     # edit the message and remove the buttons
     context.bot.edit_message_text(
         chat_id=update.effective_chat.id,
@@ -192,3 +205,10 @@ def toggle_inc_search(data):
     data['FILTERS'].setdefault('inc_search', False)
     data['FILTERS']['inc_search'] = not data['FILTERS']['inc_search']  # a label on filter menu
     print("inc_search:", data['FILTERS']['inc_search'])
+
+
+# some user names have special characters that cause errors.
+def escape_markdown(text):
+    """Helper function to escape special characters for Markdown."""
+    escape_chars = r'\*_`\['
+    return re.sub(r'([{}])'.format(escape_chars), r'\\\1', text)
