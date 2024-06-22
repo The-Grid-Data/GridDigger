@@ -1,7 +1,7 @@
 {
   "filters": ["profileType", "profileSector", "entities", "assets"],
   "filters_queries": {
-    "profileNameSearch": "profileTypes { name id }",
+    "profileNameSearch": "",
     "profileType": "profileTypes { name id }",
     "profileSector": "profileSectors { name id }",
     "profileStatuses": "profileStatuses { name id }",
@@ -10,16 +10,17 @@
     "productStatuses": "productStatus { name id }",
     "productLaunchingData": "products { id launchDate }",
     "assetTypes": "assetType { name id }",
-    "assetTickers": "assets { id ticker }",
+    "assetTickers": "",
     "assetStandards": "assetStandardSupport { name id }",
     "entityTypes": "entityTypes { name id }",
-    "entityName": "entities { name id }",
+    "entityName": "",
     "entityCountry": "entities { id name country { Name id } }"
   },
   "profile_filters": {
     "root": "profiles",
     "profileNameSearch": "name: { _ilike: \"%value%\" }",
-    "profileDeepSearch": "_or: [{ descriptionShort: { _ilike: \"%value%\" } }, { descriptionLong: { _ilike: \"%value%\" } }]",
+    "profileDeepSearch": "_or: [{ name: { _ilike: \"%value%\" } }, { descriptionShort: { _ilike: \"%value%\" } }, { descriptionLong: { _ilike: \"%value%\" } }]",
+
     "profileType": "profileType: { id: { _eq: value } }",
     "profileSector": "profileSector: { id: { _eq: value } }",
     "profileStatuses": "entities: { id: { _eq: value } }",

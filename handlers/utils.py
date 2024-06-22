@@ -32,10 +32,11 @@ def send_profile_message(update: Update, context, profile):
 
     # Construct initial message text with basic profile summary
     message_text = f"*Name:* {profile_data['name']}\n"
-    message_text += f"*Sector:* {profile_data['profileSector']['name'] if profile_data.get('profileSector') else 'N/A'}\n"
-    message_text += f"*short description:* {profile_data['shortDescription'] if profile_data.get('shortDescription') else 'N/A'}\n"
+    message_text += f"*Sector:* {profile_data['profileSector']['name'] if profile_data.get('profileSector') else '-'}\n"
+    message_text += f"*short description:* {profile_data['descriptionShort'] if profile_data.get('descriptionShort') else '-'}\n"
     # Add the "Expand" button
     buttons = [[InlineKeyboardButton("Expand", callback_data=f"expand_{profile_id}")]]
+
     reply_markup = InlineKeyboardMarkup(buttons)
 
     # Check if the logo URL is valid and in a supported format
@@ -174,7 +175,7 @@ def generate_applied_filters_text(data):
 
     # Iterate through the filters and extract the values
     for key, value in data["FILTERS"].items():
-        if not key.endswith('_id'):
+        if not key.endswith('_query'):
             filters_text[key] = value
 
     # Generate the output text
@@ -185,6 +186,9 @@ def generate_applied_filters_text(data):
 
 def toggle_inc_search(data):
     # Toggle the 'inc_search' flag
-    data.setdefault('inc_search', False)
-    data['inc_search'] = not data['inc_search']
-    print("inc_search:", data['inc_search'])
+    if not data['FILTERS']:
+        data['FILTERS'] = {}
+
+    data['FILTERS'].setdefault('inc_search', False)
+    data['FILTERS']['inc_search'] = not data['FILTERS']['inc_search']  # a label on filter menu
+    print("inc_search:", data['FILTERS']['inc_search'])

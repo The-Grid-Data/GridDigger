@@ -10,19 +10,28 @@ from handlers.utils import show_profiles, generate_applied_filters_text
 def show_filters_main_menu(update: Update, context) -> int:
     query = update.callback_query
     user_data = context.user_data
+    user_data.setdefault("FILTERS", {})
+    user_data['FILTERS'].setdefault("inc_search", False)
+
     results_count = len(api.get_profiles(user_data))  # Assuming get_profiles function takes user_data and returns results
 
     # Limit the number of results shown on the button text to 20
     display_results_count = min(results_count, 20)
 
+    filters = user_data.get('FILTERS', {})
+    profile_filter_emoji = "🟡" if 'profileNameSearch' in filters or 'profileType' in filters or 'profileSector' in filters or 'profileStatuses' in filters else '🟢'
+    product_filter_emoji = "🟡" if 'productTypes' in filters or 'productStatuses' in filters else '🟢'
+    entity_filter_emoji = "🟡" if 'entityTypes' in filters or 'entityName' in filters else '🟢'
+    asset_filter_emoji = "🟡" if 'assetTickers' in filters or 'assetTypes' in filters or 'assetStandards' in filters else '🟢'
+
     # Create buttons
     keyboard_buttons = [
-        [InlineKeyboardButton('🟢Profile filters', callback_data='profile_filters'),
-         InlineKeyboardButton('🟢Product filters', callback_data='product_filters')],
-        [InlineKeyboardButton('🟢Asset filters', callback_data='asset_filters'),
-         InlineKeyboardButton('🟢Entity filters', callback_data='entity_filters')],
+        [InlineKeyboardButton(f'{profile_filter_emoji}Profile filters', callback_data='profile_filters'),
+         InlineKeyboardButton(f'{product_filter_emoji}Product filters', callback_data='product_filters')],
+        [InlineKeyboardButton(f'{asset_filter_emoji}Asset filters', callback_data='asset_filters'),
+         InlineKeyboardButton(f'{entity_filter_emoji}Entity filters', callback_data='entity_filters')],
         [InlineKeyboardButton('🔄Reset Filters', callback_data='reset_all'),
-         InlineKeyboardButton('🔘Inc search', callback_data='inc_search')]
+         InlineKeyboardButton(f"{'✔️' if user_data['FILTERS']['inc_search'] else ''}Inc search", callback_data='inc_search')]
     ]
 
     # Add "Show profiles" button if results_count > 0
@@ -30,16 +39,17 @@ def show_filters_main_menu(update: Update, context) -> int:
         keyboard_buttons.insert(0, [InlineKeyboardButton(f'Show profiles ({display_results_count})', callback_data='show')])
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
-    query.edit_message_text(f"Applied filters: {generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
+    query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
 def handle_filter_main_text(update: Update, context) -> int:
     data = context.user_data
     data.setdefault("FILTERS", {})
+    data['FILTERS'].setdefault("inc_search", False)
 
     data["FILTERS"]["profileNameSearch"] = update.message.text
-    data["FILTERS"]["profileNameSearch_id"] = update.message.text
+    data["FILTERS"]["profileNameSearch_query"] = update.message.text
 
     # todo apply filters here
 
@@ -49,14 +59,20 @@ def handle_filter_main_text(update: Update, context) -> int:
     # Limit the number of results shown on the button text to 20
     display_results_count = min(results_count, 20)
 
+    filters = data.get('FILTERS', {})
+    profile_filter_emoji = "🟡" if 'profileNameSearch' in filters or 'profileType' in filters or 'profileSector' in filters or 'profileStatuses' in filters else '🟢'
+    product_filter_emoji = "🟡" if 'productTypes' in filters or 'productStatuses' in filters else '🟢'
+    entity_filter_emoji = "🟡" if 'entityTypes' in filters or 'entityName' in filters else '🟢'
+    asset_filter_emoji = "🟡" if 'assetTickers' in filters or 'assetTypes' in filters or 'assetStandards' in filters else '🟢'
+
     # Create buttons
     keyboard_buttons = [
-        [InlineKeyboardButton('🟢Profile filters', callback_data='profile_filters'),
-         InlineKeyboardButton('🟢Product filters', callback_data='product_filters')],
-        [InlineKeyboardButton('🟢Asset filters', callback_data='asset_filters'),
-         InlineKeyboardButton('🟢Entity filters', callback_data='entity_filters')],
+        [InlineKeyboardButton(f'{profile_filter_emoji}Profile filters', callback_data='profile_filters'),
+         InlineKeyboardButton(f'{product_filter_emoji}Product filters', callback_data='product_filters')],
+        [InlineKeyboardButton(f'{asset_filter_emoji}Asset filters', callback_data='asset_filters'),
+         InlineKeyboardButton(f'{entity_filter_emoji}Entity filters', callback_data='entity_filters')],
         [InlineKeyboardButton('🔄Reset Filters', callback_data='reset_all'),
-         InlineKeyboardButton('🔘Inc search', callback_data='inc_search')]
+         InlineKeyboardButton(f"{'✔️' if data['FILTERS']['inc_search'] else ''}Inc search", callback_data='inc_search')]
     ]
 
     # Add "Show profiles" button if results_count > 0
@@ -178,7 +194,7 @@ def handle_filter_choices_callback(update: Update, context) -> int:
         print("filter_sub_type", filter_sub_type)
         print("id", id)
         data.setdefault("FILTERS", {})
-        data["FILTERS"][filter_sub_type + '_id'] = id
+        data["FILTERS"][filter_sub_type + '_query'] = id
         # api request to get value via id
         button_text = next(
             button.text for row in update.callback_query.message.reply_markup.inline_keyboard for button in row if
@@ -194,7 +210,7 @@ def handle_filter_filling_text(update: Update, context) -> int:
     data = context.user_data
 
     data["FILTERS"][data["current_filter"]] = update.message.text
-    data["FILTERS"][data["current_filter"]+'_id'] = update.message.text
+    data["FILTERS"][data["current_filter"]+'_query'] = update.message.text
     update.message.reply_text(f"Value '{update.message.text}' saved for {data['current_filter']}.")
 
     filter_type = data.setdefault('filter_type', 'None')
@@ -216,7 +232,7 @@ def handle_filter_filling_text(update: Update, context) -> int:
 
         # Extract labels from sub_filters and create buttons
         buttons = [
-            [InlineKeyboardButton(f"🟢{sub_filter['label']}", callback_data=f"{filter_type}_{sub_filter['query']}")]
+            [InlineKeyboardButton(f"{'🟡' if data['FILTERS'].get(sub_filter['query']) else '🟢'}{sub_filter['label']}", callback_data=f"{filter_type}_{sub_filter['query']}")]
             for sub_filter in sub_filters]
 
         # Add "Show profiles" button if profile_count > 0
@@ -256,8 +272,11 @@ def show_sub_filters(update: Update, context) -> int:
         # Fetch sub-filters dynamically based on filter_type
         sub_filters = api.get_sub_filters(filter_type)
 
+        filters = data.get('FILTERS', {})
+        profile_filter_emoji = "🟡" if 'profileNameSearch' in filters or 'profileType' in filters or 'profileSector' in filters or 'profileStatuses' in filters else '🟢'
+
         # Extract labels from sub_filters and create buttons
-        buttons = [[InlineKeyboardButton(f"🟢{sub_filter['label']}",
+        buttons = [[InlineKeyboardButton(f"{'🟡' if data['FILTERS'].get(sub_filter['query']) else '🟢'}{sub_filter['label']}",
                                          callback_data=f"{filter_type}_{sub_filter['query']}")]
                    for sub_filter in sub_filters]
         buttons.insert(0, [InlineKeyboardButton("Reset", callback_data=f"reset_{filter_type}_filters"),

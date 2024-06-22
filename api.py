@@ -24,8 +24,6 @@ with open('filters.json', 'r') as f:
     filters_config = json.load(f)
 
 
-
-
 def apply_filters(filters):
     combined_clauses = {}
     for filter_name, value in filters:
@@ -79,12 +77,19 @@ def fetch_all_filter_queries():
 def get_profiles(data):
     # Initialize a dictionary to hold filter names and values
     data.setdefault("FILTERS", {})
+    data['FILTERS'].setdefault("inc_search", False)
+    inc_search: bool = data['FILTERS'].get('inc_search', False)
 
     filters = {}
 
     for key, value in data["FILTERS"].items():
-        if key.endswith('_id'):
-            filter_name = key.replace('_id', '')
+        if key.endswith('_query'):
+            if key == 'profileNameSearch_query' or key == 'profileDeepSearch_query':  # cheap hack to toggle inc_search, but it works. Better approach requires refactoring.
+                if key == 'profileNameSearch_query' and inc_search:
+                    key = 'profileDeepSearch_query'
+                elif key == 'profileDeepSearch_query' and not inc_search:
+                    key = 'profileNameSearch_query'
+            filter_name = key.replace('_query', '')
             filters[filter_name] = value
     print("filters", filters)
 
@@ -98,7 +103,8 @@ def get_profiles(data):
 
     filtered_profiles = apply_filters(filters_list)
     print("filters_list", filtered_profiles)
-    return filtered_profiles['data']['profiles'] #here
+    return filtered_profiles['data']['profiles']
+
 
 def get_profile_data_by_id(profile_id):
     query = f"""
@@ -139,10 +145,16 @@ def get_full_profile_data_by_id(profile_id):
             tagLine
             descriptionShort
             descriptionLong
+            profileStatus {{ name }}
             logo
             urlMain
             urlDocumentation
+            urlBlog
+            urlWhitepaper
             socials {{ url }}
+            profileType {{ name }}
+            slug
+            foundingDate
         }}
     }}
     """
@@ -167,7 +179,6 @@ def fetch_filter_options(query):
         logging.error(f"GraphQL query error: {response_data['errors']}")
         return []
     return response_data.get('data', {}).get(query.split()[0], [])
-
 
 # # Example usage
 # filters = [
