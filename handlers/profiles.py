@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 import api
 from handlers import utils, FILTER_MAIN
 from handlers.filters import show_sub_filters, show_filters_main_menu
-from handlers.utils import show_profiles, escape_markdown
+from handlers.utils import show_profiles
 
 MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
 
