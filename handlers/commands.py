@@ -2,12 +2,14 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 
 import api
+import database
 from handlers import FILTER_MAIN
 from handlers.utils import generate_applied_filters_text
 
 
 def start(update: Update, context) -> int:
     update.message.reply_text("Try something cool like 'solana'\n\nOr hit /filter to get started.")
+    database.add_user(update.effective_user.id)
     return -1 #SEARCH_READY
 
 
