@@ -6,6 +6,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, ContextTypes
 
 import api
+from database import increment_fetch_count
 
 MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
 
@@ -50,6 +51,7 @@ def create_main_menu_filter_keyboard(user_data, results_count):
 def show_profiles(data, update: Update, context):
     profiles = api.get_profiles(data)
 
+    increment_fetch_count(update.effective_user.id)
     # Send a monitoring message with user details
     user = update.effective_user
     monitoring_message_text = (
