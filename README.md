@@ -1,6 +1,6 @@
 # GridDigger
 
-[![GridDigger](https://github.com/The-Grid-Data/GridDigger/tree/railway)](https://github.com/The-Grid-Data/GridDigger/tree/railway)
+[![GridDigger](https://github.com/The-Grid-Data/GridDigger/tree/railway)](https://github.com/The-Grid-Data/GridDigger/)
 
 ## Introduction
 
