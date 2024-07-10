@@ -1,0 +1,5 @@
+Try something cool like 'solana'
+
+Or hit /filter to get started.
+
+Press /help if you got stuck.

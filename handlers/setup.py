@@ -1,7 +1,7 @@
 from telegram.ext import ConversationHandler, CommandHandler, filters, MessageHandler, CallbackQueryHandler
 
 from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING
-from handlers.commands import start, help_command, filter
+from handlers.commands import start, help_command, filter, open_source_command
 from handlers.profiles import handle_filter_main_callback, expand_profile_callback
 from handlers.filters import handle_filter_main_text, handle_filter_sub_callback, handle_filter_choices_callback, \
     handle_filter_filling_text
@@ -28,6 +28,7 @@ def setup(application):
         per_message=False,
     )
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("open_source", open_source_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(conv_handler)  # for flows
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^expand_'))

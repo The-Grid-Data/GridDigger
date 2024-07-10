@@ -3,6 +3,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
 import api
+from database import increment_expand_count
 from handlers import utils, FILTER_MAIN
 from handlers.filters import show_sub_filters, show_filters_main_menu
 from handlers.utils import show_profiles
@@ -61,6 +62,8 @@ def expand_profile_callback(update: Update, context):
 
     # Fetch the full profile data
     profile_data = api.get_full_profile_data_by_id(profile_id)
+
+    increment_expand_count(update.effective_user.id)
 
     # Send a monitoring message with user details
     user = update.effective_user

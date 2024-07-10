@@ -8,7 +8,8 @@ from handlers.utils import generate_applied_filters_text, create_main_menu_filte
 
 
 def start(update: Update, context) -> int:
-    update.message.reply_text("Try something cool like 'solana'\n\nOr hit /filter to get started.")
+    txt = open("handlers/long_messages/start.txt", "r").read()
+    update.message.reply_text(txt)
     database.add_user(update.effective_user.id)
     return -1 #SEARCH_READY
 
@@ -27,7 +28,12 @@ def filter(update: Update, context) -> int:
     update.message.reply_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
+def open_source_command(update: Update, context) -> None:
+    txt = open("handlers/long_messages/open_source.txt", "r").read()
+    update.message.reply_text(txt)
+
 
 def help_command(update: Update, context) -> None:
-    update.message.reply_text("Use /start to test this bot.")
+    txt = open("handlers/long_messages/help.txt", "r").read()
+    update.message.reply_text(txt)
 
