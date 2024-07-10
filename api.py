@@ -16,7 +16,7 @@ load_dotenv(".env")
 url = os.getenv("GRAPHQL_ENDPOINT")
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': f"Bearer {os.getenv('HASURA_API_TOKEN')}"
+    #'Authorization': f"Bearer {os.getenv('HASURA_API_TOKEN')}"
 }
 
 # Load filter definitions from JSON file

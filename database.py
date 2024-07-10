@@ -248,9 +248,6 @@ def increment_expand_count(user_id):
 #create_user_stats_table()
 #generate_database_design()
 #add_user(1823406139, "hehe boi")
-increment_fetch_count(1823406139)
-increment_expand_count(1823406139)
-show_user_data(1823406139)
 #create_table()
 #add_user(0)  # Add a specific user ID to test
 # display_users()  # Display all users

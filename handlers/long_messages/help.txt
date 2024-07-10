@@ -9,7 +9,7 @@ Commands list:
 
     /start - Everything has a start!
 
-    /filters - Gets filters main menu
+    /filter - Gets filters main menu
 
     /help - i.e. recursion
 
