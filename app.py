@@ -53,7 +53,7 @@ class DefaultConfig:
     PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     MODE = os.environ.get("MODE", "webhook")
-    WEBHOOK_URL = os.environ.get("LAMBDA_WEBHOOK_URL", "https://015c-175-139-40-223.ngrok-free.app")
+    WEBHOOK_URL = os.environ.get("LAMBDA_WEBHOOK_URL", "https://9153-2405-3800-803-d061-1c1b-4adc-b676-5f6d.ngrok-free.app")
     LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 
     @staticmethod

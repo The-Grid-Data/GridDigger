@@ -20,7 +20,7 @@
     "root": "profiles",
     "profileNameSearch": "name: { _ilike: \"%value%\" }",
     "profileDeepSearch": "_or: [{ name: { _ilike: \"%value%\" } }, { descriptionShort: { _ilike: \"%value%\" } }, { descriptionLong: { _ilike: \"%value%\" } }]",
-
+    "solana_profiles_only": "products: {deployedOnProductId: {_eq: value }}",
     "profileType": "profileType: { id: { _eq: value } }",
     "profileSector": "profileSector: { id: { _eq: value } }",
     "profileStatuses": "entities: { id: { _eq: value } }",

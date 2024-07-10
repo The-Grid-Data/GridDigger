@@ -10,6 +10,43 @@ import api
 MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
 
 
+def create_main_menu_filter_keyboard(user_data, results_count):
+    # Limit the number of results shown on the button text to 20
+    display_results_count = min(results_count, 20)
+
+    # Retrieve filters from user data
+    filters = user_data.get('FILTERS', {})
+
+    # Determine the appropriate emoji for each filter type
+    profile_filter_emoji = "🟡" if 'profileNameSearch' in filters or 'profileType' in filters or 'profileSector' in filters or 'profileStatuses' in filters else '🟢'
+    product_filter_emoji = "🟡" if 'productTypes' in filters or 'productStatuses' in filters else '🟢'
+    entity_filter_emoji = "🟡" if 'entityTypes' in filters or 'entityName' in filters else '🟢'
+    asset_filter_emoji = "🟡" if 'assetTickers' in filters or 'assetTypes' in filters or 'assetStandards' in filters else '🟢'
+
+    solana_toggle_text = "✔️Solana filter" if user_data.get('solana_filter_toggle', True) else "Solana filter"
+
+    # Create buttons
+    keyboard_buttons = [
+        [InlineKeyboardButton('🔄Reset filters', callback_data='reset_all')],
+        [InlineKeyboardButton(f'{profile_filter_emoji}Profile filters', callback_data='profile_filters'),
+         InlineKeyboardButton(f'{product_filter_emoji}Product filters', callback_data='product_filters')],
+        [InlineKeyboardButton(f'{asset_filter_emoji}Asset filters', callback_data='asset_filters'),
+         InlineKeyboardButton(f'{entity_filter_emoji}Entity filters', callback_data='entity_filters')],
+        [InlineKeyboardButton(f'{solana_toggle_text}', callback_data='solana_filter_toggle'),
+         InlineKeyboardButton(f"{'✔️' if user_data.get('inc_search') else ''}Inc search",
+                              callback_data='inc_search')]
+    ]
+
+    # Add "Show profiles" button if results_count > 0
+    if results_count > 0:
+        keyboard_buttons.insert(0, [
+            InlineKeyboardButton(f'Show profiles ({display_results_count})', callback_data='show')])
+
+    # Create and return the InlineKeyboardMarkup object
+    keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+    return keyboard
+
+
 def show_profiles(data, update: Update, context):
     profiles = api.get_profiles(data)
 
@@ -54,26 +91,33 @@ def send_profile_message(update: Update, context, profile):
 
     # Check if the logo URL is valid and in a supported format
     logo_url = profile_data.get('logo')
+    # Usage in your Telegram bot
     if logo_url and is_valid_url(logo_url):
         if is_supported_image_format(logo_url):
-            context.bot.send_photo(chat_id=update.effective_chat.id, photo=logo_url, caption=message_text,
-                                         parse_mode='Markdown', reply_markup=reply_markup)
-        elif is_convertible_image_format(logo_url):
-            converted_image = convert_image(logo_url)
-            if converted_image:
-                context.bot.send_photo(chat_id=update.effective_chat.id, photo=converted_image,
-                                             caption=message_text,
-                                             parse_mode='Markdown', reply_markup=reply_markup)
-            else:
-                context.bot.send_message(chat_id=update.effective_chat.id, text=message_text,
-                                               parse_mode='Markdown',
-                                               reply_markup=reply_markup)
+            download_and_send_image(logo_url, update.effective_chat.id, message_text, reply_markup, context)
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
-                                           reply_markup=reply_markup)
+                                     reply_markup=reply_markup)
     else:
         context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
-                                       reply_markup=reply_markup)
+                                 reply_markup=reply_markup)
+
+
+import requests
+
+def download_and_send_image(url, chat_id, message_text, reply_markup, context):
+    try:
+        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        if response.status_code == 200:
+            with open('temp_image.png', 'wb') as f:
+                f.write(response.content)
+            context.bot.send_photo(chat_id=chat_id, photo=open('temp_image.png', 'rb'), caption=message_text,
+                                   parse_mode='Markdown', reply_markup=reply_markup)
+        else:
+            context.bot.send_message(chat_id=chat_id, text="Failed to download image.", parse_mode='Markdown', reply_markup=reply_markup)
+    except requests.exceptions.RequestException as e:
+        context.bot.send_message(chat_id=chat_id, text=f"Error: {str(e)}", parse_mode='Markdown', reply_markup=reply_markup)
+
 
 
 def is_valid_url(url):
@@ -90,7 +134,7 @@ def is_valid_url(url):
 
 
 def is_supported_image_format(url):
-    supported_formats = {'.jpg', '.jpeg', '.png'}
+    supported_formats = {}#{'.jpg', '.jpeg', '.png'}
     path = urlparse(url).path
     _, ext = os.path.splitext(path)
     return ext.lower() in supported_formats
@@ -174,10 +218,19 @@ def convert_image(url):
 
 
 def reset_filters(data) -> bool:
-    if not data.get('FILTERS'):
-        return False
-    data['FILTERS'] = {}
-    return True
+    if data.get('FILTERS'):
+        data['FILTERS'] = {}
+        return True
+    return False
+
+
+    # print(data)
+    # print(data.get('FILTERS'))
+    # print("empty FILTERS" if not data.get('FILTERS') or data['FILTERS'] == {} else "FILTERS")
+    # if not data.get('FILTERS') or data['FILTERS'] == {}:
+    #     return False
+    # data['FILTERS'] = {}
+    # return True
 
 
 def generate_applied_filters_text(data):
@@ -198,13 +251,22 @@ def generate_applied_filters_text(data):
 
 
 def toggle_inc_search(data):
-    # Toggle the 'inc_search' flag
-    if not data['FILTERS']:
-        data['FILTERS'] = {}
+    # # Toggle the 'inc_search' flag
+    # if not data['FILTERS']:
+    #     data['FILTERS'] = {}
 
-    data['FILTERS'].setdefault('inc_search', False)
-    data['FILTERS']['inc_search'] = not data['FILTERS']['inc_search']  # a label on filter menu
-    print("inc_search:", data['FILTERS']['inc_search'])
+    data.setdefault('inc_search', False)
+    data['inc_search'] = not data['inc_search']  # a label on filter menu
+    print("inc_search:", data['inc_search'])
+
+def toggle_solana_filter(data):
+    # # Toggle the 'inc_search' flag
+    # if not data['FILTERS']:
+    #     data['FILTERS'] = {}
+
+    data.setdefault('solana_filter_toggle', True)
+    data['solana_filter_toggle'] = not data['solana_filter_toggle']  # a label on filter menu
+    print("solana_filter_toggle:", data['solana_filter_toggle'])
 
 
 # some user names have special characters that cause errors.

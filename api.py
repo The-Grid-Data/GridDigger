@@ -77,14 +77,15 @@ def fetch_all_filter_queries():
 def get_profiles(data):
     # Initialize a dictionary to hold filter names and values
     data.setdefault("FILTERS", {})
-    data['FILTERS'].setdefault("inc_search", False)
-    inc_search: bool = data['FILTERS'].get('inc_search', False)
+    data.setdefault("inc_search", False)
+    inc_search: bool = data.get('inc_search', False)
 
     filters = {}
 
     for key, value in data["FILTERS"].items():
         if key.endswith('_query'):
-            if key == 'profileNameSearch_query' or key == 'profileDeepSearch_query':  # cheap hack to toggle inc_search, but it works. Better approach requires refactoring.
+            # cheap hack to toggle inc_search, but it works. Better approach requires refactoring.
+            if key == 'profileNameSearch_query' or key == 'profileDeepSearch_query':
                 if key == 'profileNameSearch_query' and inc_search:
                     key = 'profileDeepSearch_query'
                 elif key == 'profileDeepSearch_query' and not inc_search:
@@ -93,11 +94,16 @@ def get_profiles(data):
             filters[filter_name] = value
     print("filters", filters)
 
-    if not filters:
+    if data.get('solana_filter_toggle', True) is True: #
+        filters['solana_profiles_only'] = 22
+
+
+    if not filters:  # just to prevent errors
         filters = {
             "profileNameSearch": "",
             #"profileType": 1,
         }
+
 
     filters_list = [(filter_name, value) for filter_name, value in filters.items()]
 

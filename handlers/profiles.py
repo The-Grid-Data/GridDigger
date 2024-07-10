@@ -1,5 +1,4 @@
 import os
-
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
@@ -32,9 +31,15 @@ def handle_filter_main_callback(update: Update, context) -> int:
             return FILTER_MAIN
     if query.data == 'inc_search':
         utils.toggle_inc_search(data)
-
-        context.bot.send_message(chat_id=update.effective_chat.id, text=f"\nEnabling this will search for both profile titles and descriptions.")
+        context.bot.send_message(chat_id=update.effective_chat.id, text=f"\nEnabling this results in searching for both profile titles and descriptions.")
         return show_filters_main_menu(update, context)
+
+    if query.data.startswith('solana'):
+        utils.toggle_solana_filter(data)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text=f"\nThis Solana filter is enabled by defualt to only show Solana Profiles. Disabling it results in showing non-Solana profiles as well.")
+        return show_filters_main_menu(update, context)
+
     if query.data.endswith("_filters"):
         filter_type = query.data.split("_")[0]
         data['filter_type'] = {}  # to avoid stupid errors

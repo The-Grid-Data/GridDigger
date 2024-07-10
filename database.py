@@ -78,4 +78,4 @@ def display_users():
 
 #create_table()
 #add_user(0)  # Add a specific user ID to test
-#display_users()  # Display all users
+# display_users()  # Display all users
