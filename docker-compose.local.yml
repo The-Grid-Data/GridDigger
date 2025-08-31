@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Local Redis for caching (optional)
+  redis-local:
+    image: redis:7-alpine
+    container_name: griddigger-redis-local
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --save 900 1 --save 300 10 --save 60 10000
+    volumes:
+      - redis_local_data:/data
+    networks:
+      - local-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  redis_local_data:
+
+networks:
+  local-network:
+    driver: bridge

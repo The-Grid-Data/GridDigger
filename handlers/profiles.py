@@ -17,29 +17,29 @@ def split_message(text, max_length):
 # Maximum length for Telegram media captions
 MAX_CAPTION_LENGTH = 1024
 
-def handle_filter_main_callback(update: Update, context) -> int:
+async def handle_filter_main_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.answer()
+    await query.answer()
     data = context.user_data
 
     if query.data == "show":
-        return show_profiles(data, update, context)
+        return await show_profiles(data, update, context)
     if query.data.startswith('reset'):
         if utils.reset_filters(data):
-            return show_filters_main_menu(update, context)
+            return await show_filters_main_menu(update, context)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
+            await context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
             return FILTER_MAIN
     if query.data == 'inc_search':
         utils.toggle_inc_search(data)
-        context.bot.send_message(chat_id=update.effective_chat.id, text=f"\nEnabling this results in searching for both profile titles and descriptions.")
-        return show_filters_main_menu(update, context)
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=f"\nEnabling this results in searching for both profile titles and descriptions.")
+        return await show_filters_main_menu(update, context)
 
     if query.data.startswith('solana'):
         utils.toggle_solana_filter(data)
-        context.bot.send_message(chat_id=update.effective_chat.id,
+        await context.bot.send_message(chat_id=update.effective_chat.id,
                                  text=f"\nThis Solana filter is enabled by defualt to only show Solana Profiles. Disabling it results in showing non-Solana profiles as well.")
-        return show_filters_main_menu(update, context)
+        return await show_filters_main_menu(update, context)
 
     if query.data.endswith("_filters"):
         filter_type = query.data.split("_")[0]
@@ -49,13 +49,13 @@ def handle_filter_main_callback(update: Update, context) -> int:
         print("query.data", query.data)
         print("filter_type", filter_type)
 
-        return show_sub_filters(update, context)
+        return await show_sub_filters(update, context)
     return ConversationHandler.END
 
 
-def expand_profile_callback(update: Update, context):
+async def expand_profile_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    query.answer()
+    await query.answer()
 
     # Extract profile ID from the callback data
     profile_id = query.data.split('_')[1]
@@ -65,42 +65,88 @@ def expand_profile_callback(update: Update, context):
 
     increment_expand_count(update.effective_user.id)
 
-    # Send a monitoring message with user details
-    user = update.effective_user
-    user_link = f"[{user.username}](tg://user?id={user.id})"
-    monitoring_message_text = (
-        f"User {user.id} ({user_link}) expanded profile {profile_id} of name {profile_data['name']}"
-    )
-    context.bot.send_message(text=monitoring_message_text, parse_mode='Markdown', chat_id=MONITORING_GROUP_ID)
+    # Add null safety for profile_data
+    if not profile_data:
+        profile_data = {}
+    
+    # Handle V2 schema structure - profile_data IS the profileInfo (not an array)
+    # The get_full_profile_data_by_id function returns the first profileInfo directly
+    name = profile_data.get('name', 'Unknown')
+    profile_id_display = profile_data.get('id', profile_id)
+    slug = profile_data.get('slug', '-')
+    
+    # Send a monitoring message with user details (only if MONITORING_GROUP_ID is set)
+    if MONITORING_GROUP_ID:
+        user = update.effective_user
+        user_link = f"[{user.username}](tg://user?id={user.id})"
+        monitoring_message_text = (
+            f"User {user.id} ({user_link}) expanded profile {profile_id} of name {name}"
+        )
+        try:
+            await context.bot.send_message(text=monitoring_message_text, parse_mode='Markdown', chat_id=MONITORING_GROUP_ID)
+        except Exception as e:
+            print(f"Warning: Could not send monitoring message: {e}")
 
-
-    # Construct full profile message text
-    message_text = f"*ID:* {profile_data['id']}\n"
-    message_text += f"*Name:* {profile_data['name']}\n"
-    message_text += f"*Sector:* {profile_data['profileSector']['name'] if profile_data.get('profileSector') else '-'}\n"
-    message_text += f"*Type:* {profile_data['profileType']['name'] if profile_data.get('profileType') else '-'}\n"
-    message_text += f"*Status:* {profile_data['profileStatus']['name'] if profile_data.get('profileStatus') else '-'}\n"
+    # Construct full profile message text using V2 schema structure
+    message_text = f"*ID:* {profile_id_display}\n"
+    message_text += f"*Name:* {name}\n"
+    message_text += f"*Sector:* {profile_data.get('profileSector', {}).get('name', '-') if profile_data.get('profileSector') else '-'}\n"
+    message_text += f"*Type:* {profile_data.get('profileType', {}).get('name', '-') if profile_data.get('profileType') else '-'}\n"
+    message_text += f"*Status:* {profile_data.get('profileStatus', {}).get('name', '-') if profile_data.get('profileStatus') else '-'}\n"
     message_text += f"*Founding Date:* {profile_data.get('foundingDate', '-')}\n"
-    message_text += f"*Slug:* {profile_data.get('slug', '-')}\n"
-    #message_text += f"*Description:* {profile_data.get('descriptionShort', '-')}\n" it might get too long (telegram.error.BadRequest: Media_caption_too_long)
+    message_text += f"*Slug:* {slug}\n"
     message_text += f"*Long Description:* {profile_data.get('descriptionLong', '-')}\n"
     message_text += f"*Tag Line:* {profile_data.get('tagLine', '-')}\n"
-    message_text += f"*Main Product Type:* {', '.join([product['name'] for product in profile_data.get('products', [])])}\n" # you may remove this
-    message_text += f"*Issued Assets:* {', '.join([asset['name'] for asset in profile_data.get('assets', [])])}\n"
+    
+    # Handle products array from root
+    root_data = profile_data.get('root', {})
+    products = root_data.get('products', [])
+    
+    # Add null safety for products
+    if products is not None:
+        product_names = [product.get('name', 'Unknown') for product in products if product.get('name')]
+    else:
+        product_names = []
+    message_text += f"*Main Product Type:* {', '.join(product_names) if product_names else '-'}\n"
+    
+    # Handle assets array from root
+    assets = root_data.get('assets', [])
+    
+    # Add null safety for assets
+    if assets is not None:
+        asset_names = [asset.get('name', 'Unknown') for asset in assets if asset.get('name')]
+    else:
+        asset_names = []
+    message_text += f"*Issued Assets:* {', '.join(asset_names) if asset_names else '-'}\n"
 
-
+    # Handle URLs from V2 schema structure
     buttons = []
-    if profile_data.get('urlMain'):
-        buttons.append([InlineKeyboardButton("Website", url=profile_data['urlMain'])])
-    if profile_data.get('urlDocumentation'):
-        buttons.append([InlineKeyboardButton("Documentation", url=profile_data['urlDocumentation'])])
-    if profile_data.get('urlWhitepaper'):
-        buttons.append([InlineKeyboardButton("Whitepaper", url=profile_data['urlWhitepaper'])])
-    if profile_data.get('urlBlog'):
-        buttons.append([InlineKeyboardButton("Blog", url=profile_data['urlBlog'])])
-    if profile_data.get('socials'):
-        for social in profile_data['socials']:
-            buttons.append([InlineKeyboardButton('Social', url=social['url'])])
+    urls = profile_data.get('urls', [])
+    
+    # Add null safety for urls
+    if urls is None:
+        urls = []
+    
+    # Create buttons based on URL types
+    for url_obj in urls:
+        url = url_obj.get('url')
+        url_type = url_obj.get('urlType', {}).get('name', '').lower()
+        
+        if url and url_type:
+            if 'website' in url_type or 'main' in url_type:
+                buttons.append([InlineKeyboardButton("Website", url=url)])
+            elif 'documentation' in url_type or 'docs' in url_type:
+                buttons.append([InlineKeyboardButton("Documentation", url=url)])
+            elif 'whitepaper' in url_type:
+                buttons.append([InlineKeyboardButton("Whitepaper", url=url)])
+            elif 'blog' in url_type:
+                buttons.append([InlineKeyboardButton("Blog", url=url)])
+            elif 'social' in url_type or 'twitter' in url_type or 'telegram' in url_type:
+                buttons.append([InlineKeyboardButton("Social", url=url)])
+            else:
+                # Generic button for other URL types
+                buttons.append([InlineKeyboardButton(url_type.title(), url=url)])
+    
     reply_markup = InlineKeyboardMarkup(buttons) if buttons else None
 
     # Check if the original message has an image
@@ -111,11 +157,11 @@ def expand_profile_callback(update: Update, context):
 
             try:
                 # Update the caption for a media message with the first part
-                initial_message = query.edit_message_caption(caption=messages[0], parse_mode='Markdown',
+                initial_message = await query.edit_message_caption(caption=messages[0], parse_mode='Markdown',
                                                              reply_markup=reply_markup)
                 # Send the remaining parts as separate messages
                 for part in messages[1:]:
-                    query.message.reply_text(text=part, parse_mode='Markdown',
+                    await query.message.reply_text(text=part, parse_mode='Markdown',
                                              reply_to_message_id=initial_message.message_id)
             except BadRequest as e:
                 if "Media_caption_too_long" in str(e):
@@ -123,11 +169,11 @@ def expand_profile_callback(update: Update, context):
                     raise e
         else:
             # Update the caption if it's within the limit
-            query.edit_message_caption(caption=message_text, parse_mode='Markdown', reply_markup=reply_markup)
+            await query.edit_message_caption(caption=message_text, parse_mode='Markdown', reply_markup=reply_markup)
     else:
         try:
             # Update the text for a non-media message
-            query.edit_message_text(text=message_text, parse_mode='Markdown', reply_markup=reply_markup)
+            await query.edit_message_text(text=message_text, parse_mode='Markdown', reply_markup=reply_markup)
         except BadRequest as e:
             # Handle any errors
             raise e

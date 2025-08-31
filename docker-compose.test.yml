@@ -1,0 +1,170 @@
+version: '3.8'
+
+services:
+  # Test application
+  griddigger-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: griddigger-test
+    environment:
+      - MODE=polling
+      - LOG_LEVEL=DEBUG
+      - ENABLE_CACHING=false
+      - USE_NEW_GRAPHQL_ENDPOINT=false
+      - DB_HOST=mysql-test
+      - DB_DATABASE=griddigger_test
+      - DB_USER=test_user
+      - DB_PASSWORD=test_password
+      - REDIS_URL=redis://redis-test:6379/1
+      - TELEGRAM_BOT_TOKEN=123456:TEST-TOKEN-NOT-REAL
+      - TEST_DB_HOST=mysql-test
+      - TEST_DB_DATABASE=griddigger_test
+      - TEST_DB_USER=test_user
+      - TEST_DB_PASSWORD=test_password
+      - TEST_GRAPHQL_ENDPOINT=https://maximum-grackle-73.hasura.app/v1/graphql
+      - TEST_GRAPHQL_ENDPOINT_V2=https://beta.node.thegrid.id/graphql
+      - TEST_LOG_LEVEL=DEBUG
+      - TEST_ENABLE_CACHING=false
+      - CONNECTION_POOL_SIZE=2
+      - REQUEST_TIMEOUT=10
+      - MAX_RETRIES=1
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    volumes:
+      - ./tests:/app/tests
+      - ./logs:/app/logs
+      - ./.env.testing:/app/.env.test
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo 'Waiting for services to be ready...' &&
+        sleep 5 &&
+        echo 'Running database initialization...' &&
+        python -c 'from database_v2 import db_initializer; db_initializer.initialize_schema()' &&
+        echo 'Running tests...' &&
+        python -m pytest tests/ -v --tb=short --color=yes --durations=10
+      "
+
+  # Test MySQL database
+  mysql-test:
+    image: mysql:8.0
+    container_name: griddigger-mysql-test
+    environment:
+      MYSQL_ROOT_PASSWORD: test_root_password
+      MYSQL_DATABASE: griddigger_test
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_password
+    ports:
+      - "3307:3306"  # Different port to avoid conflicts
+    volumes:
+      - mysql_test_data:/var/lib/mysql
+      - ./mysql-test-init:/docker-entrypoint-initdb.d
+    networks:
+      - test-network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "test_user", "-ptest_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # Test Redis cache
+  redis-test:
+    image: redis:7-alpine
+    container_name: griddigger-redis-test
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    networks:
+      - test-network
+    command: redis-server --appendonly no --save ""
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Test runner with coverage
+  test-coverage:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: griddigger-test-coverage
+    environment:
+      - MODE=polling
+      - LOG_LEVEL=DEBUG
+      - ENABLE_CACHING=false
+      - DB_HOST=mysql-test
+      - DB_DATABASE=griddigger_test
+      - DB_USER=test_user
+      - DB_PASSWORD=test_password
+      - REDIS_URL=redis://redis-test:6379/1
+      - TELEGRAM_BOT_TOKEN=123456:TEST-TOKEN-NOT-REAL
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    volumes:
+      - ./tests:/app/tests
+      - ./coverage_reports:/app/coverage_reports
+      - ./.env.testing:/app/.env.test
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo 'Running tests with coverage...' &&
+        python -c 'from database_v2 import db_initializer; db_initializer.initialize_schema()' &&
+        python -m pytest tests/ -v --cov=. --cov-report=html:/app/coverage_reports --cov-report=term-missing --tb=short
+      "
+    profiles:
+      - coverage
+
+  # Integration test runner
+  integration-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: griddigger-integration-test
+    environment:
+      - MODE=polling
+      - LOG_LEVEL=DEBUG
+      - ENABLE_CACHING=true
+      - DB_HOST=mysql-test
+      - DB_DATABASE=griddigger_test
+      - DB_USER=test_user
+      - DB_PASSWORD=test_password
+      - REDIS_URL=redis://redis-test:6379/1
+      - TELEGRAM_BOT_TOKEN=123456:TEST-TOKEN-NOT-REAL
+      - USE_NEW_GRAPHQL_ENDPOINT=true  # Test with new API
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    volumes:
+      - ./tests:/app/tests
+      - ./.env.testing:/app/.env.test
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo 'Running integration tests...' &&
+        python -c 'from database_v2 import db_initializer; db_initializer.initialize_schema()' &&
+        python -m pytest tests/ -v -m 'integration' --tb=short
+      "
+    profiles:
+      - integration
+
+volumes:
+  mysql_test_data:
+
+networks:
+  test-network:
+    driver: bridge

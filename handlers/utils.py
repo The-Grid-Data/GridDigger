@@ -48,77 +48,112 @@ def create_main_menu_filter_keyboard(user_data, results_count):
     return keyboard
 
 
-def show_profiles(data, update: Update, context):
+async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE):
     profiles = api.get_profiles(data)
+    
+    # Add null safety for profiles
+    if profiles is None:
+        profiles = []
 
     increment_fetch_count(update.effective_user.id)
-    # Send a monitoring message with user details
-    user = update.effective_user
-    monitoring_message_text = (
-        f"User {user.id} ({user.username}) showed "
-        f"{min(len(profiles), 20)} of these settings:\n{generate_applied_filters_text(data)}"
-    )
-    context.bot.send_message(
-        text=monitoring_message_text,
-        chat_id=MONITORING_GROUP_ID
-    )
+    
+    # Send a monitoring message with user details (only if MONITORING_GROUP_ID is set)
+    if MONITORING_GROUP_ID:
+        user = update.effective_user
+        monitoring_message_text = (
+            f"User {user.id} ({user.username}) showed "
+            f"{min(len(profiles), 20)} of these settings:\n{generate_applied_filters_text(data)}"
+        )
+        try:
+            await context.bot.send_message(
+                text=monitoring_message_text,
+                chat_id=MONITORING_GROUP_ID
+            )
+        except Exception as e:
+            print(f"Warning: Could not send monitoring message: {e}")
+    
+    # Determine the correct chat_id and message_id based on update type
+    if update.callback_query:
+        chat_id = update.callback_query.message.chat.id
+        message_id = update.callback_query.message.message_id
+    else:
+        chat_id = update.effective_chat.id
+        message_id = update.effective_message.message_id
+    
     # edit the message and remove the buttons
-    context.bot.edit_message_text(
-        chat_id=update.effective_chat.id,
-        message_id=update.effective_message.message_id,
+    await context.bot.edit_message_text(
+        chat_id=chat_id,
+        message_id=message_id,
         text=f"Showing profiles with applied filters: \n\n {generate_applied_filters_text(data)}",
         reply_markup=None
     )
     for profile in profiles[:20]:
         try:
-            send_profile_message(update, context, profile)
+            await send_profile_message(update, context, profile)
         except Exception as e:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
+            await context.bot.send_message(chat_id=chat_id, text=f"Error: {e}")
 
     return ConversationHandler.END
 
 
-def send_profile_message(update: Update, context, profile):
+async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYPE, profile):
     profile_id = profile['id']
     profile_data = api.get_profile_data_by_id(profile_id)
-
+    
+    # Add null safety for profile_data
+    if not profile_data:
+        profile_data = {}
+    
+    # Handle V2 schema structure - profile_data IS the profileInfo (not an array)
+    # The get_profile_data_by_id function returns the first profileInfo directly
+    name = profile_data.get('name', 'Unknown')
+    sector_name = profile_data.get('profileSector', {}).get('name', '-') if profile_data.get('profileSector') else '-'
+    description_short = profile_data.get('descriptionShort', '-') if profile_data.get('descriptionShort') else '-'
+    
     # Construct initial message text with basic profile summary
-    message_text = f"*Name:* {profile_data['name']}\n"
-    message_text += f"*Sector:* {profile_data['profileSector']['name'] if profile_data.get('profileSector') else '-'}\n"
-    message_text += f"*short description:* {profile_data['descriptionShort'] if profile_data.get('descriptionShort') else '-'}\n"
+    message_text = f"*Name:* {name}\n"
+    message_text += f"*Sector:* {sector_name}\n"
+    message_text += f"*short description:* {description_short}\n"
+    
     # Add the "Expand" button
     buttons = [[InlineKeyboardButton("Expand", callback_data=f"expand_{profile_id}")]]
-
     reply_markup = InlineKeyboardMarkup(buttons)
 
-    # Check if the logo URL is valid and in a supported format
-    logo_url = profile_data.get('logo')
+    # For V2 schema, logo/image URLs would be in urls array with specific urlType
+    # For now, we'll skip the logo functionality until we know the exact V2 structure for URLs
+    logo_url = None
+    urls = profile_data.get('urls', [])
+    for url_obj in urls:
+        if url_obj.get('urlType', {}).get('name', '').lower() in ['logo', 'image']:
+            logo_url = url_obj.get('url')
+            break
+    
     # Usage in your Telegram bot
     if logo_url and is_valid_url(logo_url):
         if is_supported_image_format(logo_url):
-            download_and_send_image(logo_url, update.effective_chat.id, message_text, reply_markup, context)
+            await download_and_send_image(logo_url, update.effective_chat.id, message_text, reply_markup, context)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                      reply_markup=reply_markup)
     else:
-        context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
                                  reply_markup=reply_markup)
 
 
 import requests
 
-def download_and_send_image(url, chat_id, message_text, reply_markup, context):
+async def download_and_send_image(url, chat_id, message_text, reply_markup, context):
     try:
         response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         if response.status_code == 200:
             with open('temp_image.png', 'wb') as f:
                 f.write(response.content)
-            context.bot.send_photo(chat_id=chat_id, photo=open('temp_image.png', 'rb'), caption=message_text,
+            await context.bot.send_photo(chat_id=chat_id, photo=open('temp_image.png', 'rb'), caption=message_text,
                                    parse_mode='Markdown', reply_markup=reply_markup)
         else:
-            context.bot.send_message(chat_id=chat_id, text="Failed to download image.", parse_mode='Markdown', reply_markup=reply_markup)
+            await context.bot.send_message(chat_id=chat_id, text="Failed to download image.", parse_mode='Markdown', reply_markup=reply_markup)
     except requests.exceptions.RequestException as e:
-        context.bot.send_message(chat_id=chat_id, text=f"Error: {str(e)}", parse_mode='Markdown', reply_markup=reply_markup)
+        await context.bot.send_message(chat_id=chat_id, text=f"Error: {str(e)}", parse_mode='Markdown', reply_markup=reply_markup)
 
 
 

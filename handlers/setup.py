@@ -11,18 +11,18 @@ def setup(application):
     conv_handler = ConversationHandler(
         entry_points=[
             CommandHandler("filter", filter),
-            MessageHandler(filters.Filters.text & ~filters.Filters.command, handle_filter_main_text),
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_filter_main_text),
         ]
         ,
         states={
             FILTER_MAIN: [CallbackQueryHandler(handle_filter_main_callback)],
             FILTER_SUB: [CallbackQueryHandler(handle_filter_sub_callback)],
             FILTER_CHOICES: [CallbackQueryHandler(handle_filter_choices_callback)],
-            FILTER_FILLING: [MessageHandler(filters.Filters.text & ~filters.Filters.command, handle_filter_filling_text)],
+            FILTER_FILLING: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_filter_filling_text)],
         },
         fallbacks=[
             CommandHandler("filter", filter),
-            MessageHandler(filters.Filters.text & ~filters.Filters.command, handle_filter_main_text),
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_filter_main_text),
             #CallbackQueryHandler(query_result_handler),
         ],
         per_message=False,

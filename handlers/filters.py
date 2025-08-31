@@ -7,20 +7,21 @@ from api import get_profiles
 from handlers.utils import show_profiles, generate_applied_filters_text, create_main_menu_filter_keyboard
 
 
-def show_filters_main_menu(update: Update, context) -> int:
+async def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     user_data = context.user_data
     user_data.setdefault("FILTERS", {})
     user_data.setdefault("inc_search", False)
-    results_count = len(api.get_profiles(user_data))
+    results = api.get_profiles(user_data)
+    results_count = len(results) if results is not None else 0
 
     keyboard = create_main_menu_filter_keyboard(user_data, results_count)
 
-    query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
+    await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
-def handle_filter_main_text(update: Update, context) -> int:
+async def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     data = context.user_data
     data.setdefault("FILTERS", {})
     data.setdefault("inc_search", False)
@@ -31,35 +32,35 @@ def handle_filter_main_text(update: Update, context) -> int:
     # todo apply filters here
 
     results = get_profiles(data)
-    results_count = len(results)
+    results_count = len(results) if results is not None else 0
 
     keyboard = create_main_menu_filter_keyboard(data, results_count)
 
-    update.message.reply_text(f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {results_count}", reply_markup=keyboard)
+    await update.message.reply_text(f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {results_count}", reply_markup=keyboard)
     return FILTER_MAIN
 
 
-def start_over_handler(update: Update, context) -> int:
+async def start_over_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.edit_message_text(f"This menu has expired, start over please. /filters")
+    await query.edit_message_text(f"This menu has expired, start over please. /filters")
     return ConversationHandler.END
 
 
-def handle_filter_sub_callback(update: Update, context) -> int:
+async def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.answer()
+    await query.answer()
 
     data = context.user_data
 
     if query.data == "back_to_main_filters":
-        return show_filters_main_menu(update, context)
+        return await show_filters_main_menu(update, context)
     elif query.data.startswith("show"):  # could be more precise
-        return show_profiles(data, update, context)
+        return await show_profiles(data, update, context)
     elif query.data.startswith('reset'):
         if utils.reset_filters(data):
-            return show_sub_filters(update, context)
+            return await show_sub_filters(update, context)
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
+            await context.bot.send_message(chat_id=update.effective_chat.id, text="Already reset")
             return FILTER_SUB
     query_data = query.data.split("_", 1)
     filter_type = query_data[0]
@@ -77,8 +78,8 @@ def handle_filter_sub_callback(update: Update, context) -> int:
     # Determine the filter type (searchable or multiple)
     filter_meta = next((f for f in sub_filters if f['query'] == sub_filter), None)
     if not filter_meta:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Something wrong happened")
-        return show_filters_main_menu(update, context)
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Something wrong happened")
+        return await show_filters_main_menu(update, context)
 
     print("filter label", filter_meta['label'])
     filter_type = filter_meta['type']
@@ -92,7 +93,7 @@ def handle_filter_sub_callback(update: Update, context) -> int:
     print("data['current_filter'] (sub_filter)", sub_filter)
 
     if filter_type == 'searchable':
-        query.edit_message_text(f"Enter the value for {filter_meta['label']}:")
+        await query.edit_message_text(f"Enter the value for {filter_meta['label']}:")
         return FILTER_FILLING
     elif filter_type == 'multiple':
         filter_query = api.filters_config["filters_queries"].get(filter_meta['query'])
@@ -105,44 +106,44 @@ def handle_filter_sub_callback(update: Update, context) -> int:
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_sub_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
 
-        query.edit_message_text(f"Choose an option for {filter_meta['label']}:", reply_markup=reply_markup)
+        await query.edit_message_text(f"Choose an option for {filter_meta['label']}:", reply_markup=reply_markup)
         return FILTER_CHOICES
 
 
-def handle_text_input(update: Update, context) -> int:
+async def handle_text_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user_input = update.message.text
     data = context.user_data
     current_filter = data.get('current_filter')
 
     if current_filter:
         data[current_filter] = user_input
-        update.message.reply_text(f"Value '{user_input}' saved for {current_filter}.")
+        await update.message.reply_text(f"Value '{user_input}' saved for {current_filter}.")
         return FILTER_MAIN
     else:
-        update.message.reply_text("No active filter.")
+        await update.message.reply_text("No active filter.")
         return FILTER_MAIN
 
 
-def handle_choice_selection(update: Update, context) -> int:
+async def handle_choice_selection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.answer()
+    await query.answer()
     data = context.user_data
 
     sub_filter, choice_id = query.data.split("_")
     data[sub_filter] = choice_id
 
-    query.edit_message_text(f"Option '{choice_id}' saved for {sub_filter}.")
+    await query.edit_message_text(f"Option '{choice_id}' saved for {sub_filter}.")
     return FILTER_MAIN
 
 
-def handle_filter_choices_callback(update: Update, context) -> int:
+async def handle_filter_choices_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.answer()
+    await query.answer()
 
     data = context.user_data
 
     if query.data == "back_to_sub_main_filters":
-        return show_sub_filters(update, context)
+        return await show_sub_filters(update, context)
     else:
         filter_sub_type, id = query.data.rsplit('_', 1)
         print("filter_sub_type", filter_sub_type)
@@ -157,15 +158,15 @@ def handle_filter_choices_callback(update: Update, context) -> int:
         data["FILTERS"][filter_sub_type] = button_text  # for printing filter data on menu
         print("button_text", button_text)
         # store filter name in data as well
-        return show_sub_filters(update, context)
+        return await show_sub_filters(update, context)
 
 
-def handle_filter_filling_text(update: Update, context) -> int:
+async def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     data = context.user_data
 
     data["FILTERS"][data["current_filter"]] = update.message.text
     data["FILTERS"][data["current_filter"]+'_query'] = update.message.text
-    update.message.reply_text(f"Value '{update.message.text}' saved for {data['current_filter']}.")
+    await update.message.reply_text(f"Value '{update.message.text}' saved for {data['current_filter']}.")
 
     filter_type = data.setdefault('filter_type', 'None')
 
@@ -174,11 +175,11 @@ def handle_filter_filling_text(update: Update, context) -> int:
         print(f"Key: {key}, Value: {value}")
     if filter_type == "None":
 
-        return show_filters_main_menu(update, context) # it'll show an error if reached here
+        return await show_filters_main_menu(update, context) # it'll show an error if reached here
     else:
 
         profiles = api.get_profiles(data)
-        profile_count = len(profiles)
+        profile_count = len(profiles) if profiles is not None else 0
         display_results_count = min(profile_count, 20)
 
         # Fetch sub-filters dynamically based on filter_type
@@ -200,15 +201,15 @@ def handle_filter_filling_text(update: Update, context) -> int:
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
 
-        context.bot.send_message(chat_id=update.message.chat_id,
+        await context.bot.send_message(chat_id=update.message.chat_id,
                                        text=f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {profile_count}",
                                        reply_markup=reply_markup)
         return FILTER_SUB
 
 
-def show_sub_filters(update: Update, context) -> int:
+async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
-    query.answer()
+    await query.answer()
     data = context.user_data
     filter_type = data.setdefault('filter_type', 'None')
 
@@ -217,11 +218,11 @@ def show_sub_filters(update: Update, context) -> int:
         print(f"Key: {key}, Value: {value}")
     if filter_type == "None":
 
-        return show_filters_main_menu(update, context)
+        return await show_filters_main_menu(update, context)
     else:
 
         profiles = api.get_profiles(data)
-        profile_count = len(profiles)
+        profile_count = len(profiles) if profiles is not None else 0
 
         # Fetch sub-filters dynamically based on filter_type
         sub_filters = api.get_sub_filters(filter_type)
@@ -238,7 +239,7 @@ def show_sub_filters(update: Update, context) -> int:
                                                 callback_data=f"show_{filter_type}_filters")])
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
-        query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(data)}", reply_markup=reply_markup)
+        await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(data)}", reply_markup=reply_markup)
         return FILTER_SUB
 
 
