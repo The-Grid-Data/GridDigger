@@ -12,8 +12,7 @@ def setup(application):
         entry_points=[
             CommandHandler("filter", filter),
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_filter_main_text),
-        ]
-        ,
+        ],
         states={
             FILTER_MAIN: [CallbackQueryHandler(handle_filter_main_callback)],
             FILTER_SUB: [CallbackQueryHandler(handle_filter_sub_callback)],
@@ -25,7 +24,6 @@ def setup(application):
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_filter_main_text),
             #CallbackQueryHandler(query_result_handler),
         ],
-        per_message=False,
     )
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("open_source", open_source_command))

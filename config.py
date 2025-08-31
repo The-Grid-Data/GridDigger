@@ -15,7 +15,7 @@ class Config:
     TELEGRAM_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     MODE: str = os.getenv("MODE", "webhook")
     PORT: int = int(os.getenv("PORT", 5000))
-    WEBHOOK_URL: str = os.getenv("LAMBDA_WEBHOOK_URL", "")
+    WEBHOOK_URL: str = os.getenv("WEBHOOK_URL", "")
     
     # GraphQL API Configuration
     GRAPHQL_ENDPOINT: str = os.getenv("GRAPHQL_ENDPOINT_V2", "https://beta.node.thegrid.id/graphql")
