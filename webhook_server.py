@@ -84,8 +84,20 @@ def webhook():
         update = Update.de_json(update_data, bot_application.bot)
         
         if update:
-            # Process the update asynchronously
-            asyncio.create_task(bot_application.process_update(update))
+            # Process the update in a new event loop
+            def process_update_sync():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    loop.run_until_complete(bot_application.process_update(update))
+                finally:
+                    loop.close()
+            
+            # Run in a separate thread to avoid blocking Flask
+            import threading
+            thread = threading.Thread(target=process_update_sync)
+            thread.start()
+            
             logger.debug(f"Processing update {update.update_id}")
         else:
             logger.warning("Failed to create Update object from received data")
