@@ -31,5 +31,9 @@ def setup(application):
     application.add_handler(conv_handler)  # for flows
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^expand_'))
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^back_to_card_'))
+    application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^product_detail_'))
+    application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^asset_detail_'))
+    application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^more_products_'))
+    application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^more_assets_'))
 
     #application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)

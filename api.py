@@ -118,8 +118,8 @@ def get_profiles(data):
             logging.error(f"V2 search failed, falling back to legacy: {e}")
             # Fall through to legacy method
 
-    if data.get('solana_filter_toggle', True) is True:
-        filters['solana_profiles_only'] = 22
+    # Solana filter removed as part of Phase 1 UX improvements
+    # Users can now see all profiles without automatic filtering
 
     if not filters:  # just to prevent errors
         filters = {
@@ -280,6 +280,8 @@ def get_full_profile_data_by_id(profile_id):
           name
         }
         root {
+          id
+          slug
           assets {
             ticker
             id
@@ -389,6 +391,135 @@ def get_full_profile_data_by_id(profile_id):
         return {}
 
 
+def get_product_detail(product_id: str):
+    """Get detailed product information with TGS schema alignment"""
+    query = """
+    query getProductDetail($productId: String1) {
+      products(where: {id: {_eq: $productId}}) {
+        id
+        name
+        description
+        launchDate
+        isMainProduct
+        rootId
+        root {
+          id
+          slug
+        }
+        productType {
+          id
+          name
+          definition
+        }
+        productStatus {
+          id
+          name
+          definition
+        }
+        urls(order_by: {urlTypeId: Asc}) {
+          url
+          urlType {
+            name
+            definition
+          }
+        }
+        productAssetRelationships {
+          asset {
+            id
+            name
+            ticker
+          }
+          assetSupportType {
+            name
+            definition
+          }
+        }
+        productDeployments {
+          smartContractDeployment {
+            smartContracts {
+              name
+              address
+              deploymentDate
+            }
+            deployedOnId {
+              id
+            }
+          }
+        }
+      }
+    }
+    """
+    
+    variables = {"productId": str(product_id)}
+    
+    try:
+        response = requests.post(url, headers=headers, json={'query': query, 'variables': variables})
+        response_data = response.json()
+        
+        if 'errors' in response_data:
+            logging.error(f"GraphQL query error: {response_data['errors']}")
+            return {}
+        
+        product_data = response_data.get('data', {}).get('products', [])
+        return product_data[0] if product_data else {}
+    except Exception as e:
+        logging.error(f"Error in get_product_detail: {e}")
+        return {}
+
+
+def get_asset_detail(asset_id: str):
+    """Get detailed asset information with TGS schema alignment - CORRECTED"""
+    query = """
+    query getAssetDetail($assetId: String1) {
+      assets(where: {id: {_eq: $assetId}}) {
+        id
+        name
+        ticker
+        description
+        icon
+        rootId
+        root {
+          id
+          slug
+        }
+        assetType {
+          id
+          name
+          definition
+        }
+        assetStatus {
+          id
+          name
+          definition
+        }
+        urls(order_by: {urlTypeId: Asc}) {
+          url
+          urlType {
+            name
+            definition
+          }
+        }
+      }
+    }
+    """
+    
+    variables = {"assetId": str(asset_id)}
+    
+    try:
+        response = requests.post(url, headers=headers, json={'query': query, 'variables': variables})
+        response_data = response.json()
+        
+        if 'errors' in response_data:
+            logging.error(f"GraphQL query error: {response_data['errors']}")
+            return {}
+        
+        asset_data = response_data.get('data', {}).get('assets', [])
+        return asset_data[0] if asset_data else {}
+    except Exception as e:
+        logging.error(f"Error in get_asset_detail: {e}")
+        return {}
+
+
 def get_sub_filters(filter_type):
     return filters_config["sub_filters"].get(filter_type, [])
 
@@ -411,6 +542,35 @@ def fetch_filter_options(query):
 # apply_filters(filters)
 
 #print(len(get_profiles({})))
+def get_total_profile_count():
+    """
+    Get the total number of profiles available in the database
+    Returns the count for display in UX
+    """
+    try:
+        query = """
+        query getTotalProfileCount {
+          roots(limit: 10000) {
+            id
+          }
+        }
+        """
+        
+        response = requests.post(url, headers=headers, json={'query': query})
+        response_data = response.json()
+        
+        if 'errors' in response_data:
+            logging.error(f"GraphQL query error in get_total_profile_count: {response_data['errors']}")
+            return 0
+        
+        roots = response_data.get('data', {}).get('roots', [])
+        return len(roots) if roots else 0
+        
+    except Exception as e:
+        logging.error(f"Error in get_total_profile_count: {e}")
+        return 0
+
+
 # # Example usage:
 # data = {
 #     "FILTERS": {

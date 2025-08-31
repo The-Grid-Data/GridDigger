@@ -16,8 +16,17 @@ async def show_filters_main_menu(update: Update, context: ContextTypes.DEFAULT_T
     results_count = len(results) if results is not None else 0
 
     keyboard = create_main_menu_filter_keyboard(user_data, results_count)
+    
+    # Enhanced message with better UX
+    total_profiles = api.get_total_profile_count()
+    filter_text = generate_applied_filters_text(user_data)
+    
+    if filter_text and filter_text != "No filters applied":
+        message = f"🔍 **Profile Search Results**\n\n**Applied filters:**\n{filter_text}\n\n**Found results:** {results_count:,} of {total_profiles:,} total profiles"
+    else:
+        message = f"🔍 **Profile Search & Filter**\n\n📊 **{total_profiles:,} profiles** available to search\n\n**Current filters:** None\n**Found results:** {results_count:,}"
 
-    await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(user_data)}\nFound results: {results_count}", reply_markup=keyboard)
+    await query.edit_message_text(message, reply_markup=keyboard, parse_mode='Markdown')
     return FILTER_MAIN
 
 
@@ -35,8 +44,19 @@ async def handle_filter_main_text(update: Update, context: ContextTypes.DEFAULT_
     results_count = len(results) if results is not None else 0
 
     keyboard = create_main_menu_filter_keyboard(data, results_count)
+    
+    # Enhanced message for text search
+    total_profiles = api.get_total_profile_count()
+    search_term = update.message.text
+    search_mode = "Deep Search" if data.get('inc_search', False) else "Quick Search"
+    
+    message = f"🔍 **Search Results**\n\n"
+    message += f"**Search term:** \"{search_term}\"\n"
+    message += f"**Search mode:** {search_mode}\n"
+    message += f"**Found results:** {results_count:,} of {total_profiles:,} total profiles\n\n"
+    message += f"💡 *Tip: Use the toggle button below to switch between Quick (names only) and Deep (names + descriptions) search modes*"
 
-    await update.message.reply_text(f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {results_count}", reply_markup=keyboard)
+    await update.message.reply_text(message, reply_markup=keyboard, parse_mode='Markdown')
     return FILTER_MAIN
 
 
@@ -93,7 +113,12 @@ async def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAU
     print("data['current_filter'] (sub_filter)", sub_filter)
 
     if filter_type == 'searchable':
-        await query.edit_message_text(f"Enter the value for {filter_meta['label']}:")
+        message = f"✏️ **Enter Search Value**\n\n"
+        message += f"**Filter:** {filter_meta['label']}\n"
+        message += f"**Type:** Text search\n\n"
+        message += f"💡 *Type your search term and press Enter*"
+        
+        await query.edit_message_text(message, parse_mode='Markdown')
         return FILTER_FILLING
     elif filter_type == 'multiple':
         filter_query = api.filters_config["filters_queries"].get(filter_meta['query'])
@@ -106,7 +131,12 @@ async def handle_filter_sub_callback(update: Update, context: ContextTypes.DEFAU
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_sub_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
 
-        await query.edit_message_text(f"Choose an option for {filter_meta['label']}:", reply_markup=reply_markup)
+        message = f"📋 **Select Option**\n\n"
+        message += f"**Filter:** {filter_meta['label']}\n"
+        message += f"**Available options:** {len(filter_options)}\n\n"
+        message += f"💡 *Choose one of the options below*"
+        
+        await query.edit_message_text(message, reply_markup=reply_markup, parse_mode='Markdown')
         return FILTER_CHOICES
 
 
@@ -201,9 +231,18 @@ async def handle_filter_filling_text(update: Update, context: ContextTypes.DEFAU
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
 
+        # Enhanced message for filter results
+        total_profiles = api.get_total_profile_count()
+        filter_text = generate_applied_filters_text(data)
+        
+        message = f"✅ **Filter Applied**\n\n"
+        message += f"**Applied filters:**\n{filter_text}\n\n"
+        message += f"**Found results:** {profile_count:,} of {total_profiles:,} total profiles"
+        
         await context.bot.send_message(chat_id=update.message.chat_id,
-                                       text=f"Applied filters: {generate_applied_filters_text(data)}\nFound results: {profile_count}",
-                                       reply_markup=reply_markup)
+                                       text=message,
+                                       reply_markup=reply_markup,
+                                       parse_mode='Markdown')
         return FILTER_SUB
 
 
@@ -239,7 +278,17 @@ async def show_sub_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                                                 callback_data=f"show_{filter_type}_filters")])
         buttons.append([InlineKeyboardButton("Back", callback_data="back_to_main_filters")])
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.edit_message_text(f"Applied filters:\n{generate_applied_filters_text(data)}", reply_markup=reply_markup)
+        # Enhanced sub-filter menu message
+        total_profiles = api.get_total_profile_count()
+        filter_text = generate_applied_filters_text(data)
+        
+        message = f"🔧 **Advanced Filters**\n\n"
+        if filter_text and filter_text != "No filters applied":
+            message += f"**Applied filters:**\n{filter_text}\n\n"
+        message += f"**Found results:** {profile_count:,} of {total_profiles:,} total profiles\n\n"
+        message += f"💡 *Select a filter below to refine your search*"
+        
+        await query.edit_message_text(message, reply_markup=reply_markup, parse_mode='Markdown')
         return FILTER_SUB
 
 

@@ -30,45 +30,104 @@ class CardFormatter(ProfileFormatter):
     def format(self, profile: ProfileData) -> FormattedProfile:
         """Format profile for enhanced card display"""
         try:
+            # Escape special characters to prevent Telegram parsing errors
+            safe_name = self._escape_markdown_text(profile.name)
+            safe_sector = self._escape_markdown_text(profile.sector.name if profile.sector else '-')
+            
             message_parts = [
-                f"*Name:* {profile.name}",
-                f"*Sector:* {profile.sector.name if profile.sector else '-'}",
+                f"*Name:* {safe_name}",
+                f"*Sector:* {safe_sector}",
             ]
             
             # Add short description if available
             if profile.description_short:
-                message_parts.append(f"*Description:* {profile.description_short}")
+                safe_description = self._escape_markdown_text(profile.description_short)
+                message_parts.append(f"*Description:* {safe_description}")
             else:
                 message_parts.append("*Description:* -")
             
-            # Add products information (enhanced feature)
+            # Add products count (enhanced feature - buttons will be added below)
             if profile.products:
-                product_names = [p.name for p in profile.products if p.name and p.name != 'Unknown']
-                if product_names:
-                    # Limit to 3 products for card display
-                    display_products = product_names[:3]
-                    products_text = ', '.join(display_products)
-                    if len(product_names) > 3:
-                        products_text += f" (+{len(product_names) - 3} more)"
-                    message_parts.append(f"*Products:* {products_text}")
+                valid_products = [p for p in profile.products if p.name and p.name != 'Unknown']
+                if valid_products:
+                    message_parts.append(f"*Products:* {len(valid_products)} available")
             
-            # Add assets information (enhanced feature)
+            # Add assets count (enhanced feature - buttons will be added below)
             if profile.assets:
-                asset_names = [a.name for a in profile.assets if a.name and a.name != 'Unknown']
-                if asset_names:
-                    # Limit to 3 assets for card display
-                    display_assets = asset_names[:3]
-                    assets_text = ', '.join(display_assets)
-                    if len(asset_names) > 3:
-                        assets_text += f" (+{len(asset_names) - 3} more)"
-                    message_parts.append(f"*Assets:* {assets_text}")
+                valid_assets = [a for a in profile.assets if a.name and a.name != 'Unknown']
+                if valid_assets:
+                    message_parts.append(f"*Assets:* {len(valid_assets)} available")
             
             # Add profile type if available
             if profile.profile_type:
                 message_parts.append(f"*Type:* {profile.profile_type.name}")
             
-            # Create expand button
-            buttons = [[InlineKeyboardButton("Expand", callback_data=f"expand_{profile.id}")]]
+            # Create interactive buttons for products and assets
+            buttons = []
+            
+            # Add individual product buttons - SHOW ALL PRODUCTS by default
+            if profile.products:
+                valid_products = [p for p in profile.products if p.name and p.name != 'Unknown']
+                if valid_products:
+                    # Show ALL products individually (no limit)
+                    for product in valid_products:
+                        # Escape product name to prevent button text issues
+                        safe_product_name = self._escape_markdown_text(product.name)
+                        buttons.append([InlineKeyboardButton(
+                            f"🔧 {safe_product_name}",
+                            callback_data=f"product_detail_{product.id}"
+                        )])
+            
+            # Add individual asset buttons - SHOW ALL ASSETS by default
+            if profile.assets:
+                valid_assets = [a for a in profile.assets if a.name and a.name != 'Unknown']
+                if valid_assets:
+                    # Show ALL assets individually (no limit)
+                    for asset in valid_assets:
+                        # Escape asset name and ticker to prevent button text issues
+                        safe_asset_name = self._escape_markdown_text(asset.name)
+                        safe_ticker = self._escape_markdown_text(asset.ticker) if asset.ticker else ""
+                        button_text = f"💎 {safe_asset_name} ({safe_ticker})" if safe_ticker else f"💎 {safe_asset_name}"
+                        buttons.append([InlineKeyboardButton(
+                            button_text,
+                            callback_data=f"asset_detail_{asset.id}"
+                        )])
+            
+            # Add profile URLs as buttons (this is where the real URLs should be)
+            if profile.urls:
+                url_buttons = []
+                for url_obj in profile.urls[:3]:  # Limit to 3 URLs for clean UI
+                    if url_obj and url_obj.url:
+                        url_type = url_obj.url_type.lower() if url_obj.url_type else 'link'
+                        
+                        # Create appropriate button text based on URL type
+                        if 'website' in url_type or 'main' in url_type:
+                            button_text = "🌐 Website"
+                        elif 'documentation' in url_type or 'docs' in url_type:
+                            button_text = "📚 Docs"
+                        elif 'whitepaper' in url_type:
+                            button_text = "📄 Whitepaper"
+                        elif 'blog' in url_type:
+                            button_text = "📝 Blog"
+                        elif 'social' in url_type or 'twitter' in url_type:
+                            button_text = "🐦 Social"
+                        elif 'telegram' in url_type:
+                            button_text = "💬 Telegram"
+                        else:
+                            button_text = f"🔗 {url_type.title()}"
+                        
+                        url_buttons.append(InlineKeyboardButton(button_text, url=url_obj.url))
+                
+                # Add URL buttons in rows of 2
+                for i in range(0, len(url_buttons), 2):
+                    buttons.append(url_buttons[i:i+2])
+            
+            # Add discovery button and expand button at the end
+            if profile.slug:
+                discovery_url = f"https://discovery.thegrid.id/profiles/{profile.slug}"
+                buttons.append([InlineKeyboardButton(f"🔍 Open {profile.name} on Discovery", url=discovery_url)])
+            
+            buttons.append([InlineKeyboardButton("📋 Expand Profile", callback_data=f"expand_{profile.id}")])
             
             return FormattedProfile(
                 message_text="\n".join(message_parts),
@@ -83,6 +142,20 @@ class CardFormatter(ProfileFormatter):
                 message_text=f"*Name:* {profile.name}\n*Error:* Unable to format profile",
                 buttons=[[InlineKeyboardButton("Expand", callback_data=f"expand_{profile.id}")]]
             )
+    
+    def _escape_markdown_text(self, text: str) -> str:
+        """Escape special markdown characters to prevent Telegram parsing errors"""
+        if not text:
+            return text
+        
+        # Escape problematic characters that cause entity parsing errors
+        # More comprehensive escaping to prevent "can't find end of entity" errors
+        problematic_chars = ['_', '*', '[', ']', '`', '\\', '(', ')']
+        
+        for char in problematic_chars:
+            text = text.replace(char, f'\\{char}')
+        
+        return text
     
     def get_supported_fields(self) -> List[str]:
         return ['name', 'sector', 'description_short', 'products', 'assets', 'profile_type', 'logo']
@@ -135,6 +208,11 @@ class ExpandedFormatter(ProfileFormatter):
             
             # Generate URL buttons
             buttons = self._create_url_buttons(profile.urls)
+            
+            # Add discovery button
+            if profile.slug:
+                discovery_url = f"https://discovery.thegrid.id/profiles/{profile.slug}"
+                buttons.append([InlineKeyboardButton(f"🔍 Open {profile.name} on Discovery", url=discovery_url)])
             
             # Add back button at the end
             buttons.append([InlineKeyboardButton("← Back", callback_data=f"back_to_card_{profile.id}")])

@@ -2478,3 +2478,364 @@
 2025-08-31 19:52:26,497 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
 2025-08-31 19:52:26,498 - services.profile_repository - DEBUG - Successfully converted profile data for: The Grid
 2025-08-31 19:52:26,498 - services.enhanced_profile_service - INFO - Successfully formatted expanded profile for: The Grid
+2025-08-31 20:29:29,376 - __main__ - INFO - ============================================================
+2025-08-31 20:29:29,376 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:29:29,376 - __main__ - INFO - ============================================================
+2025-08-31 20:29:29,674 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:29:29,675 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:29:29,675 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:29:29,678 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:29:29,678 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:29:29,979 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:29:29,980 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:29:30,272 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:29:30,273 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:29:30,566 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:29:30,566 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:29:30,858 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:29:30,858 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:29:31,014 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:29:31,122 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:29:32,172 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:29:32,306 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:29:32,408 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 20:29:32,408 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 20:29:32,408 - cache - INFO - Falling back to in-memory cache
+2025-08-31 20:29:32,592 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:29:32,592 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:29:32,593 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:29:32,593 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:29:32,757 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:29:32,758 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:29:32,758 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 20:29:32,758 - services.enhanced_profile_service - DEBUG - Getting expanded profile for ID: 254
+2025-08-31 20:29:32,758 - cache - DEBUG - Cache miss for get_full_profile
+2025-08-31 20:29:32,758 - services.profile_repository - DEBUG - Fetching full profile data for ID: 254
+2025-08-31 20:29:32,758 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:29:32,922 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:29:32,922 - services.profile_repository - DEBUG - Successfully converted profile data for: The Grid
+2025-08-31 20:29:32,922 - services.enhanced_profile_service - INFO - Successfully formatted expanded profile for: The Grid
+2025-08-31 20:34:07,114 - __main__ - INFO - ============================================================
+2025-08-31 20:34:07,115 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:34:07,115 - __main__ - INFO - ============================================================
+2025-08-31 20:34:11,402 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:34:11,403 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:34:11,403 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:34:11,408 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:34:11,408 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:34:11,672 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:34:11,673 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:34:12,025 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:34:12,026 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:34:12,328 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:34:12,329 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:34:12,614 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:34:12,615 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:34:12,784 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:34:12,892 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:34:13,899 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:34:13,983 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:34:14,027 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 20:34:14,028 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 20:34:14,028 - cache - INFO - Falling back to in-memory cache
+2025-08-31 20:34:14,098 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:34:14,098 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:34:14,098 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:34:14,099 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:34:14,250 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:34:14,251 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:34:14,251 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 20:34:14,251 - services.enhanced_profile_service - DEBUG - Getting expanded profile for ID: 254
+2025-08-31 20:34:14,251 - cache - DEBUG - Cache miss for get_full_profile
+2025-08-31 20:34:14,251 - services.profile_repository - DEBUG - Fetching full profile data for ID: 254
+2025-08-31 20:34:14,252 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:34:14,412 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:34:14,414 - services.profile_repository - DEBUG - Successfully converted profile data for: The Grid
+2025-08-31 20:34:14,414 - services.enhanced_profile_service - INFO - Successfully formatted expanded profile for: The Grid
+2025-08-31 20:37:18,757 - __main__ - INFO - ============================================================
+2025-08-31 20:37:18,758 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:37:18,758 - __main__ - INFO - ============================================================
+2025-08-31 20:37:19,036 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:37:19,037 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:37:19,037 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:37:19,041 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:37:19,041 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:37:19,321 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:37:19,322 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:37:19,622 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:37:19,622 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:37:19,911 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:37:19,912 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:37:20,216 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:37:20,216 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:37:20,388 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:37:20,496 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:37:21,561 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:37:21,681 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:37:21,731 - cache - INFO - Using in-memory cache
+2025-08-31 20:37:21,864 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:37:21,864 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:37:21,865 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:37:21,865 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:37:22,046 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:37:22,047 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:37:22,047 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 20:37:22,047 - services.enhanced_profile_service - DEBUG - Getting expanded profile for ID: 254
+2025-08-31 20:37:22,047 - cache - DEBUG - Cache miss for get_full_profile
+2025-08-31 20:37:22,047 - services.profile_repository - DEBUG - Fetching full profile data for ID: 254
+2025-08-31 20:37:22,048 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:37:22,214 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 20:37:22,215 - services.profile_repository - DEBUG - Successfully converted profile data for: The Grid
+2025-08-31 20:37:22,216 - services.enhanced_profile_service - INFO - Successfully formatted expanded profile for: The Grid
+2025-08-31 20:47:28,843 - __main__ - INFO - ============================================================
+2025-08-31 20:47:28,843 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:47:28,843 - __main__ - INFO - ============================================================
+2025-08-31 20:47:29,093 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:47:29,093 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:47:29,093 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:47:29,097 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:47:29,098 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:47:29,521 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:47:29,522 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:47:29,841 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:47:29,842 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:47:30,138 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:47:30,138 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:47:30,451 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:47:30,451 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:47:30,619 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:47:30,726 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:47:31,742 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:47:31,864 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:47:31,913 - cache - INFO - Using in-memory cache
+2025-08-31 20:47:32,035 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:47:32,035 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:47:32,035 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:47:32,036 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:47:32,192 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 20:47:32,193 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:47:32,193 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 20:53:21,057 - __main__ - INFO - ============================================================
+2025-08-31 20:53:21,057 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:53:21,057 - __main__ - INFO - ============================================================
+2025-08-31 20:53:23,309 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:53:23,309 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:53:23,309 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:53:23,311 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:53:23,312 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:53:23,600 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:53:23,601 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:53:23,888 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:53:23,889 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:53:24,156 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:53:24,157 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:53:24,444 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:53:24,444 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:53:24,591 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:53:24,693 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:53:25,733 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:53:25,892 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:53:25,942 - cache - INFO - Using in-memory cache
+2025-08-31 20:53:26,055 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:53:26,056 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:53:26,056 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:53:26,056 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:53:26,212 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 20:53:26,213 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:53:26,213 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 20:58:35,748 - __main__ - INFO - ============================================================
+2025-08-31 20:58:35,748 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 20:58:35,748 - __main__ - INFO - ============================================================
+2025-08-31 20:58:35,999 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:58:36,000 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 20:58:36,000 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 20:58:36,005 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 20:58:36,005 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:58:36,296 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:58:36,297 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:58:36,577 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:58:36,578 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:58:36,873 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:58:36,873 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:58:37,152 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 20:58:37,152 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 20:58:37,308 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 20:58:37,419 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 20:58:38,451 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:58:38,534 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 20:58:38,576 - cache - INFO - Using in-memory cache
+2025-08-31 20:58:38,698 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 20:58:38,698 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 20:58:38,698 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 20:58:38,700 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 20:58:38,852 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 20:58:38,852 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 20:58:38,852 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:00:06,362 - __main__ - INFO - ============================================================
+2025-08-31 21:00:06,363 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:00:06,363 - __main__ - INFO - ============================================================
+2025-08-31 21:00:06,571 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:00:06,571 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:00:06,571 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:00:06,576 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:00:06,576 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:00:06,856 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:00:06,857 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:00:07,148 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:00:07,148 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:00:07,427 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:00:07,428 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:00:07,699 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:00:07,700 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:00:07,849 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:00:07,935 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:00:08,958 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:00:09,043 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:00:09,087 - cache - INFO - Using in-memory cache
+2025-08-31 21:00:09,233 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:00:09,233 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:00:09,233 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:00:09,234 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:00:09,400 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:00:09,400 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:00:09,400 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:02:32,855 - __main__ - INFO - ============================================================
+2025-08-31 21:02:32,855 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:02:32,856 - __main__ - INFO - ============================================================
+2025-08-31 21:02:33,072 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:02:33,072 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:02:33,072 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:02:33,075 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:02:33,075 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:02:33,376 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:02:33,377 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:02:33,660 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:02:33,661 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:02:33,934 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:02:33,934 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:02:34,250 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:02:34,250 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:02:34,442 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:02:34,541 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:02:35,566 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:02:35,665 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:02:35,727 - cache - INFO - Using in-memory cache
+2025-08-31 21:02:35,851 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:02:35,851 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:02:35,851 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:02:35,851 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:02:36,044 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:02:36,045 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:02:36,046 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:04:21,520 - __main__ - INFO - ============================================================
+2025-08-31 21:04:21,521 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:04:21,521 - __main__ - INFO - ============================================================
+2025-08-31 21:04:22,761 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:04:22,761 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:04:22,761 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:04:22,771 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:04:22,771 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:04:23,164 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:04:23,164 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:04:23,489 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:04:23,489 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:04:23,774 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:04:23,774 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:04:24,086 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:04:24,087 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:04:24,261 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:04:24,340 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:04:25,394 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:04:25,715 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:04:25,768 - cache - INFO - Using in-memory cache
+2025-08-31 21:04:25,890 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:04:25,890 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:04:25,890 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:04:25,891 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:04:26,040 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:04:26,040 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:04:26,041 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:06:55,903 - __main__ - INFO - ============================================================
+2025-08-31 21:06:55,903 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:06:55,903 - __main__ - INFO - ============================================================
+2025-08-31 21:06:56,125 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:06:56,125 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:06:56,125 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:06:56,130 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:06:56,130 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:06:56,397 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:06:56,398 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:06:56,657 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:06:56,658 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:06:56,928 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:06:56,928 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:06:57,195 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:06:57,196 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:06:57,335 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:06:57,436 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:06:58,606 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:06:58,739 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:06:58,781 - cache - INFO - Using in-memory cache
+2025-08-31 21:06:58,905 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:06:58,905 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:06:58,905 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:06:58,906 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:06:59,059 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:06:59,059 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:06:59,060 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:26:51,860 - __main__ - INFO - ============================================================
+2025-08-31 21:26:51,860 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:26:51,860 - __main__ - INFO - ============================================================
+2025-08-31 21:26:52,075 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:26:52,076 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:26:52,076 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:26:52,079 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:26:52,079 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:26:52,358 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:26:52,359 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:26:52,642 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:26:52,642 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:26:52,911 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:26:52,912 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:26:53,200 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:26:53,201 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:26:53,361 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:26:53,464 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:26:54,510 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:26:54,596 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:26:54,639 - cache - INFO - Using in-memory cache
+2025-08-31 21:26:54,746 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:26:54,746 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:26:54,746 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:26:54,746 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:26:54,906 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:26:54,906 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:26:54,906 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 21:31:28,137 - __main__ - INFO - ============================================================
+2025-08-31 21:31:28,137 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 21:31:28,137 - __main__ - INFO - ============================================================
+2025-08-31 21:31:28,376 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:31:28,376 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 21:31:28,376 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 21:31:28,380 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 21:31:28,380 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:31:28,652 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:31:28,652 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:31:28,929 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:31:28,929 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:31:29,204 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:31:29,205 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:31:29,485 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 21:31:29,486 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 21:31:29,630 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 21:31:29,726 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 21:31:30,762 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:31:32,616 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 21:31:32,683 - cache - INFO - Using in-memory cache
+2025-08-31 21:31:32,805 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 21:31:32,805 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 21:31:32,805 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 21:31:32,806 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 21:31:32,975 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2559
+2025-08-31 21:31:32,976 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 21:31:32,976 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid

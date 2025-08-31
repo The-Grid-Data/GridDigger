@@ -27,18 +27,21 @@ def create_main_menu_filter_keyboard(user_data, results_count):
     entity_filter_emoji = "🟡" if 'entityTypes' in filters or 'entityName' in filters else '🟢'
     asset_filter_emoji = "🟡" if 'assetTickers' in filters or 'assetTypes' in filters or 'assetStandards' in filters else '🟢'
 
-    solana_toggle_text = "✔️Solana filter" if user_data.get('solana_filter_toggle', True) else "Solana filter"
+    # Enhanced search mode toggle with clear labels and explanations
+    search_mode_active = user_data.get('inc_search', False)  # Default False = Quick Search
+    if search_mode_active:
+        search_mode_text = "🔍 Deep Search (names + descriptions) → Switch to Quick"
+    else:
+        search_mode_text = "📝 Quick Search (names only) → Switch to Deep"
 
-    # Create buttons
+    # Create buttons (Solana filter removed for cleaner UI)
     keyboard_buttons = [
         [InlineKeyboardButton('🔄Reset filters', callback_data='reset_all')],
         [InlineKeyboardButton(f'{profile_filter_emoji}Profile filters', callback_data='profile_filters'),
          InlineKeyboardButton(f'{product_filter_emoji}Product filters', callback_data='product_filters')],
         [InlineKeyboardButton(f'{asset_filter_emoji}Asset filters', callback_data='asset_filters'),
          InlineKeyboardButton(f'{entity_filter_emoji}Entity filters', callback_data='entity_filters')],
-        [InlineKeyboardButton(f'{solana_toggle_text}', callback_data='solana_filter_toggle'),
-         InlineKeyboardButton(f"{'✔️' if user_data.get('inc_search') else ''}Inc search",
-                              callback_data='inc_search')]
+        [InlineKeyboardButton(f'{search_mode_text}', callback_data='toggle_search_mode')]
     ]
 
     # Add "Show profiles" button if results_count > 0
@@ -84,11 +87,21 @@ async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE
         message_id = update.effective_message.message_id
     
     # edit the message and remove the buttons
+    # Enhanced message when showing profiles
+    total_profiles = api.get_total_profile_count()
+    filter_text = generate_applied_filters_text(data)
+    
+    if filter_text and filter_text != "No filters applied":
+        message = f"🔍 **Showing filtered profiles**\n\n**Applied filters:**\n{filter_text}\n\n**Displaying:** {min(len(profiles), 20)} of {len(profiles):,} matching profiles"
+    else:
+        message = f"📋 **Showing all profiles**\n\n**Displaying:** {min(len(profiles), 20)} of {total_profiles:,} total profiles"
+    
     await context.bot.edit_message_text(
         chat_id=chat_id,
         message_id=message_id,
-        text=f"Showing profiles with applied filters: \n\n {generate_applied_filters_text(data)}",
-        reply_markup=None
+        text=message,
+        reply_markup=None,
+        parse_mode='Markdown'
     )
     for profile in profiles[:20]:
         try:
@@ -287,32 +300,75 @@ def generate_applied_filters_text(data):
 
     # Iterate through the filters and extract the values
     for key, value in data["FILTERS"].items():
-        if not key.endswith('_query'):
-            filters_text[key] = value
+        if not key.endswith('_query') and value:  # Only include non-empty values
+            # Make filter names more user-friendly
+            if key == 'profileNameSearch':
+                filters_text['Profile Name'] = f'"{value}"'
+            elif key == 'profileDeepSearch':
+                filters_text['Deep Search'] = f'"{value}"'
+            elif key == 'profileTypes':
+                filters_text['Profile Type'] = value
+            elif key == 'profileSectors':
+                filters_text['Sector'] = value
+            elif key == 'profileStatuses':
+                filters_text['Status'] = value
+            elif key == 'productTypes':
+                filters_text['Product Type'] = value
+            elif key == 'productStatuses':
+                filters_text['Product Status'] = value
+            elif key == 'assetTickers':
+                filters_text['Asset Ticker'] = f'"{value}"'
+            elif key == 'assetTypes':
+                filters_text['Asset Type'] = value
+            elif key == 'assetStandards':
+                filters_text['Asset Standard'] = value
+            elif key == 'entityTypes':
+                filters_text['Entity Type'] = value
+            elif key == 'entityName':
+                filters_text['Entity Name'] = f'"{value}"'
+            else:
+                filters_text[key] = value
 
-    # Generate the output text
-    result = '\n'.join(f"{key}: {value}" for key, value in filters_text.items())
-
+    # Generate the output text with better formatting
+    if not filters_text:
+        return "No filters applied"
+    
+    result = '\n'.join(f"• {key}: {value}" for key, value in filters_text.items())
     return result
 
 
-def toggle_inc_search(data):
-    # # Toggle the 'inc_search' flag
-    # if not data['FILTERS']:
-    #     data['FILTERS'] = {}
-
+def toggle_search_mode(data):
+    """Enhanced search mode toggle with better UX and clear feedback"""
     data.setdefault('inc_search', False)
-    data['inc_search'] = not data['inc_search']  # a label on filter menu
-    print("inc_search:", data['inc_search'])
+    data['inc_search'] = not data['inc_search']
+    
+    # Update search query type in filters if there's an active search
+    search_term = None
+    
+    # Get the current search term from either filter type
+    if 'profileNameSearch_query' in data.get('FILTERS', {}):
+        search_term = data['FILTERS']['profileNameSearch_query']
+    elif 'profileDeepSearch_query' in data.get('FILTERS', {}):
+        search_term = data['FILTERS']['profileDeepSearch_query']
+    
+    # Update filter keys based on new mode
+    if search_term is not None:
+        # Clear both filter types first
+        data['FILTERS'].pop('profileNameSearch_query', None)
+        data['FILTERS'].pop('profileDeepSearch_query', None)
+        
+        # Set the appropriate filter type
+        if data['inc_search']:
+            # Switch to deep search
+            data['FILTERS']['profileDeepSearch_query'] = search_term
+        else:
+            # Switch to quick search
+            data['FILTERS']['profileNameSearch_query'] = search_term
+    
+    # Return current mode for feedback
+    return data['inc_search']
 
-def toggle_solana_filter(data):
-    # # Toggle the 'inc_search' flag
-    # if not data['FILTERS']:
-    #     data['FILTERS'] = {}
-
-    data.setdefault('solana_filter_toggle', True)
-    data['solana_filter_toggle'] = not data['solana_filter_toggle']  # a label on filter menu
-    print("solana_filter_toggle:", data['solana_filter_toggle'])
+# Solana filter function removed as part of Phase 1 UX improvements
 
 
 # some user names have special characters that cause errors.

@@ -192,10 +192,15 @@ class ProfileData:
                         country=entity_data.get('country', {}).get('name') if entity_data.get('country') else None
                     ))
         
+        # Extract slug from root object (where it's actually located in the API response)
+        slug = raw_data.get('slug', '')  # Try top level first (for backward compatibility)
+        if not slug and root_data.get('slug'):
+            slug = root_data['slug']  # Extract from root object where it's actually located
+        
         return cls(
             id=profile_id,
             name=raw_data.get('name', 'Unknown'),
-            slug=raw_data.get('slug', ''),
+            slug=slug,
             description_short=raw_data.get('descriptionShort'),
             description_long=raw_data.get('descriptionLong'),
             tag_line=raw_data.get('tagLine'),
