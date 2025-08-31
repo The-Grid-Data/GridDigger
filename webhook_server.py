@@ -72,19 +72,27 @@ async def initialize_bot_async():
     
     try:
         logger.info("Initializing Telegram bot for webhook mode...")
+        logger.info(f"Using token: {Config.TELEGRAM_TOKEN[:10]}...")
         
         # Create application
         bot_application = Application.builder().token(Config.TELEGRAM_TOKEN).build()
+        logger.info("Bot application created")
         
         # Setup handlers
         setup(bot_application)
+        logger.info("Handlers setup complete")
         
         # Initialize the application
         await bot_application.initialize()
+        logger.info("Bot application initialized")
+        
         await bot_application.start()
+        logger.info("Bot application started")
         
         # Set webhook
         webhook_url = f"{Config.WEBHOOK_URL}/{Config.TELEGRAM_TOKEN}"
+        logger.info(f"Setting webhook to: {webhook_url}")
+        
         await bot_application.bot.set_webhook(
             url=webhook_url,
             drop_pending_updates=True
@@ -95,6 +103,7 @@ async def initialize_bot_async():
         
     except Exception as e:
         logger.error(f"Failed to initialize bot: {e}")
+        logger.exception("Full error traceback:")
         return False
 
 @app.route('/', methods=['GET'])
@@ -107,10 +116,15 @@ def health_check():
         'bot_loop_running': bot_loop is not None and not bot_loop.is_closed()
     })
 
-@app.route(f'/{Config.TELEGRAM_TOKEN}', methods=['POST'])
-def webhook():
+@app.route('/<token>', methods=['POST'])
+def webhook(token):
     """Handle incoming webhook requests from Telegram"""
     global bot_application, update_queue
+    
+    # Validate token
+    if token != Config.TELEGRAM_TOKEN:
+        logger.warning(f"Invalid webhook token received: {token}")
+        return jsonify({'error': 'Invalid token'}), 403
     
     if not bot_application:
         logger.error("Bot application not initialized")
@@ -137,19 +151,28 @@ def webhook():
 
 def create_app():
     """Create and configure the Flask app"""
+    logger.info("Starting webhook server initialization...")
+    logger.info(f"Config - WEBHOOK_URL: {Config.WEBHOOK_URL}")
+    logger.info(f"Config - PORT: {Config.PORT}")
+    logger.info(f"Config - TOKEN configured: {bool(Config.TELEGRAM_TOKEN)}")
+    
     # Start the bot loop in a separate thread
     bot_thread = threading.Thread(target=run_bot_loop, daemon=True)
     bot_thread.start()
     
     # Give the bot time to initialize
     import time
-    time.sleep(3)
+    logger.info("Waiting for bot initialization...")
+    time.sleep(5)  # Increased wait time
     
     if not bot_application:
-        logger.error("Failed to initialize bot, exiting...")
+        logger.error("Failed to initialize bot after waiting, exiting...")
+        logger.error("Check environment variables and network connectivity")
         exit(1)
     
+    logger.info(f"Bot initialized successfully!")
     logger.info(f"Webhook server starting on port {Config.PORT}")
+    logger.info(f"Webhook endpoint: /{Config.TELEGRAM_TOKEN}")
     return app
 
 if __name__ == '__main__':

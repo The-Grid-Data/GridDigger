@@ -2441,3 +2441,40 @@
 2025-08-31 18:03:08,984 - database_v2 - INFO - Database connection pool test successful
 2025-08-31 18:03:09,999 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
 2025-08-31 18:03:10,122 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 19:52:22,057 - __main__ - INFO - ============================================================
+2025-08-31 19:52:22,057 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 19:52:22,057 - __main__ - INFO - ============================================================
+2025-08-31 19:52:22,709 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 19:52:22,710 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 19:52:22,710 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 19:52:22,767 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 19:52:22,767 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 19:52:23,034 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 19:52:23,035 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 19:52:23,306 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 19:52:23,306 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 19:52:23,590 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 19:52:23,591 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 19:52:23,887 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 19:52:23,887 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 19:52:24,037 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 19:52:24,140 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 19:52:25,261 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 19:52:25,843 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 19:52:25,993 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 19:52:25,993 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 19:52:25,993 - cache - INFO - Falling back to in-memory cache
+2025-08-31 19:52:26,182 - services.enhanced_profile_service - DEBUG - Getting enhanced profile card for ID: 254
+2025-08-31 19:52:26,182 - cache - DEBUG - Cache miss for get_card_profile
+2025-08-31 19:52:26,182 - services.profile_repository - DEBUG - Fetching card profile data for ID: 254
+2025-08-31 19:52:26,182 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 19:52:26,340 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 19:52:26,340 - services.profile_repository - DEBUG - Successfully converted card profile data for: The Grid
+2025-08-31 19:52:26,340 - services.enhanced_profile_service - INFO - Successfully formatted enhanced profile card for: The Grid
+2025-08-31 19:52:26,340 - services.enhanced_profile_service - DEBUG - Getting expanded profile for ID: 254
+2025-08-31 19:52:26,341 - cache - DEBUG - Cache miss for get_full_profile
+2025-08-31 19:52:26,341 - services.profile_repository - DEBUG - Fetching full profile data for ID: 254
+2025-08-31 19:52:26,342 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 19:52:26,497 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2530
+2025-08-31 19:52:26,498 - services.profile_repository - DEBUG - Successfully converted profile data for: The Grid
+2025-08-31 19:52:26,498 - services.enhanced_profile_service - INFO - Successfully formatted expanded profile for: The Grid
