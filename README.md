@@ -45,7 +45,7 @@ GridDigger is a high-performance Telegram bot that provides seamless access to T
 
 2. **Install Dependencies**
    ```bash
-   pip install -r requirements_enhanced.txt
+   pip install -r requirements.txt
    ```
 
 3. **Environment Setup**
@@ -225,7 +225,7 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 ### Development Setup
 1. Fork the repository
 2. Create a feature branch
-3. Install development dependencies: `pip install -r requirements_enhanced.txt`
+3. Install development dependencies: `pip install -r requirements.txt`
 4. Run tests: `python3 -m pytest`
 5. Follow code style: `black . && flake8 .`
 

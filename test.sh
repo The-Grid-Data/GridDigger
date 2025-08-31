@@ -112,7 +112,7 @@ run_local_tests() {
     
     # Check if pytest is available
     if ! command -v pytest &> /dev/null; then
-        print_error "pytest not found! Install with: pip install -r requirements_enhanced.txt"
+        print_error "pytest not found! Install with: pip install -r requirements.txt"
         exit 1
     fi
     

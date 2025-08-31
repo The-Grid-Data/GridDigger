@@ -65,9 +65,9 @@ run_tests() {
     print_header "Running Tests..."
     
     if command -v python3 &> /dev/null; then
-        if [ -f requirements_enhanced.txt ]; then
+        if [ -f requirements.txt ]; then
             print_status "Installing test dependencies..."
-            pip3 install -r requirements_enhanced.txt > /dev/null 2>&1 || true
+            pip3 install -r requirements.txt > /dev/null 2>&1 || true
         fi
         
         if command -v pytest &> /dev/null; then
@@ -114,7 +114,7 @@ deploy_python() {
     fi
     
     print_status "Installing dependencies..."
-    pip3 install -r requirements_enhanced.txt
+    pip3 install -r requirements.txt
     
     print_status "Initializing database..."
     python3 -c "from database_v2 import db_initializer; db_initializer.initialize_schema()" || print_warning "Database initialization failed"

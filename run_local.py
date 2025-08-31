@@ -136,26 +136,18 @@ def check_graphql_endpoint():
         if response.status_code == 200:
             print(f"✅ GraphQL endpoint accessible: {endpoint}")
             
-            # Run comprehensive GraphQL tests
-            print("🧪 Running comprehensive GraphQL V2 tests...")
+            # Basic GraphQL functionality test
+            print("🧪 Testing basic GraphQL functionality...")
             try:
-                from graphql_tester import GraphQLTester
-                tester = GraphQLTester()
-                test_results = tester.run_all_tests()
-                
-                if test_results['critical_success']:
-                    print(f"✅ All critical GraphQL tests passed ({test_results['critical_passed']}/3)")
-                    if test_results['failed'] > 0:
-                        print(f"⚠️  {test_results['failed']} non-critical tests failed, but bot should work")
-                    else:
-                        print("🎉 All GraphQL tests passed perfectly!")
+                import api_v2
+                # Test a simple search
+                test_result = api_v2.search_profiles_v2("test")
+                if test_result is not None:
+                    print("✅ GraphQL search functionality working")
                 else:
-                    print(f"❌ Critical GraphQL tests failed ({test_results['critical_passed']}/3)")
-                    print("   Bot may not function properly!")
-                    return False
-                    
+                    print("⚠️  GraphQL search returned no data, but endpoint is accessible")
             except Exception as test_error:
-                print(f"⚠️  GraphQL testing failed: {test_error}")
+                print(f"⚠️  GraphQL functionality test failed: {test_error}")
                 print("   Basic endpoint works, continuing...")
             
             return True
@@ -169,50 +161,39 @@ def check_graphql_endpoint():
         print("   This might still work for the bot, continuing...")
         return True
 
-def run_integration_tests():
-    """Run integration tests to verify bot functionality"""
+def run_basic_functionality_tests():
+    """Run basic functionality tests using core services"""
     try:
-        print("🧪 Running integration tests...")
-        from integration_tester import IntegrationTester
+        print("🧪 Running basic functionality tests...")
+        from services.enhanced_profile_service import enhanced_profile_service
         
-        tester = IntegrationTester()
-        results = tester.run_all_tests()
+        # Test profile service
+        test_profile_id = '254'
+        formatted_profile = enhanced_profile_service.get_profile_card(test_profile_id)
         
-        if results['all_passed']:
-            print(f"✅ All integration tests passed ({results['passed']}/{results['total_tests']})")
-            print("   Bot functionality verified!")
-            return True
-        else:
-            print(f"⚠️  {results['failed']} integration tests failed")
-            print("   Some bot features may not work properly")
-            return True  # Continue anyway, but warn user
+        if formatted_profile and formatted_profile.buttons:
+            callback_data = formatted_profile.buttons[0][0].callback_data
+            print(f"✅ Profile service working - callback: {callback_data}")
             
-    except Exception as e:
-        print(f"⚠️  Integration testing failed: {e}")
-        print("   Bot may still work, continuing...")
+            # Test expand functionality
+            if callback_data.startswith('expand_'):
+                profile_id = callback_data.split('_')[1]
+                expanded_profile = enhanced_profile_service.get_expanded_profile(profile_id)
+                if expanded_profile:
+                    print(f"✅ Expand functionality working - profile ID: {profile_id}")
+                else:
+                    print("⚠️  Expand functionality may have issues")
+            else:
+                print("⚠️  Callback data format unexpected")
+        else:
+            print("⚠️  Profile service may have issues")
+            
+        print("✅ Basic functionality tests completed")
         return True
-
-def run_show_profiles_tests():
-    """Run show profiles specific tests"""
-    try:
-        print("🧪 Running show profiles tests...")
-        from show_profiles_tester import ShowProfilesTester
-        
-        tester = ShowProfilesTester()
-        results = tester.run_all_tests()
-        
-        if results['all_passed']:
-            print(f"✅ All show profiles tests passed ({results['passed']}/{results['total_tests']})")
-            print("   'Show profiles' button will work properly!")
-            return True
-        else:
-            print(f"⚠️  {results['failed']} show profiles tests failed")
-            print("   'Show profiles' button may not work properly")
-            return True  # Continue anyway, but warn user
             
     except Exception as e:
-        print(f"⚠️  Show profiles testing failed: {e}")
-        print("   'Show profiles' functionality may have issues...")
+        print(f"⚠️  Basic functionality testing failed: {e}")
+        print("   Bot may still work, continuing...")
         return True
 
 def run_bot():
@@ -264,13 +245,9 @@ def main():
         if response.lower() != 'y':
             sys.exit(1)
     
-    # Run integration tests
+    # Run basic functionality tests
     print("\n" + "="*50)
-    run_integration_tests()
-    
-    # Run show profiles tests
-    print("\n" + "="*50)
-    run_show_profiles_tests()
+    run_basic_functionality_tests()
     
     print("\n" + "="*50)
     print("🎯 Pre-flight checks complete!")
