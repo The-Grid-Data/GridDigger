@@ -1856,3 +1856,10 @@ Traceback (most recent call last):
               ^^^^^^^^^
 TypeError: 'NoneType' object is not iterable
 2025-08-31 17:22:59 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:38:55 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:47:19 - handlers.profiles - [31mERROR[0m - profiles:expand_profile_callback:76 - Enhanced service returned None for profile ID: ''
+2025-08-31 17:47:21 - handlers.profiles - [31mERROR[0m - profiles:expand_profile_callback:76 - Enhanced service returned None for profile ID: ''
+2025-08-31 17:48:25 - handlers.profiles - [31mERROR[0m - profiles:expand_profile_callback:76 - Enhanced service returned None for profile ID: ''
+2025-08-31 18:00:54 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 18:01:29 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 18:03:10 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.

@@ -1239,3 +1239,1205 @@
 2025-08-31 17:22:59,191 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
 2025-08-31 17:22:59,191 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
 2025-08-31 17:22:59,191 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 17:38:49,594 - __main__ - INFO - ============================================================
+2025-08-31 17:38:49,594 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 17:38:49,594 - __main__ - INFO - ============================================================
+2025-08-31 17:38:49,816 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:38:49,817 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 17:38:49,817 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 17:38:49,821 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 17:38:49,821 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:38:50,084 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:38:50,084 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:38:50,363 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:38:50,363 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:38:50,649 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:38:50,650 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:38:50,926 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:38:50,926 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:38:51,076 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 17:38:51,178 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 17:38:52,186 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,270 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 17:38:52,272 - graphql_tester - INFO - 🚀 Starting GraphQL V2 Migration Tests...
+2025-08-31 17:38:52,272 - graphql_tester - INFO - 📡 Endpoint: https://beta.node.thegrid.id/graphql
+2025-08-31 17:38:52,272 - graphql_tester - INFO - 🔑 Headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer your_production_api_token_here'}
+2025-08-31 17:38:52,272 - graphql_tester - INFO - 
+🔥 CRITICAL TESTS (Must Pass)
+2025-08-31 17:38:52,272 - graphql_tester - INFO - 🔍 Testing: Basic Search Test
+2025-08-31 17:38:52,272 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:38:52,272 - graphql_tester - DEBUG - Variables: {'searchTerm': 'The Grid'}
+2025-08-31 17:38:52,273 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,386 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:38:52,387 - graphql_tester - INFO - ✅ Basic Search Test - SUCCESS
+2025-08-31 17:38:52,387 - graphql_tester - INFO - 🔍 Testing: Empty Search Test
+2025-08-31 17:38:52,387 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:38:52,387 - graphql_tester - DEBUG - Variables: {'searchTerm': ''}
+2025-08-31 17:38:52,388 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,486 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 191
+2025-08-31 17:38:52,487 - graphql_tester - INFO - ✅ Empty Search Test - SUCCESS
+2025-08-31 17:38:52,487 - graphql_tester - INFO - 🔍 Testing: Profile Detail Test
+2025-08-31 17:38:52,487 - graphql_tester - DEBUG - Query: 
+        query getProfileData($profileId: String1) {
+          profileInfos(limit: 1, where: {root: ...
+2025-08-31 17:38:52,487 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:38:52,488 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,589 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 917
+2025-08-31 17:38:52,590 - graphql_tester - INFO - ✅ Profile Detail Test - SUCCESS
+2025-08-31 17:38:52,590 - graphql_tester - INFO - 
+📋 FILTER OPTION TESTS
+2025-08-31 17:38:52,591 - graphql_tester - INFO - 🔍 Testing: Profile Types Test
+2025-08-31 17:38:52,591 - graphql_tester - DEBUG - Query: query getProfileTypes { profileTypes { id name } }...
+2025-08-31 17:38:52,591 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:38:52,592 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,688 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 227
+2025-08-31 17:38:52,689 - graphql_tester - INFO - ✅ Profile Types Test - SUCCESS
+2025-08-31 17:38:52,689 - graphql_tester - INFO - 🔍 Testing: Profile Sectors Test
+2025-08-31 17:38:52,689 - graphql_tester - DEBUG - Query: query getProfileSectors { profileSectors { id name } }...
+2025-08-31 17:38:52,689 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:38:52,690 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,787 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 851
+2025-08-31 17:38:52,787 - graphql_tester - INFO - ✅ Profile Sectors Test - SUCCESS
+2025-08-31 17:38:52,787 - graphql_tester - INFO - 🔍 Testing: Asset Types Test
+2025-08-31 17:38:52,787 - graphql_tester - DEBUG - Query: query getAssetTypes { assetTypes { id name } }...
+2025-08-31 17:38:52,788 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:38:52,788 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,881 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 568
+2025-08-31 17:38:52,881 - graphql_tester - INFO - ✅ Asset Types Test - SUCCESS
+2025-08-31 17:38:52,881 - graphql_tester - INFO - 🔍 Testing: Profile Statuses Test
+2025-08-31 17:38:52,881 - graphql_tester - DEBUG - Query: query getProfileStatuses { profileStatuses { id name } }...
+2025-08-31 17:38:52,881 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:38:52,882 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:52,968 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 195
+2025-08-31 17:38:52,968 - graphql_tester - INFO - ✅ Profile Statuses Test - SUCCESS
+2025-08-31 17:38:52,968 - graphql_tester - INFO - 
+⚡ ADVANCED TESTS
+2025-08-31 17:38:52,968 - graphql_tester - INFO - 🔍 Testing: Profile By Slug Test
+2025-08-31 17:38:52,968 - graphql_tester - DEBUG - Query: 
+        query getProfileDataBySlug($profileSlug: String1) {
+          profileInfos(limit: 1, where:...
+2025-08-31 17:38:52,968 - graphql_tester - DEBUG - Variables: {'profileSlug': 'The_Grid'}
+2025-08-31 17:38:52,969 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,057 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 381
+2025-08-31 17:38:53,057 - graphql_tester - INFO - ✅ Profile By Slug Test - SUCCESS
+2025-08-31 17:38:53,058 - graphql_tester - INFO - 🔍 Testing: Advanced Filters Test
+2025-08-31 17:38:53,058 - graphql_tester - DEBUG - Query: 
+        query searchWithFilters($profileTypeId: String1, $searchTerm: String1) {
+          roots(
+ ...
+2025-08-31 17:38:53,058 - graphql_tester - DEBUG - Variables: {'profileTypeId': '1', 'searchTerm': 'The Grid'}
+2025-08-31 17:38:53,059 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,173 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:38:53,173 - graphql_tester - INFO - ✅ Advanced Filters Test - SUCCESS
+2025-08-31 17:38:53,174 - graphql_tester - INFO - 🔍 Testing: Full Profile Data Test
+2025-08-31 17:38:53,174 - graphql_tester - DEBUG - Query: 
+        query getFullProfileData($profileId: String1) {
+          profileInfos(limit: 1, offset: 0,...
+2025-08-31 17:38:53,174 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:38:53,175 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,288 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2112
+2025-08-31 17:38:53,289 - graphql_tester - INFO - ✅ Full Profile Data Test - SUCCESS
+2025-08-31 17:38:53,289 - graphql_tester - INFO - 🔍 Testing: Solana Filter Test
+2025-08-31 17:38:53,289 - graphql_tester - DEBUG - Query: 
+        query getSolanaProfiles($productId: String1) {
+          roots(
+            where: {
+      ...
+2025-08-31 17:38:53,289 - graphql_tester - DEBUG - Variables: {'productId': '22'}
+2025-08-31 17:38:53,290 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,380 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 193
+2025-08-31 17:38:53,380 - graphql_tester - INFO - ✅ Solana Filter Test - SUCCESS
+2025-08-31 17:38:53,380 - graphql_tester - INFO - 
+📊 TEST RESULTS SUMMARY
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    Total Tests: 11
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    Passed: 11
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    Failed: 0
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    Critical Tests Passed: 3/3
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:38:53,380 - graphql_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    ✅ PASS - Basic Search Test
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    ✅ PASS - Empty Search Test
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    ✅ PASS - Profile Detail Test
+2025-08-31 17:38:53,380 - graphql_tester - INFO -    ✅ PASS - Profile Types Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Profile Sectors Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Asset Types Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Profile Statuses Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Profile By Slug Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Advanced Filters Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Full Profile Data Test
+2025-08-31 17:38:53,381 - graphql_tester - INFO -    ✅ PASS - Solana Filter Test
+2025-08-31 17:38:53,646 - integration_tester - INFO - 🚀 Starting Integration Tests...
+2025-08-31 17:38:53,646 - integration_tester - INFO - 
+🔥 CRITICAL USER FLOW TESTS
+2025-08-31 17:38:53,646 - integration_tester - INFO - 🔍 Testing Basic Search Flow (User types 'Solana')
+2025-08-31 17:38:53,647 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,763 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:38:53,763 - integration_tester - INFO - ✅ api.get_profiles() returned: <class 'list'> with 17 items
+2025-08-31 17:38:53,763 - integration_tester - INFO - ✅ Null-safe len() call: 17
+2025-08-31 17:38:53,763 - integration_tester - INFO - ✅ Filter text generated: 'profileNameSearch: Solana'
+2025-08-31 17:38:53,763 - integration_tester - INFO - ✅ Keyboard created with 5 rows
+2025-08-31 17:38:53,763 - integration_tester - INFO - 🔍 Testing Empty Search Flow
+2025-08-31 17:38:53,764 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:53,894 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:38:53,930 - integration_tester - INFO - ✅ Empty search returned 1956 results
+2025-08-31 17:38:53,930 - integration_tester - INFO - 🔍 Testing No Results Flow
+2025-08-31 17:38:53,931 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,046 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:38:54,046 - root - ERROR - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 17:38:54,047 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,144 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:38:54,144 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "XYZ123NONEXISTENT"}}, assets: {ticker: {_contains: "XYZ123NONEXISTENT"}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:38:54,144 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:38:54,144 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:38:54,144 - integration_tester - INFO - ✅ No results search returned 0 results
+2025-08-31 17:38:54,145 - integration_tester - INFO - 
+⚡ ADVANCED FUNCTIONALITY TESTS
+2025-08-31 17:38:54,145 - integration_tester - INFO - 🔍 Testing Filter Combinations
+2025-08-31 17:38:54,146 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,236 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:38:54,236 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "The Grid"}}, assets: {ticker: {_contains: "The Grid"}}}, profileInfos: {profileType: {id: {_eq: 1}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:38:54,236 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:38:54,236 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:38:54,236 - integration_tester - INFO - ✅ Filter combination returned 0 results
+2025-08-31 17:38:54,236 - integration_tester - INFO - 🔍 Testing V2 Search Integration
+2025-08-31 17:38:54,237 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,355 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:38:54,356 - integration_tester - INFO - ✅ V2 search returned 17 results
+2025-08-31 17:38:54,358 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,456 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 717
+2025-08-31 17:38:54,456 - integration_tester - INFO - ✅ Profile data retrieved: True
+2025-08-31 17:38:54,456 - integration_tester - INFO - 🔍 Testing Error Handling
+2025-08-31 17:38:54,457 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,548 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 47
+2025-08-31 17:38:54,548 - root - INFO - Query: query queryName { roots (where: { products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:38:54,548 - root - INFO - Response: {'data': {'roots': [{'id': '3', 'slug': 'Solana'}]}}
+2025-08-31 17:38:54,549 - integration_tester - INFO - ✅ Error handling returned 1 results
+2025-08-31 17:38:54,549 - integration_tester - INFO - ✅ Properly handled None data
+2025-08-31 17:38:54,549 - integration_tester - INFO - 
+📊 INTEGRATION TEST RESULTS:
+2025-08-31 17:38:54,549 - integration_tester - INFO -    Total Tests: 6
+2025-08-31 17:38:54,549 - integration_tester - INFO -    Passed: 6
+2025-08-31 17:38:54,549 - integration_tester - INFO -    Failed: 0
+2025-08-31 17:38:54,549 - integration_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:38:54,549 - integration_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - Basic Search Flow
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 17
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - Empty Search Flow
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 1956
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - No Results Flow
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 0
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - Filter Combinations
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 0
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - V2 Search Integration
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 17
+2025-08-31 17:38:54,549 - integration_tester - INFO -    ✅ PASS - Error Handling
+2025-08-31 17:38:54,549 - integration_tester - INFO -       Results: 1
+2025-08-31 17:38:54,551 - show_profiles_tester - INFO - 🚀 Starting Show Profiles Tests...
+2025-08-31 17:38:54,551 - show_profiles_tester - INFO - 🔍 Testing Show Profiles Data Flow
+2025-08-31 17:38:54,551 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,670 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:38:54,671 - show_profiles_tester - INFO - ✅ Step 1 - api.get_profiles() returned: <class 'list'> with 1 items
+2025-08-31 17:38:54,671 - show_profiles_tester - INFO - ✅ Step 3 - Filter text: 'profileNameSearch: The Grid'
+2025-08-31 17:38:54,671 - show_profiles_tester - INFO - ✅ Step 4a - First profile ID: 254
+2025-08-31 17:38:54,673 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,768 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 701
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - ✅ Step 4b - Profile data type: <class 'dict'>
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - ✅ Step 4c - Profile details: Name='The Grid', Sector='Data & Analytics', Desc='The Grid is a data company that provides structure...'
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - 🔍 Testing Empty Monitoring Group ID
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - ✅ Current MONITORING_GROUP_ID: 'None'
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - ✅ MONITORING_GROUP_ID is empty/None - this should be handled gracefully
+2025-08-31 17:38:54,769 - show_profiles_tester - INFO - 🔍 Testing Profile Data Structure
+2025-08-31 17:38:54,770 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:54,905 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:38:54,935 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:38:55,080 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 863
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO - ✅ Profile data keys: ['tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'name', 'urls']
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO - ✅ Found keys: ['name', 'tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'urls']
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO - ⚠️ Missing keys: []
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO - 
+📊 SHOW PROFILES TEST RESULTS:
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    Total Tests: 3
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    Passed: 3
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    Failed: 0
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
+2025-08-31 17:38:55,080 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 17:44:09,576 - __main__ - INFO - ============================================================
+2025-08-31 17:44:09,576 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 17:44:09,576 - __main__ - INFO - ============================================================
+2025-08-31 17:44:09,802 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:44:09,802 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 17:44:09,802 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 17:44:09,806 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 17:44:09,806 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:44:10,079 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:44:10,079 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:44:10,358 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:44:10,358 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:44:10,641 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:44:10,641 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:44:10,923 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:44:10,924 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:44:11,077 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 17:44:11,167 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 17:44:12,138 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,223 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 17:44:12,224 - graphql_tester - INFO - 🚀 Starting GraphQL V2 Migration Tests...
+2025-08-31 17:44:12,224 - graphql_tester - INFO - 📡 Endpoint: https://beta.node.thegrid.id/graphql
+2025-08-31 17:44:12,224 - graphql_tester - INFO - 🔑 Headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer your_production_api_token_here'}
+2025-08-31 17:44:12,224 - graphql_tester - INFO - 
+🔥 CRITICAL TESTS (Must Pass)
+2025-08-31 17:44:12,224 - graphql_tester - INFO - 🔍 Testing: Basic Search Test
+2025-08-31 17:44:12,224 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:44:12,224 - graphql_tester - DEBUG - Variables: {'searchTerm': 'The Grid'}
+2025-08-31 17:44:12,224 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,331 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:44:12,331 - graphql_tester - INFO - ✅ Basic Search Test - SUCCESS
+2025-08-31 17:44:12,331 - graphql_tester - INFO - 🔍 Testing: Empty Search Test
+2025-08-31 17:44:12,331 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:44:12,331 - graphql_tester - DEBUG - Variables: {'searchTerm': ''}
+2025-08-31 17:44:12,332 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,421 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 191
+2025-08-31 17:44:12,421 - graphql_tester - INFO - ✅ Empty Search Test - SUCCESS
+2025-08-31 17:44:12,422 - graphql_tester - INFO - 🔍 Testing: Profile Detail Test
+2025-08-31 17:44:12,422 - graphql_tester - DEBUG - Query: 
+        query getProfileData($profileId: String1) {
+          profileInfos(limit: 1, where: {root: ...
+2025-08-31 17:44:12,422 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:44:12,423 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,525 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 917
+2025-08-31 17:44:12,525 - graphql_tester - INFO - ✅ Profile Detail Test - SUCCESS
+2025-08-31 17:44:12,525 - graphql_tester - INFO - 
+📋 FILTER OPTION TESTS
+2025-08-31 17:44:12,525 - graphql_tester - INFO - 🔍 Testing: Profile Types Test
+2025-08-31 17:44:12,525 - graphql_tester - DEBUG - Query: query getProfileTypes { profileTypes { id name } }...
+2025-08-31 17:44:12,525 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:44:12,526 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,616 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 227
+2025-08-31 17:44:12,617 - graphql_tester - INFO - ✅ Profile Types Test - SUCCESS
+2025-08-31 17:44:12,617 - graphql_tester - INFO - 🔍 Testing: Profile Sectors Test
+2025-08-31 17:44:12,617 - graphql_tester - DEBUG - Query: query getProfileSectors { profileSectors { id name } }...
+2025-08-31 17:44:12,617 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:44:12,618 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,704 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 851
+2025-08-31 17:44:12,704 - graphql_tester - INFO - ✅ Profile Sectors Test - SUCCESS
+2025-08-31 17:44:12,704 - graphql_tester - INFO - 🔍 Testing: Asset Types Test
+2025-08-31 17:44:12,704 - graphql_tester - DEBUG - Query: query getAssetTypes { assetTypes { id name } }...
+2025-08-31 17:44:12,704 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:44:12,705 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,785 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 568
+2025-08-31 17:44:12,785 - graphql_tester - INFO - ✅ Asset Types Test - SUCCESS
+2025-08-31 17:44:12,785 - graphql_tester - INFO - 🔍 Testing: Profile Statuses Test
+2025-08-31 17:44:12,785 - graphql_tester - DEBUG - Query: query getProfileStatuses { profileStatuses { id name } }...
+2025-08-31 17:44:12,785 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:44:12,786 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,868 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 195
+2025-08-31 17:44:12,868 - graphql_tester - INFO - ✅ Profile Statuses Test - SUCCESS
+2025-08-31 17:44:12,869 - graphql_tester - INFO - 
+⚡ ADVANCED TESTS
+2025-08-31 17:44:12,869 - graphql_tester - INFO - 🔍 Testing: Profile By Slug Test
+2025-08-31 17:44:12,869 - graphql_tester - DEBUG - Query: 
+        query getProfileDataBySlug($profileSlug: String1) {
+          profileInfos(limit: 1, where:...
+2025-08-31 17:44:12,869 - graphql_tester - DEBUG - Variables: {'profileSlug': 'The_Grid'}
+2025-08-31 17:44:12,869 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:12,964 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 381
+2025-08-31 17:44:12,964 - graphql_tester - INFO - ✅ Profile By Slug Test - SUCCESS
+2025-08-31 17:44:12,965 - graphql_tester - INFO - 🔍 Testing: Advanced Filters Test
+2025-08-31 17:44:12,965 - graphql_tester - DEBUG - Query: 
+        query searchWithFilters($profileTypeId: String1, $searchTerm: String1) {
+          roots(
+ ...
+2025-08-31 17:44:12,965 - graphql_tester - DEBUG - Variables: {'profileTypeId': '1', 'searchTerm': 'The Grid'}
+2025-08-31 17:44:12,966 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,056 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:44:13,057 - graphql_tester - INFO - ✅ Advanced Filters Test - SUCCESS
+2025-08-31 17:44:13,057 - graphql_tester - INFO - 🔍 Testing: Full Profile Data Test
+2025-08-31 17:44:13,057 - graphql_tester - DEBUG - Query: 
+        query getFullProfileData($profileId: String1) {
+          profileInfos(limit: 1, offset: 0,...
+2025-08-31 17:44:13,057 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:44:13,058 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,186 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2112
+2025-08-31 17:44:13,187 - graphql_tester - INFO - ✅ Full Profile Data Test - SUCCESS
+2025-08-31 17:44:13,187 - graphql_tester - INFO - 🔍 Testing: Solana Filter Test
+2025-08-31 17:44:13,187 - graphql_tester - DEBUG - Query: 
+        query getSolanaProfiles($productId: String1) {
+          roots(
+            where: {
+      ...
+2025-08-31 17:44:13,188 - graphql_tester - DEBUG - Variables: {'productId': '22'}
+2025-08-31 17:44:13,189 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,278 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 193
+2025-08-31 17:44:13,279 - graphql_tester - INFO - ✅ Solana Filter Test - SUCCESS
+2025-08-31 17:44:13,279 - graphql_tester - INFO - 
+📊 TEST RESULTS SUMMARY
+2025-08-31 17:44:13,279 - graphql_tester - INFO -    Total Tests: 11
+2025-08-31 17:44:13,279 - graphql_tester - INFO -    Passed: 11
+2025-08-31 17:44:13,279 - graphql_tester - INFO -    Failed: 0
+2025-08-31 17:44:13,279 - graphql_tester - INFO -    Critical Tests Passed: 3/3
+2025-08-31 17:44:13,279 - graphql_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:44:13,280 - graphql_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Basic Search Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Empty Search Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Profile Detail Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Profile Types Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Profile Sectors Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Asset Types Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Profile Statuses Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Profile By Slug Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Advanced Filters Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Full Profile Data Test
+2025-08-31 17:44:13,280 - graphql_tester - INFO -    ✅ PASS - Solana Filter Test
+2025-08-31 17:44:13,520 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:44:13,520 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:44:13,520 - cache - INFO - Falling back to in-memory cache
+2025-08-31 17:44:13,525 - integration_tester - INFO - 🚀 Starting Integration Tests...
+2025-08-31 17:44:13,525 - integration_tester - INFO - 
+🔥 CRITICAL USER FLOW TESTS
+2025-08-31 17:44:13,525 - integration_tester - INFO - 🔍 Testing Basic Search Flow (User types 'Solana')
+2025-08-31 17:44:13,526 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,643 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:44:13,643 - integration_tester - INFO - ✅ api.get_profiles() returned: <class 'list'> with 17 items
+2025-08-31 17:44:13,643 - integration_tester - INFO - ✅ Null-safe len() call: 17
+2025-08-31 17:44:13,643 - integration_tester - INFO - ✅ Filter text generated: 'profileNameSearch: Solana'
+2025-08-31 17:44:13,644 - integration_tester - INFO - ✅ Keyboard created with 5 rows
+2025-08-31 17:44:13,644 - integration_tester - INFO - 🔍 Testing Empty Search Flow
+2025-08-31 17:44:13,644 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,782 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:44:13,805 - integration_tester - INFO - ✅ Empty search returned 1956 results
+2025-08-31 17:44:13,806 - integration_tester - INFO - 🔍 Testing No Results Flow
+2025-08-31 17:44:13,807 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:13,911 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:44:13,911 - root - ERROR - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 17:44:13,912 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,000 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:44:14,001 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "XYZ123NONEXISTENT"}}, assets: {ticker: {_contains: "XYZ123NONEXISTENT"}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:44:14,001 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:44:14,002 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:44:14,002 - integration_tester - INFO - ✅ No results search returned 0 results
+2025-08-31 17:44:14,002 - integration_tester - INFO - 
+⚡ ADVANCED FUNCTIONALITY TESTS
+2025-08-31 17:44:14,002 - integration_tester - INFO - 🔍 Testing Filter Combinations
+2025-08-31 17:44:14,003 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,088 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:44:14,089 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "The Grid"}}, assets: {ticker: {_contains: "The Grid"}}}, profileInfos: {profileType: {id: {_eq: 1}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:44:14,089 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:44:14,090 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:44:14,090 - integration_tester - INFO - ✅ Filter combination returned 0 results
+2025-08-31 17:44:14,090 - integration_tester - INFO - 🔍 Testing V2 Search Integration
+2025-08-31 17:44:14,092 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,199 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:44:14,200 - integration_tester - INFO - ✅ V2 search returned 17 results
+2025-08-31 17:44:14,201 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,304 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 717
+2025-08-31 17:44:14,306 - integration_tester - INFO - ✅ Profile data retrieved: True
+2025-08-31 17:44:14,306 - integration_tester - INFO - 🔍 Testing Error Handling
+2025-08-31 17:44:14,308 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,404 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 47
+2025-08-31 17:44:14,405 - root - INFO - Query: query queryName { roots (where: { products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:44:14,405 - root - INFO - Response: {'data': {'roots': [{'id': '3', 'slug': 'Solana'}]}}
+2025-08-31 17:44:14,406 - integration_tester - INFO - ✅ Error handling returned 1 results
+2025-08-31 17:44:14,406 - integration_tester - INFO - ✅ Properly handled None data
+2025-08-31 17:44:14,406 - integration_tester - INFO - 
+📊 INTEGRATION TEST RESULTS:
+2025-08-31 17:44:14,406 - integration_tester - INFO -    Total Tests: 6
+2025-08-31 17:44:14,406 - integration_tester - INFO -    Passed: 6
+2025-08-31 17:44:14,406 - integration_tester - INFO -    Failed: 0
+2025-08-31 17:44:14,406 - integration_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:44:14,406 - integration_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - Basic Search Flow
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 17
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - Empty Search Flow
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 1956
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - No Results Flow
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 0
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - Filter Combinations
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 0
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - V2 Search Integration
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 17
+2025-08-31 17:44:14,407 - integration_tester - INFO -    ✅ PASS - Error Handling
+2025-08-31 17:44:14,407 - integration_tester - INFO -       Results: 1
+2025-08-31 17:44:14,408 - show_profiles_tester - INFO - 🚀 Starting Show Profiles Tests...
+2025-08-31 17:44:14,409 - show_profiles_tester - INFO - 🔍 Testing Show Profiles Data Flow
+2025-08-31 17:44:14,410 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,523 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:44:14,524 - show_profiles_tester - INFO - ✅ Step 1 - api.get_profiles() returned: <class 'list'> with 1 items
+2025-08-31 17:44:14,524 - show_profiles_tester - INFO - ✅ Step 3 - Filter text: 'profileNameSearch: The Grid'
+2025-08-31 17:44:14,525 - show_profiles_tester - INFO - ✅ Step 4a - First profile ID: 254
+2025-08-31 17:44:14,526 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,627 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 701
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - ✅ Step 4b - Profile data type: <class 'dict'>
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - ✅ Step 4c - Profile details: Name='The Grid', Sector='Data & Analytics', Desc='The Grid is a data company that provides structure...'
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - 🔍 Testing Empty Monitoring Group ID
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - ✅ Current MONITORING_GROUP_ID: 'None'
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - ✅ MONITORING_GROUP_ID is empty/None - this should be handled gracefully
+2025-08-31 17:44:14,628 - show_profiles_tester - INFO - 🔍 Testing Profile Data Structure
+2025-08-31 17:44:14,628 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,764 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:44:14,791 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:44:14,889 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 863
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO - ✅ Profile data keys: ['tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'name', 'urls']
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO - ✅ Found keys: ['name', 'tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'urls']
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO - ⚠️ Missing keys: []
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO - 
+📊 SHOW PROFILES TEST RESULTS:
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO -    Total Tests: 3
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO -    Passed: 3
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO -    Failed: 0
+2025-08-31 17:44:14,890 - show_profiles_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:44:14,891 - show_profiles_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:44:14,891 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
+2025-08-31 17:44:14,891 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
+2025-08-31 17:44:14,891 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 17:47:10,595 - __main__ - INFO - ============================================================
+2025-08-31 17:47:10,595 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 17:47:10,595 - __main__ - INFO - ============================================================
+2025-08-31 17:47:10,822 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:10,822 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 17:47:10,822 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 17:47:10,827 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 17:47:10,827 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:11,109 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:11,110 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:11,402 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:11,402 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:11,737 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:11,738 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:12,029 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:12,030 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:12,185 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 17:47:12,278 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 17:47:13,320 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,435 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 17:47:13,437 - graphql_tester - INFO - 🚀 Starting GraphQL V2 Migration Tests...
+2025-08-31 17:47:13,437 - graphql_tester - INFO - 📡 Endpoint: https://beta.node.thegrid.id/graphql
+2025-08-31 17:47:13,437 - graphql_tester - INFO - 🔑 Headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer your_production_api_token_here'}
+2025-08-31 17:47:13,437 - graphql_tester - INFO - 
+🔥 CRITICAL TESTS (Must Pass)
+2025-08-31 17:47:13,437 - graphql_tester - INFO - 🔍 Testing: Basic Search Test
+2025-08-31 17:47:13,437 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:47:13,437 - graphql_tester - DEBUG - Variables: {'searchTerm': 'The Grid'}
+2025-08-31 17:47:13,438 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,550 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:47:13,551 - graphql_tester - INFO - ✅ Basic Search Test - SUCCESS
+2025-08-31 17:47:13,552 - graphql_tester - INFO - 🔍 Testing: Empty Search Test
+2025-08-31 17:47:13,552 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:47:13,553 - graphql_tester - DEBUG - Variables: {'searchTerm': ''}
+2025-08-31 17:47:13,554 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,636 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 191
+2025-08-31 17:47:13,637 - graphql_tester - INFO - ✅ Empty Search Test - SUCCESS
+2025-08-31 17:47:13,637 - graphql_tester - INFO - 🔍 Testing: Profile Detail Test
+2025-08-31 17:47:13,637 - graphql_tester - DEBUG - Query: 
+        query getProfileData($profileId: String1) {
+          profileInfos(limit: 1, where: {root: ...
+2025-08-31 17:47:13,637 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:47:13,638 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,739 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 917
+2025-08-31 17:47:13,740 - graphql_tester - INFO - ✅ Profile Detail Test - SUCCESS
+2025-08-31 17:47:13,740 - graphql_tester - INFO - 
+📋 FILTER OPTION TESTS
+2025-08-31 17:47:13,741 - graphql_tester - INFO - 🔍 Testing: Profile Types Test
+2025-08-31 17:47:13,741 - graphql_tester - DEBUG - Query: query getProfileTypes { profileTypes { id name } }...
+2025-08-31 17:47:13,741 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:13,742 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,830 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 227
+2025-08-31 17:47:13,832 - graphql_tester - INFO - ✅ Profile Types Test - SUCCESS
+2025-08-31 17:47:13,832 - graphql_tester - INFO - 🔍 Testing: Profile Sectors Test
+2025-08-31 17:47:13,833 - graphql_tester - DEBUG - Query: query getProfileSectors { profileSectors { id name } }...
+2025-08-31 17:47:13,833 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:13,834 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:13,933 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 851
+2025-08-31 17:47:13,933 - graphql_tester - INFO - ✅ Profile Sectors Test - SUCCESS
+2025-08-31 17:47:13,934 - graphql_tester - INFO - 🔍 Testing: Asset Types Test
+2025-08-31 17:47:13,934 - graphql_tester - DEBUG - Query: query getAssetTypes { assetTypes { id name } }...
+2025-08-31 17:47:13,934 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:13,936 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,031 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 568
+2025-08-31 17:47:14,032 - graphql_tester - INFO - ✅ Asset Types Test - SUCCESS
+2025-08-31 17:47:14,032 - graphql_tester - INFO - 🔍 Testing: Profile Statuses Test
+2025-08-31 17:47:14,032 - graphql_tester - DEBUG - Query: query getProfileStatuses { profileStatuses { id name } }...
+2025-08-31 17:47:14,032 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:14,033 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,114 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 195
+2025-08-31 17:47:14,115 - graphql_tester - INFO - ✅ Profile Statuses Test - SUCCESS
+2025-08-31 17:47:14,116 - graphql_tester - INFO - 
+⚡ ADVANCED TESTS
+2025-08-31 17:47:14,116 - graphql_tester - INFO - 🔍 Testing: Profile By Slug Test
+2025-08-31 17:47:14,116 - graphql_tester - DEBUG - Query: 
+        query getProfileDataBySlug($profileSlug: String1) {
+          profileInfos(limit: 1, where:...
+2025-08-31 17:47:14,116 - graphql_tester - DEBUG - Variables: {'profileSlug': 'The_Grid'}
+2025-08-31 17:47:14,118 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,208 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 381
+2025-08-31 17:47:14,208 - graphql_tester - INFO - ✅ Profile By Slug Test - SUCCESS
+2025-08-31 17:47:14,209 - graphql_tester - INFO - 🔍 Testing: Advanced Filters Test
+2025-08-31 17:47:14,209 - graphql_tester - DEBUG - Query: 
+        query searchWithFilters($profileTypeId: String1, $searchTerm: String1) {
+          roots(
+ ...
+2025-08-31 17:47:14,209 - graphql_tester - DEBUG - Variables: {'profileTypeId': '1', 'searchTerm': 'The Grid'}
+2025-08-31 17:47:14,210 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,292 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:14,292 - graphql_tester - INFO - ✅ Advanced Filters Test - SUCCESS
+2025-08-31 17:47:14,293 - graphql_tester - INFO - 🔍 Testing: Full Profile Data Test
+2025-08-31 17:47:14,293 - graphql_tester - DEBUG - Query: 
+        query getFullProfileData($profileId: String1) {
+          profileInfos(limit: 1, offset: 0,...
+2025-08-31 17:47:14,293 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:47:14,294 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,405 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2112
+2025-08-31 17:47:14,406 - graphql_tester - INFO - ✅ Full Profile Data Test - SUCCESS
+2025-08-31 17:47:14,407 - graphql_tester - INFO - 🔍 Testing: Solana Filter Test
+2025-08-31 17:47:14,407 - graphql_tester - DEBUG - Query: 
+        query getSolanaProfiles($productId: String1) {
+          roots(
+            where: {
+      ...
+2025-08-31 17:47:14,407 - graphql_tester - DEBUG - Variables: {'productId': '22'}
+2025-08-31 17:47:14,408 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,500 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 193
+2025-08-31 17:47:14,500 - graphql_tester - INFO - ✅ Solana Filter Test - SUCCESS
+2025-08-31 17:47:14,501 - graphql_tester - INFO - 
+📊 TEST RESULTS SUMMARY
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    Total Tests: 11
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    Passed: 11
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    Failed: 0
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    Critical Tests Passed: 3/3
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:14,501 - graphql_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:14,501 - graphql_tester - INFO -    ✅ PASS - Basic Search Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Empty Search Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Profile Detail Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Profile Types Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Profile Sectors Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Asset Types Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Profile Statuses Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Profile By Slug Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Advanced Filters Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Full Profile Data Test
+2025-08-31 17:47:14,502 - graphql_tester - INFO -    ✅ PASS - Solana Filter Test
+2025-08-31 17:47:14,768 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:47:14,768 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:47:14,768 - cache - INFO - Falling back to in-memory cache
+2025-08-31 17:47:14,774 - integration_tester - INFO - 🚀 Starting Integration Tests...
+2025-08-31 17:47:14,774 - integration_tester - INFO - 
+🔥 CRITICAL USER FLOW TESTS
+2025-08-31 17:47:14,774 - integration_tester - INFO - 🔍 Testing Basic Search Flow (User types 'Solana')
+2025-08-31 17:47:14,775 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:14,882 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:47:14,882 - integration_tester - INFO - ✅ api.get_profiles() returned: <class 'list'> with 17 items
+2025-08-31 17:47:14,882 - integration_tester - INFO - ✅ Null-safe len() call: 17
+2025-08-31 17:47:14,882 - integration_tester - INFO - ✅ Filter text generated: 'profileNameSearch: Solana'
+2025-08-31 17:47:14,883 - integration_tester - INFO - ✅ Keyboard created with 5 rows
+2025-08-31 17:47:14,883 - integration_tester - INFO - 🔍 Testing Empty Search Flow
+2025-08-31 17:47:14,883 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,034 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:47:15,068 - integration_tester - INFO - ✅ Empty search returned 1956 results
+2025-08-31 17:47:15,068 - integration_tester - INFO - 🔍 Testing No Results Flow
+2025-08-31 17:47:15,069 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,186 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:15,187 - root - ERROR - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 17:47:15,189 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,286 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:15,287 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "XYZ123NONEXISTENT"}}, assets: {ticker: {_contains: "XYZ123NONEXISTENT"}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:15,287 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:47:15,288 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:47:15,288 - integration_tester - INFO - ✅ No results search returned 0 results
+2025-08-31 17:47:15,288 - integration_tester - INFO - 
+⚡ ADVANCED FUNCTIONALITY TESTS
+2025-08-31 17:47:15,288 - integration_tester - INFO - 🔍 Testing Filter Combinations
+2025-08-31 17:47:15,290 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,380 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:15,382 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "The Grid"}}, assets: {ticker: {_contains: "The Grid"}}}, profileInfos: {profileType: {id: {_eq: 1}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:15,382 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:47:15,383 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:47:15,384 - integration_tester - INFO - ✅ Filter combination returned 0 results
+2025-08-31 17:47:15,384 - integration_tester - INFO - 🔍 Testing V2 Search Integration
+2025-08-31 17:47:15,385 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,506 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:47:15,507 - integration_tester - INFO - ✅ V2 search returned 17 results
+2025-08-31 17:47:15,508 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,605 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 717
+2025-08-31 17:47:15,606 - integration_tester - INFO - ✅ Profile data retrieved: True
+2025-08-31 17:47:15,606 - integration_tester - INFO - 🔍 Testing Error Handling
+2025-08-31 17:47:15,608 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,694 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 47
+2025-08-31 17:47:15,694 - root - INFO - Query: query queryName { roots (where: { products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:15,695 - root - INFO - Response: {'data': {'roots': [{'id': '3', 'slug': 'Solana'}]}}
+2025-08-31 17:47:15,695 - integration_tester - INFO - ✅ Error handling returned 1 results
+2025-08-31 17:47:15,695 - integration_tester - INFO - ✅ Properly handled None data
+2025-08-31 17:47:15,695 - integration_tester - INFO - 
+📊 INTEGRATION TEST RESULTS:
+2025-08-31 17:47:15,695 - integration_tester - INFO -    Total Tests: 6
+2025-08-31 17:47:15,695 - integration_tester - INFO -    Passed: 6
+2025-08-31 17:47:15,695 - integration_tester - INFO -    Failed: 0
+2025-08-31 17:47:15,695 - integration_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:15,695 - integration_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - Basic Search Flow
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 17
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - Empty Search Flow
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 1956
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - No Results Flow
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 0
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - Filter Combinations
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 0
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - V2 Search Integration
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 17
+2025-08-31 17:47:15,695 - integration_tester - INFO -    ✅ PASS - Error Handling
+2025-08-31 17:47:15,695 - integration_tester - INFO -       Results: 1
+2025-08-31 17:47:15,697 - show_profiles_tester - INFO - 🚀 Starting Show Profiles Tests...
+2025-08-31 17:47:15,697 - show_profiles_tester - INFO - 🔍 Testing Show Profiles Data Flow
+2025-08-31 17:47:15,698 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,818 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:47:15,819 - show_profiles_tester - INFO - ✅ Step 1 - api.get_profiles() returned: <class 'list'> with 1 items
+2025-08-31 17:47:15,819 - show_profiles_tester - INFO - ✅ Step 3 - Filter text: 'profileNameSearch: The Grid'
+2025-08-31 17:47:15,820 - show_profiles_tester - INFO - ✅ Step 4a - First profile ID: 254
+2025-08-31 17:47:15,821 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:15,917 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 701
+2025-08-31 17:47:15,919 - show_profiles_tester - INFO - ✅ Step 4b - Profile data type: <class 'dict'>
+2025-08-31 17:47:15,919 - show_profiles_tester - INFO - ✅ Step 4c - Profile details: Name='The Grid', Sector='Data & Analytics', Desc='The Grid is a data company that provides structure...'
+2025-08-31 17:47:15,919 - show_profiles_tester - INFO - 🔍 Testing Empty Monitoring Group ID
+2025-08-31 17:47:15,920 - show_profiles_tester - INFO - ✅ Current MONITORING_GROUP_ID: 'None'
+2025-08-31 17:47:15,920 - show_profiles_tester - INFO - ✅ MONITORING_GROUP_ID is empty/None - this should be handled gracefully
+2025-08-31 17:47:15,920 - show_profiles_tester - INFO - 🔍 Testing Profile Data Structure
+2025-08-31 17:47:15,922 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:16,056 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:47:16,088 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:16,189 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 863
+2025-08-31 17:47:16,189 - show_profiles_tester - INFO - ✅ Profile data keys: ['tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'name', 'urls']
+2025-08-31 17:47:16,189 - show_profiles_tester - INFO - ✅ Found keys: ['name', 'tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'urls']
+2025-08-31 17:47:16,189 - show_profiles_tester - INFO - ⚠️ Missing keys: []
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO - 
+📊 SHOW PROFILES TEST RESULTS:
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    Total Tests: 3
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    Passed: 3
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    Failed: 0
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
+2025-08-31 17:47:16,190 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 17:47:48,960 - __main__ - INFO - ============================================================
+2025-08-31 17:47:48,960 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 17:47:48,960 - __main__ - INFO - ============================================================
+2025-08-31 17:47:49,427 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:49,427 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 17:47:49,427 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 17:47:49,431 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 17:47:49,431 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:49,718 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:49,719 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:50,006 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:50,007 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:50,286 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:50,286 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:50,570 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:47:50,570 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:47:50,725 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 17:47:50,830 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 17:47:51,857 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:51,945 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 17:47:51,947 - graphql_tester - INFO - 🚀 Starting GraphQL V2 Migration Tests...
+2025-08-31 17:47:51,947 - graphql_tester - INFO - 📡 Endpoint: https://beta.node.thegrid.id/graphql
+2025-08-31 17:47:51,947 - graphql_tester - INFO - 🔑 Headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer your_production_api_token_here'}
+2025-08-31 17:47:51,947 - graphql_tester - INFO - 
+🔥 CRITICAL TESTS (Must Pass)
+2025-08-31 17:47:51,947 - graphql_tester - INFO - 🔍 Testing: Basic Search Test
+2025-08-31 17:47:51,947 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:47:51,947 - graphql_tester - DEBUG - Variables: {'searchTerm': 'The Grid'}
+2025-08-31 17:47:51,948 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,057 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:47:52,058 - graphql_tester - INFO - ✅ Basic Search Test - SUCCESS
+2025-08-31 17:47:52,058 - graphql_tester - INFO - 🔍 Testing: Empty Search Test
+2025-08-31 17:47:52,058 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:47:52,058 - graphql_tester - DEBUG - Variables: {'searchTerm': ''}
+2025-08-31 17:47:52,059 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,151 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 191
+2025-08-31 17:47:52,152 - graphql_tester - INFO - ✅ Empty Search Test - SUCCESS
+2025-08-31 17:47:52,152 - graphql_tester - INFO - 🔍 Testing: Profile Detail Test
+2025-08-31 17:47:52,152 - graphql_tester - DEBUG - Query: 
+        query getProfileData($profileId: String1) {
+          profileInfos(limit: 1, where: {root: ...
+2025-08-31 17:47:52,152 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:47:52,154 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,257 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 917
+2025-08-31 17:47:52,257 - graphql_tester - INFO - ✅ Profile Detail Test - SUCCESS
+2025-08-31 17:47:52,257 - graphql_tester - INFO - 
+📋 FILTER OPTION TESTS
+2025-08-31 17:47:52,257 - graphql_tester - INFO - 🔍 Testing: Profile Types Test
+2025-08-31 17:47:52,257 - graphql_tester - DEBUG - Query: query getProfileTypes { profileTypes { id name } }...
+2025-08-31 17:47:52,257 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:52,258 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,346 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 227
+2025-08-31 17:47:52,346 - graphql_tester - INFO - ✅ Profile Types Test - SUCCESS
+2025-08-31 17:47:52,346 - graphql_tester - INFO - 🔍 Testing: Profile Sectors Test
+2025-08-31 17:47:52,346 - graphql_tester - DEBUG - Query: query getProfileSectors { profileSectors { id name } }...
+2025-08-31 17:47:52,346 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:52,348 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,443 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 851
+2025-08-31 17:47:52,443 - graphql_tester - INFO - ✅ Profile Sectors Test - SUCCESS
+2025-08-31 17:47:52,443 - graphql_tester - INFO - 🔍 Testing: Asset Types Test
+2025-08-31 17:47:52,443 - graphql_tester - DEBUG - Query: query getAssetTypes { assetTypes { id name } }...
+2025-08-31 17:47:52,443 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:52,444 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,535 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 568
+2025-08-31 17:47:52,536 - graphql_tester - INFO - ✅ Asset Types Test - SUCCESS
+2025-08-31 17:47:52,536 - graphql_tester - INFO - 🔍 Testing: Profile Statuses Test
+2025-08-31 17:47:52,536 - graphql_tester - DEBUG - Query: query getProfileStatuses { profileStatuses { id name } }...
+2025-08-31 17:47:52,536 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:47:52,537 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,625 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 195
+2025-08-31 17:47:52,625 - graphql_tester - INFO - ✅ Profile Statuses Test - SUCCESS
+2025-08-31 17:47:52,626 - graphql_tester - INFO - 
+⚡ ADVANCED TESTS
+2025-08-31 17:47:52,626 - graphql_tester - INFO - 🔍 Testing: Profile By Slug Test
+2025-08-31 17:47:52,626 - graphql_tester - DEBUG - Query: 
+        query getProfileDataBySlug($profileSlug: String1) {
+          profileInfos(limit: 1, where:...
+2025-08-31 17:47:52,626 - graphql_tester - DEBUG - Variables: {'profileSlug': 'The_Grid'}
+2025-08-31 17:47:52,627 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,722 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 381
+2025-08-31 17:47:52,722 - graphql_tester - INFO - ✅ Profile By Slug Test - SUCCESS
+2025-08-31 17:47:52,722 - graphql_tester - INFO - 🔍 Testing: Advanced Filters Test
+2025-08-31 17:47:52,722 - graphql_tester - DEBUG - Query: 
+        query searchWithFilters($profileTypeId: String1, $searchTerm: String1) {
+          roots(
+ ...
+2025-08-31 17:47:52,723 - graphql_tester - DEBUG - Variables: {'profileTypeId': '1', 'searchTerm': 'The Grid'}
+2025-08-31 17:47:52,723 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,809 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:52,810 - graphql_tester - INFO - ✅ Advanced Filters Test - SUCCESS
+2025-08-31 17:47:52,810 - graphql_tester - INFO - 🔍 Testing: Full Profile Data Test
+2025-08-31 17:47:52,810 - graphql_tester - DEBUG - Query: 
+        query getFullProfileData($profileId: String1) {
+          profileInfos(limit: 1, offset: 0,...
+2025-08-31 17:47:52,810 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:47:52,811 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:52,928 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2112
+2025-08-31 17:47:52,929 - graphql_tester - INFO - ✅ Full Profile Data Test - SUCCESS
+2025-08-31 17:47:52,929 - graphql_tester - INFO - 🔍 Testing: Solana Filter Test
+2025-08-31 17:47:52,929 - graphql_tester - DEBUG - Query: 
+        query getSolanaProfiles($productId: String1) {
+          roots(
+            where: {
+      ...
+2025-08-31 17:47:52,929 - graphql_tester - DEBUG - Variables: {'productId': '22'}
+2025-08-31 17:47:52,930 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,019 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 193
+2025-08-31 17:47:53,019 - graphql_tester - INFO - ✅ Solana Filter Test - SUCCESS
+2025-08-31 17:47:53,019 - graphql_tester - INFO - 
+📊 TEST RESULTS SUMMARY
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    Total Tests: 11
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    Passed: 11
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    Failed: 0
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    Critical Tests Passed: 3/3
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:53,019 - graphql_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Basic Search Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Empty Search Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Profile Detail Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Profile Types Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Profile Sectors Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Asset Types Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Profile Statuses Test
+2025-08-31 17:47:53,019 - graphql_tester - INFO -    ✅ PASS - Profile By Slug Test
+2025-08-31 17:47:53,020 - graphql_tester - INFO -    ✅ PASS - Advanced Filters Test
+2025-08-31 17:47:53,020 - graphql_tester - INFO -    ✅ PASS - Full Profile Data Test
+2025-08-31 17:47:53,020 - graphql_tester - INFO -    ✅ PASS - Solana Filter Test
+2025-08-31 17:47:53,300 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:47:53,300 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:47:53,300 - cache - INFO - Falling back to in-memory cache
+2025-08-31 17:47:53,307 - integration_tester - INFO - 🚀 Starting Integration Tests...
+2025-08-31 17:47:53,307 - integration_tester - INFO - 
+🔥 CRITICAL USER FLOW TESTS
+2025-08-31 17:47:53,307 - integration_tester - INFO - 🔍 Testing Basic Search Flow (User types 'Solana')
+2025-08-31 17:47:53,308 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,423 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:47:53,423 - integration_tester - INFO - ✅ api.get_profiles() returned: <class 'list'> with 17 items
+2025-08-31 17:47:53,423 - integration_tester - INFO - ✅ Null-safe len() call: 17
+2025-08-31 17:47:53,423 - integration_tester - INFO - ✅ Filter text generated: 'profileNameSearch: Solana'
+2025-08-31 17:47:53,423 - integration_tester - INFO - ✅ Keyboard created with 5 rows
+2025-08-31 17:47:53,423 - integration_tester - INFO - 🔍 Testing Empty Search Flow
+2025-08-31 17:47:53,424 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,635 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:47:53,665 - integration_tester - INFO - ✅ Empty search returned 1956 results
+2025-08-31 17:47:53,665 - integration_tester - INFO - 🔍 Testing No Results Flow
+2025-08-31 17:47:53,667 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,787 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:53,787 - root - ERROR - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 17:47:53,788 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,881 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:53,881 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "XYZ123NONEXISTENT"}}, assets: {ticker: {_contains: "XYZ123NONEXISTENT"}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:53,881 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:47:53,882 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:47:53,882 - integration_tester - INFO - ✅ No results search returned 0 results
+2025-08-31 17:47:53,882 - integration_tester - INFO - 
+⚡ ADVANCED FUNCTIONALITY TESTS
+2025-08-31 17:47:53,882 - integration_tester - INFO - 🔍 Testing Filter Combinations
+2025-08-31 17:47:53,883 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:53,970 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:47:53,971 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "The Grid"}}, assets: {ticker: {_contains: "The Grid"}}}, profileInfos: {profileType: {id: {_eq: 1}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:53,971 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:47:53,971 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:47:53,971 - integration_tester - INFO - ✅ Filter combination returned 0 results
+2025-08-31 17:47:53,971 - integration_tester - INFO - 🔍 Testing V2 Search Integration
+2025-08-31 17:47:53,972 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,089 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:47:54,089 - integration_tester - INFO - ✅ V2 search returned 17 results
+2025-08-31 17:47:54,090 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,184 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 717
+2025-08-31 17:47:54,184 - integration_tester - INFO - ✅ Profile data retrieved: True
+2025-08-31 17:47:54,184 - integration_tester - INFO - 🔍 Testing Error Handling
+2025-08-31 17:47:54,185 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,272 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 47
+2025-08-31 17:47:54,272 - root - INFO - Query: query queryName { roots (where: { products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:47:54,272 - root - INFO - Response: {'data': {'roots': [{'id': '3', 'slug': 'Solana'}]}}
+2025-08-31 17:47:54,272 - integration_tester - INFO - ✅ Error handling returned 1 results
+2025-08-31 17:47:54,272 - integration_tester - INFO - ✅ Properly handled None data
+2025-08-31 17:47:54,272 - integration_tester - INFO - 
+📊 INTEGRATION TEST RESULTS:
+2025-08-31 17:47:54,272 - integration_tester - INFO -    Total Tests: 6
+2025-08-31 17:47:54,272 - integration_tester - INFO -    Passed: 6
+2025-08-31 17:47:54,272 - integration_tester - INFO -    Failed: 0
+2025-08-31 17:47:54,272 - integration_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:54,272 - integration_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - Basic Search Flow
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 17
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - Empty Search Flow
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 1956
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - No Results Flow
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 0
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - Filter Combinations
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 0
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - V2 Search Integration
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 17
+2025-08-31 17:47:54,273 - integration_tester - INFO -    ✅ PASS - Error Handling
+2025-08-31 17:47:54,273 - integration_tester - INFO -       Results: 1
+2025-08-31 17:47:54,274 - show_profiles_tester - INFO - 🚀 Starting Show Profiles Tests...
+2025-08-31 17:47:54,274 - show_profiles_tester - INFO - 🔍 Testing Show Profiles Data Flow
+2025-08-31 17:47:54,275 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,386 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:47:54,387 - show_profiles_tester - INFO - ✅ Step 1 - api.get_profiles() returned: <class 'list'> with 1 items
+2025-08-31 17:47:54,387 - show_profiles_tester - INFO - ✅ Step 3 - Filter text: 'profileNameSearch: The Grid'
+2025-08-31 17:47:54,387 - show_profiles_tester - INFO - ✅ Step 4a - First profile ID: 254
+2025-08-31 17:47:54,387 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,477 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 701
+2025-08-31 17:47:54,477 - show_profiles_tester - INFO - ✅ Step 4b - Profile data type: <class 'dict'>
+2025-08-31 17:47:54,478 - show_profiles_tester - INFO - ✅ Step 4c - Profile details: Name='The Grid', Sector='Data & Analytics', Desc='The Grid is a data company that provides structure...'
+2025-08-31 17:47:54,478 - show_profiles_tester - INFO - 🔍 Testing Empty Monitoring Group ID
+2025-08-31 17:47:54,478 - show_profiles_tester - INFO - ✅ Current MONITORING_GROUP_ID: 'None'
+2025-08-31 17:47:54,478 - show_profiles_tester - INFO - ✅ MONITORING_GROUP_ID is empty/None - this should be handled gracefully
+2025-08-31 17:47:54,478 - show_profiles_tester - INFO - 🔍 Testing Profile Data Structure
+2025-08-31 17:47:54,479 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,619 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:47:54,649 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:47:54,743 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 863
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO - ✅ Profile data keys: ['tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'name', 'urls']
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO - ✅ Found keys: ['name', 'tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'urls']
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO - ⚠️ Missing keys: []
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO - 
+📊 SHOW PROFILES TEST RESULTS:
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    Total Tests: 3
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    Passed: 3
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    Failed: 0
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
+2025-08-31 17:47:54,744 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 17:54:24,512 - __main__ - INFO - ============================================================
+2025-08-31 17:54:24,512 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 17:54:24,512 - __main__ - INFO - ============================================================
+2025-08-31 17:54:24,796 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:54:24,796 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 17:54:24,796 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 17:54:24,799 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 17:54:24,799 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:54:25,069 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:54:25,070 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:54:25,342 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:54:25,342 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:54:25,608 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:54:25,608 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:54:25,896 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 17:54:25,896 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 17:54:26,047 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 17:54:26,139 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 17:54:27,150 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,234 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31
+2025-08-31 17:54:27,235 - graphql_tester - INFO - 🚀 Starting GraphQL V2 Migration Tests...
+2025-08-31 17:54:27,235 - graphql_tester - INFO - 📡 Endpoint: https://beta.node.thegrid.id/graphql
+2025-08-31 17:54:27,235 - graphql_tester - INFO - 🔑 Headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer your_production_api_token_here'}
+2025-08-31 17:54:27,235 - graphql_tester - INFO - 
+🔥 CRITICAL TESTS (Must Pass)
+2025-08-31 17:54:27,235 - graphql_tester - INFO - 🔍 Testing: Basic Search Test
+2025-08-31 17:54:27,235 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:54:27,235 - graphql_tester - DEBUG - Variables: {'searchTerm': 'The Grid'}
+2025-08-31 17:54:27,236 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,345 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:54:27,346 - graphql_tester - INFO - ✅ Basic Search Test - SUCCESS
+2025-08-31 17:54:27,346 - graphql_tester - INFO - 🔍 Testing: Empty Search Test
+2025-08-31 17:54:27,346 - graphql_tester - DEBUG - Query: 
+        query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
+          roots(
+          ...
+2025-08-31 17:54:27,346 - graphql_tester - DEBUG - Variables: {'searchTerm': ''}
+2025-08-31 17:54:27,348 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,435 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 191
+2025-08-31 17:54:27,435 - graphql_tester - INFO - ✅ Empty Search Test - SUCCESS
+2025-08-31 17:54:27,436 - graphql_tester - INFO - 🔍 Testing: Profile Detail Test
+2025-08-31 17:54:27,436 - graphql_tester - DEBUG - Query: 
+        query getProfileData($profileId: String1) {
+          profileInfos(limit: 1, where: {root: ...
+2025-08-31 17:54:27,436 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:54:27,437 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,525 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 917
+2025-08-31 17:54:27,525 - graphql_tester - INFO - ✅ Profile Detail Test - SUCCESS
+2025-08-31 17:54:27,526 - graphql_tester - INFO - 
+📋 FILTER OPTION TESTS
+2025-08-31 17:54:27,526 - graphql_tester - INFO - 🔍 Testing: Profile Types Test
+2025-08-31 17:54:27,526 - graphql_tester - DEBUG - Query: query getProfileTypes { profileTypes { id name } }...
+2025-08-31 17:54:27,526 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:54:27,526 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,612 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 227
+2025-08-31 17:54:27,612 - graphql_tester - INFO - ✅ Profile Types Test - SUCCESS
+2025-08-31 17:54:27,612 - graphql_tester - INFO - 🔍 Testing: Profile Sectors Test
+2025-08-31 17:54:27,612 - graphql_tester - DEBUG - Query: query getProfileSectors { profileSectors { id name } }...
+2025-08-31 17:54:27,612 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:54:27,613 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,697 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 851
+2025-08-31 17:54:27,697 - graphql_tester - INFO - ✅ Profile Sectors Test - SUCCESS
+2025-08-31 17:54:27,697 - graphql_tester - INFO - 🔍 Testing: Asset Types Test
+2025-08-31 17:54:27,697 - graphql_tester - DEBUG - Query: query getAssetTypes { assetTypes { id name } }...
+2025-08-31 17:54:27,697 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:54:27,698 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,778 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 568
+2025-08-31 17:54:27,778 - graphql_tester - INFO - ✅ Asset Types Test - SUCCESS
+2025-08-31 17:54:27,778 - graphql_tester - INFO - 🔍 Testing: Profile Statuses Test
+2025-08-31 17:54:27,778 - graphql_tester - DEBUG - Query: query getProfileStatuses { profileStatuses { id name } }...
+2025-08-31 17:54:27,778 - graphql_tester - DEBUG - Variables: {}
+2025-08-31 17:54:27,778 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,867 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 195
+2025-08-31 17:54:27,868 - graphql_tester - INFO - ✅ Profile Statuses Test - SUCCESS
+2025-08-31 17:54:27,868 - graphql_tester - INFO - 
+⚡ ADVANCED TESTS
+2025-08-31 17:54:27,868 - graphql_tester - INFO - 🔍 Testing: Profile By Slug Test
+2025-08-31 17:54:27,868 - graphql_tester - DEBUG - Query: 
+        query getProfileDataBySlug($profileSlug: String1) {
+          profileInfos(limit: 1, where:...
+2025-08-31 17:54:27,868 - graphql_tester - DEBUG - Variables: {'profileSlug': 'The_Grid'}
+2025-08-31 17:54:27,868 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:27,952 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 381
+2025-08-31 17:54:27,952 - graphql_tester - INFO - ✅ Profile By Slug Test - SUCCESS
+2025-08-31 17:54:27,952 - graphql_tester - INFO - 🔍 Testing: Advanced Filters Test
+2025-08-31 17:54:27,952 - graphql_tester - DEBUG - Query: 
+        query searchWithFilters($profileTypeId: String1, $searchTerm: String1) {
+          roots(
+ ...
+2025-08-31 17:54:27,952 - graphql_tester - DEBUG - Variables: {'profileTypeId': '1', 'searchTerm': 'The Grid'}
+2025-08-31 17:54:27,953 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,041 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:54:28,041 - graphql_tester - INFO - ✅ Advanced Filters Test - SUCCESS
+2025-08-31 17:54:28,041 - graphql_tester - INFO - 🔍 Testing: Full Profile Data Test
+2025-08-31 17:54:28,041 - graphql_tester - DEBUG - Query: 
+        query getFullProfileData($profileId: String1) {
+          profileInfos(limit: 1, offset: 0,...
+2025-08-31 17:54:28,041 - graphql_tester - DEBUG - Variables: {'profileId': '1'}
+2025-08-31 17:54:28,042 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,157 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 2112
+2025-08-31 17:54:28,157 - graphql_tester - INFO - ✅ Full Profile Data Test - SUCCESS
+2025-08-31 17:54:28,158 - graphql_tester - INFO - 🔍 Testing: Solana Filter Test
+2025-08-31 17:54:28,158 - graphql_tester - DEBUG - Query: 
+        query getSolanaProfiles($productId: String1) {
+          roots(
+            where: {
+      ...
+2025-08-31 17:54:28,158 - graphql_tester - DEBUG - Variables: {'productId': '22'}
+2025-08-31 17:54:28,159 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,248 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 193
+2025-08-31 17:54:28,248 - graphql_tester - INFO - ✅ Solana Filter Test - SUCCESS
+2025-08-31 17:54:28,248 - graphql_tester - INFO - 
+📊 TEST RESULTS SUMMARY
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    Total Tests: 11
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    Passed: 11
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    Failed: 0
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    Critical Tests Passed: 3/3
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:54:28,248 - graphql_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Basic Search Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Empty Search Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Profile Detail Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Profile Types Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Profile Sectors Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Asset Types Test
+2025-08-31 17:54:28,248 - graphql_tester - INFO -    ✅ PASS - Profile Statuses Test
+2025-08-31 17:54:28,249 - graphql_tester - INFO -    ✅ PASS - Profile By Slug Test
+2025-08-31 17:54:28,249 - graphql_tester - INFO -    ✅ PASS - Advanced Filters Test
+2025-08-31 17:54:28,249 - graphql_tester - INFO -    ✅ PASS - Full Profile Data Test
+2025-08-31 17:54:28,249 - graphql_tester - INFO -    ✅ PASS - Solana Filter Test
+2025-08-31 17:54:28,499 - cache - ERROR - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:54:28,499 - cache - WARNING - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 17:54:28,499 - cache - INFO - Falling back to in-memory cache
+2025-08-31 17:54:28,506 - integration_tester - INFO - 🚀 Starting Integration Tests...
+2025-08-31 17:54:28,506 - integration_tester - INFO - 
+🔥 CRITICAL USER FLOW TESTS
+2025-08-31 17:54:28,506 - integration_tester - INFO - 🔍 Testing Basic Search Flow (User types 'Solana')
+2025-08-31 17:54:28,506 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,607 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:54:28,607 - integration_tester - INFO - ✅ api.get_profiles() returned: <class 'list'> with 17 items
+2025-08-31 17:54:28,607 - integration_tester - INFO - ✅ Null-safe len() call: 17
+2025-08-31 17:54:28,607 - integration_tester - INFO - ✅ Filter text generated: 'profileNameSearch: Solana'
+2025-08-31 17:54:28,607 - integration_tester - INFO - ✅ Keyboard created with 5 rows
+2025-08-31 17:54:28,607 - integration_tester - INFO - 🔍 Testing Empty Search Flow
+2025-08-31 17:54:28,608 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,744 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:54:28,773 - integration_tester - INFO - ✅ Empty search returned 1956 results
+2025-08-31 17:54:28,773 - integration_tester - INFO - 🔍 Testing No Results Flow
+2025-08-31 17:54:28,774 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,882 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:54:28,882 - root - ERROR - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 17:54:28,883 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:28,966 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:54:28,966 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "XYZ123NONEXISTENT"}}, assets: {ticker: {_contains: "XYZ123NONEXISTENT"}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:54:28,966 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:54:28,967 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:54:28,967 - integration_tester - INFO - ✅ No results search returned 0 results
+2025-08-31 17:54:28,967 - integration_tester - INFO - 
+⚡ ADVANCED FUNCTIONALITY TESTS
+2025-08-31 17:54:28,967 - integration_tester - INFO - 🔍 Testing Filter Combinations
+2025-08-31 17:54:28,968 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,065 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 23
+2025-08-31 17:54:29,065 - root - INFO - Query: query queryName { roots (where: { _or: {profileInfos: {name: {_contains: "The Grid"}}, assets: {ticker: {_contains: "The Grid"}}}, profileInfos: {profileType: {id: {_eq: 1}}}, products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:54:29,065 - root - INFO - Response: {'data': {'roots': None}}
+2025-08-31 17:54:29,066 - root - WARNING - GraphQL returned roots: null, treating as empty results
+2025-08-31 17:54:29,066 - integration_tester - INFO - ✅ Filter combination returned 0 results
+2025-08-31 17:54:29,066 - integration_tester - INFO - 🔍 Testing V2 Search Integration
+2025-08-31 17:54:29,067 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,180 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 792
+2025-08-31 17:54:29,181 - integration_tester - INFO - ✅ V2 search returned 17 results
+2025-08-31 17:54:29,182 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,280 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 717
+2025-08-31 17:54:29,281 - integration_tester - INFO - ✅ Profile data retrieved: True
+2025-08-31 17:54:29,281 - integration_tester - INFO - 🔍 Testing Error Handling
+2025-08-31 17:54:29,283 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,364 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 47
+2025-08-31 17:54:29,365 - root - INFO - Query: query queryName { roots (where: { products: {id: {_eq: 22}} }) { id slug } }
+2025-08-31 17:54:29,365 - root - INFO - Response: {'data': {'roots': [{'id': '3', 'slug': 'Solana'}]}}
+2025-08-31 17:54:29,365 - integration_tester - INFO - ✅ Error handling returned 1 results
+2025-08-31 17:54:29,365 - integration_tester - INFO - ✅ Properly handled None data
+2025-08-31 17:54:29,365 - integration_tester - INFO - 
+📊 INTEGRATION TEST RESULTS:
+2025-08-31 17:54:29,365 - integration_tester - INFO -    Total Tests: 6
+2025-08-31 17:54:29,365 - integration_tester - INFO -    Passed: 6
+2025-08-31 17:54:29,365 - integration_tester - INFO -    Failed: 0
+2025-08-31 17:54:29,366 - integration_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:54:29,366 - integration_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - Basic Search Flow
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 17
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - Empty Search Flow
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 1956
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - No Results Flow
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 0
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - Filter Combinations
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 0
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - V2 Search Integration
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 17
+2025-08-31 17:54:29,366 - integration_tester - INFO -    ✅ PASS - Error Handling
+2025-08-31 17:54:29,366 - integration_tester - INFO -       Results: 1
+2025-08-31 17:54:29,368 - show_profiles_tester - INFO - 🚀 Starting Show Profiles Tests...
+2025-08-31 17:54:29,368 - show_profiles_tester - INFO - 🔍 Testing Show Profiles Data Flow
+2025-08-31 17:54:29,369 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,476 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 51
+2025-08-31 17:54:29,477 - show_profiles_tester - INFO - ✅ Step 1 - api.get_profiles() returned: <class 'list'> with 1 items
+2025-08-31 17:54:29,477 - show_profiles_tester - INFO - ✅ Step 3 - Filter text: 'profileNameSearch: The Grid'
+2025-08-31 17:54:29,477 - show_profiles_tester - INFO - ✅ Step 4a - First profile ID: 254
+2025-08-31 17:54:29,478 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,576 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 701
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - ✅ Step 4b - Profile data type: <class 'dict'>
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - ✅ Step 4c - Profile details: Name='The Grid', Sector='Data & Analytics', Desc='The Grid is a data company that provides structure...'
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - 🔍 Testing Empty Monitoring Group ID
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - ✅ Current MONITORING_GROUP_ID: 'None'
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - ✅ MONITORING_GROUP_ID is empty/None - this should be handled gracefully
+2025-08-31 17:54:29,577 - show_profiles_tester - INFO - 🔍 Testing Profile Data Structure
+2025-08-31 17:54:29,578 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,715 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 99208
+2025-08-31 17:54:29,739 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 17:54:29,842 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 863
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO - ✅ Profile data keys: ['tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'name', 'urls']
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO - ✅ Found keys: ['name', 'tagLine', 'descriptionShort', 'profileSector', 'profileType', 'root', 'logo', 'urls']
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO - ⚠️ Missing keys: []
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO - 
+📊 SHOW PROFILES TEST RESULTS:
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    Total Tests: 3
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    Passed: 3
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    Failed: 0
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    Success Rate: 100.0%
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO - 
+📝 DETAILED RESULTS:
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    ✅ PASS - Show Profiles Data Flow
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    ✅ PASS - Empty Monitoring Group ID
+2025-08-31 17:54:29,843 - show_profiles_tester - INFO -    ✅ PASS - Profile Data Structure
+2025-08-31 18:03:07,343 - __main__ - INFO - ============================================================
+2025-08-31 18:03:07,343 - __main__ - INFO - GridDigger Local Testing Session Started
+2025-08-31 18:03:07,343 - __main__ - INFO - ============================================================
+2025-08-31 18:03:07,580 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 18:03:07,580 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-31 18:03:07,580 - mysql.connector - INFO - plugin_name: mysql_native_password
+2025-08-31 18:03:07,585 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-08-31 18:03:07,586 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 18:03:07,857 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 18:03:07,858 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 18:03:08,133 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 18:03:08,133 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 18:03:08,427 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 18:03:08,427 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 18:03:08,724 - mysql.connector - DEBUG - # _do_auth(): self._auth_plugin: 
+2025-08-31 18:03:08,725 - mysql.connector - DEBUG - new_auth_plugin: mysql_native_password
+2025-08-31 18:03:08,871 - database_v2 - INFO - Database connection pool initialized with 5 connections
+2025-08-31 18:03:08,984 - database_v2 - INFO - Database connection pool test successful
+2025-08-31 18:03:09,999 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): beta.node.thegrid.id:443
+2025-08-31 18:03:10,122 - urllib3.connectionpool - DEBUG - https://beta.node.thegrid.id:443 "POST /graphql HTTP/11" 200 31

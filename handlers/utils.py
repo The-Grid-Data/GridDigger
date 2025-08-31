@@ -8,6 +8,9 @@ from telegram.ext import ConversationHandler, ContextTypes
 import api
 from database import increment_fetch_count
 
+# Import enhanced profile service
+from services.enhanced_profile_service import enhanced_profile_service
+
 MONITORING_GROUP_ID = os.getenv('MONITORING_GROUP_ID')
 
 
@@ -97,47 +100,53 @@ async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def send_profile_message(update: Update, context: ContextTypes.DEFAULT_TYPE, profile):
+    """Enhanced profile message using service layer with products and assets"""
     profile_id = profile['id']
-    profile_data = api.get_profile_data_by_id(profile_id)
     
-    # Add null safety for profile_data
-    if not profile_data:
-        profile_data = {}
+    # Use enhanced service to get formatted profile card
+    formatted_profile = enhanced_profile_service.get_profile_card(profile_id)
     
-    # Handle V2 schema structure - profile_data IS the profileInfo (not an array)
-    # The get_profile_data_by_id function returns the first profileInfo directly
-    name = profile_data.get('name', 'Unknown')
-    sector_name = profile_data.get('profileSector', {}).get('name', '-') if profile_data.get('profileSector') else '-'
-    description_short = profile_data.get('descriptionShort', '-') if profile_data.get('descriptionShort') else '-'
+    if not formatted_profile:
+        # Fallback to basic message if service fails
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=f"*Profile ID:* {profile_id}\n*Error:* Unable to load profile",
+            parse_mode='Markdown'
+        )
+        return
     
-    # Construct initial message text with basic profile summary
-    message_text = f"*Name:* {name}\n"
-    message_text += f"*Sector:* {sector_name}\n"
-    message_text += f"*short description:* {description_short}\n"
+    # Get reply markup from formatted profile
+    reply_markup = formatted_profile.get_inline_keyboard_markup()
     
-    # Add the "Expand" button
-    buttons = [[InlineKeyboardButton("Expand", callback_data=f"expand_{profile_id}")]]
-    reply_markup = InlineKeyboardMarkup(buttons)
-
-    # For V2 schema, logo/image URLs would be in urls array with specific urlType
-    # For now, we'll skip the logo functionality until we know the exact V2 structure for URLs
-    logo_url = None
-    urls = profile_data.get('urls', [])
-    for url_obj in urls:
-        if url_obj.get('urlType', {}).get('name', '').lower() in ['logo', 'image']:
-            logo_url = url_obj.get('url')
-            break
-    
-    # Usage in your Telegram bot
-    if logo_url and is_valid_url(logo_url):
-        if is_supported_image_format(logo_url):
-            await download_and_send_image(logo_url, update.effective_chat.id, message_text, reply_markup, context)
+    # Handle media if available
+    if formatted_profile.has_media and formatted_profile.media_url:
+        logo_url = formatted_profile.media_url
+        
+        # Check if we can display the image
+        if is_valid_url(logo_url) and is_supported_image_format(logo_url):
+            await download_and_send_image(
+                logo_url,
+                update.effective_chat.id,
+                formatted_profile.message_text,
+                reply_markup,
+                context
+            )
         else:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
-                                     reply_markup=reply_markup)
+            # Send as text message if image can't be displayed
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=formatted_profile.message_text,
+                parse_mode='Markdown',
+                reply_markup=reply_markup
+            )
     else:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=message_text, parse_mode='Markdown',
-                                 reply_markup=reply_markup)
+        # Send as text message (no media)
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=formatted_profile.message_text,
+            parse_mode='Markdown',
+            reply_markup=reply_markup
+        )
 
 
 import requests

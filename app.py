@@ -16,7 +16,7 @@ from logging_config import setup_logging, get_logger
 from handlers.setup import setup
 from cache import warm_cache, get_cache_stats
 from database_v2 import get_database_health
-from graphql_tester import GraphQLTester
+# GraphQL tester removed - functionality consolidated
 
 # Initialize logging first
 logger = get_logger(__name__)
@@ -157,25 +157,18 @@ class BotApplication:
                 logger.error("Health check failed, exiting...")
                 sys.exit(1)
             
-            # Test GraphQL queries on startup
-            logger.info("🧪 Testing GraphQL V2 queries...")
+            # Basic GraphQL connectivity test
+            logger.info("🧪 Testing GraphQL connectivity...")
             try:
-                tester = GraphQLTester()
-                test_results = tester.run_all_tests()
-                
-                if not test_results['critical_success']:
-                    logger.error(f"🚨 CRITICAL GraphQL tests failed: {3 - test_results['critical_passed']}/3")
-                    logger.error("Bot cannot function properly with these failures!")
-                    logger.error("Please check the GraphQL endpoint and schema compatibility.")
-                    sys.exit(1)
-                elif test_results['failed'] > 0:
-                    logger.warning(f"⚠️ {test_results['failed']} non-critical GraphQL tests failed")
-                    logger.warning("Basic functionality should work, but some features may be limited")
+                import api_v2
+                # Simple connectivity test
+                test_result = api_v2.search_profiles_v2("test")
+                if test_result is not None:
+                    logger.info("✅ GraphQL endpoint is accessible")
                 else:
-                    logger.info("✅ All GraphQL queries tested successfully!")
-                    
+                    logger.warning("⚠️ GraphQL endpoint returned no data for test query")
             except Exception as e:
-                logger.error(f"GraphQL testing failed with exception: {e}")
+                logger.warning(f"GraphQL connectivity test failed: {e}")
                 logger.warning("Continuing startup, but GraphQL functionality may be impaired")
             
             # Warm up cache

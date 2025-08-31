@@ -36,41 +36,28 @@ class SearchService:
             Dictionary containing search results or error information
         """
         try:
-            if self.use_new_api:
-                response = api_client.search_profiles(search_term, limit, offset)
-                
-                if not response.success:
-                    logger.error(f"Search failed for term '{search_term}': {response.errors}")
-                    return {
-                        'success': False,
-                        'error': response.errors[0] if response.errors else 'Unknown error',
-                        'profiles': [],
-                        'total_count': 0
-                    }
-                
-                search_result = response.data['search_result']
-                return {
-                    'success': True,
-                    'profiles': search_result.get_profiles_list(),
-                    'total_count': search_result.total_count,
-                    'raw_result': search_result
-                }
+            # For now, use legacy API approach since we're in transition
+            import api as legacy_api
             
-                    'FILTERS': filters or {}
-                
-                # Add search term to filters
-                if search_term:
-                    user_data['FILTERS']['profileNameSearch'] = search_term
-                    user_data['FILTERS']['profileNameSearch_query'] = search_term
-                
-                profiles = legacy_api.get_profiles(user_data)
-                
-                return {
-                    'success': True,
-                    'profiles': profiles[:limit],
-                    'total_count': len(profiles),
-                    'raw_result': None
-                }
+            # Create user_data structure for legacy API
+            user_data = {
+                'FILTERS': filters or {},
+                'inc_search': False
+            }
+            
+            # Add search term to filters
+            if search_term:
+                user_data['FILTERS']['profileNameSearch'] = search_term
+                user_data['FILTERS']['profileNameSearch_query'] = search_term
+            
+            profiles = legacy_api.get_profiles(user_data)
+            
+            return {
+                'success': True,
+                'profiles': profiles[:limit] if profiles else [],
+                'total_count': len(profiles) if profiles else 0,
+                'raw_result': None
+            }
                 
         except Exception as e:
             logger.error(f"Error searching profiles with term '{search_term}': {e}")
@@ -92,26 +79,16 @@ class SearchService:
             Dictionary containing search results
         """
         try:
-            if self.use_new_api:
-                # Convert legacy filters to new format
-                search_term = ""
-                filters = user_data.get('FILTERS', {})
-                
-                # Extract search term from filters
-                if 'profileNameSearch_query' in filters:
-                    search_term = filters['profileNameSearch_query']
-                elif 'profileNameSearch' in filters:
-                    search_term = filters['profileNameSearch']
-                
-                # For now, use basic search - can be expanded to handle more filters
-                return self.search_profiles(search_term)
+            # Use legacy API for backward compatibility
+            import api as legacy_api
             
-                
-                return {
-                    'success': True,
-                    'profiles': profiles,
-                    'total_count': len(profiles)
-                }
+            profiles = legacy_api.get_profiles(user_data)
+            
+            return {
+                'success': True,
+                'profiles': profiles if profiles else [],
+                'total_count': len(profiles) if profiles else 0
+            }
                 
         except Exception as e:
             logger.error(f"Error in legacy filter search: {e}")
