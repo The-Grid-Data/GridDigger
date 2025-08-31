@@ -4,7 +4,7 @@
 
 ## 🚀 Overview
 
-GridDigger is a high-performance Telegram bot that provides seamless access to The Grid ID database through an intuitive interface. This enhanced version features a robust service layer architecture, comprehensive GraphQL API integration, and enterprise-grade reliability.
+GridDigger is a high-performance Telegram bot that provides seamless access to The Grid ID database through an intuitive interface. This enhanced version features a robust service layer architecture, comprehensive GraphQL API integration, enterprise-grade reliability, and production-ready webhook deployment.
 
 **🎯 Live Bot**: [t.me/the_grid_id_bot](https://t.me/the_grid_id_bot)
 
@@ -12,6 +12,7 @@ GridDigger is a high-performance Telegram bot that provides seamless access to T
 
 ### 🔍 **Smart Search System**
 - **Hybrid Architecture**: Optimized V2 GraphQL for simple searches, legacy system for complex filters
+- **High-Volume Results**: Support for up to 10,000 search results per query
 - **Real-time Results**: Instant profile and asset discovery
 - **Advanced Filtering**: Multi-dimensional filtering by sector, type, status, and more
 - **Graceful Degradation**: Automatic fallback ensures 100% uptime
@@ -19,11 +20,14 @@ GridDigger is a high-performance Telegram bot that provides seamless access to T
 ### 🎨 **Enhanced User Experience**
 - **Rich Profile Cards**: Display with products, assets, and comprehensive details
 - **Expand Functionality**: Detailed profile views with URLs and social links
+- **Back Navigation**: Seamless navigation between card and expanded views
 - **Intuitive Navigation**: Clean filter interface with visual indicators
 - **Error Resilience**: Robust error handling with user-friendly messages
 
 ### 🏗 **Enterprise Architecture**
 - **Service Layer Pattern**: Clean separation of concerns with comprehensive testing
+- **Webhook Deployment**: Production-ready webhook server for Railway/cloud deployment
+- **Dual Mode Support**: Both polling (development) and webhook (production) modes
 - **GraphQL Integration**: Dual API support with seamless migration capabilities
 - **Performance Optimization**: Connection pooling, caching, and async operations
 - **Comprehensive Monitoring**: Health checks, analytics, and error tracking
@@ -56,10 +60,13 @@ GridDigger is a high-performance Telegram bot that provides seamless access to T
 
 4. **Run Bot**
    ```bash
-   # Development (with comprehensive testing)
+   # Development (polling mode with comprehensive testing)
    python3 run_local.py
    
-   # Production
+   # Production (webhook mode)
+   python3 webhook_server.py
+   
+   # Legacy polling mode
    python3 app.py
    ```
 
@@ -70,10 +77,13 @@ GridDigger is a high-performance Telegram bot that provides seamless access to T
 # Telegram Bot
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 MODE=webhook  # or 'polling' for development
+WEBHOOK_URL=https://your-domain.com  # Required for webhook mode
+PORT=5000  # Port for webhook server
 
 # GraphQL API
 GRAPHQL_ENDPOINT=https://maximum-grackle-73.hasura.app/v1/graphql
 GRAPHQL_ENDPOINT_V2=https://beta.node.thegrid.id/graphql
+HASURA_API_TOKEN_V2=your_api_token  # Optional
 
 # Database
 DB_HOST=localhost
@@ -107,6 +117,9 @@ python3 -m pytest --cov=. --cov-report=html
 
 # Code quality
 black . && flake8 . && mypy .
+
+# Test webhook server locally
+python3 test_webhook.py
 ```
 
 ### Continuous Integration
@@ -117,38 +130,51 @@ black . && flake8 . && mypy .
 
 ## 🏗 Architecture
 
-### Service Layer Design
+### Current System Architecture
 ```
 GridDigger/
-├── 🎯 app.py                    # Main application with health checks
+├── 🎯 app.py                    # Legacy polling mode application
+├── 🌐 webhook_server.py         # Production webhook server (NEW)
+├── 🧪 run_local.py              # Enhanced local testing (UPDATED)
 ├── 🔧 config.py                 # Configuration management
 ├── 📊 api_v2.py                 # GraphQL client with connection pooling
+├── 📊 api.py                    # Legacy API (still heavily used)
 ├── 🗄️ database_v2.py            # Enhanced database operations
 ├── 📁 services/                 # Business logic layer
 │   ├── enhanced_profile_service.py  # Main orchestration service
 │   ├── profile_repository.py        # Data access layer
-│   ├── profile_formatter.py         # Display formatting
+│   ├── profile_formatter.py         # Display formatting (UPDATED)
 │   └── profile_service.py           # Legacy compatibility
 ├── 📁 models/                   # Data models with null safety
 │   ├── profile_data.py              # Comprehensive profile structure
 │   └── common.py                    # Shared data structures
 ├── 📁 handlers/                 # Telegram interaction layer
-│   ├── profiles.py                  # Enhanced expand functionality
+│   ├── profiles.py                  # Enhanced expand functionality (UPDATED)
 │   ├── filters.py                   # Filter management
+│   ├── setup.py                     # Handler registration (UPDATED)
 │   └── utils.py                     # Profile display utilities
 └── 📁 tests/                    # Comprehensive test suite
 ```
 
 ### Key Components
 
+#### 🌐 **Webhook Server** (NEW)
+- **Production Ready**: Flask-based webhook server for cloud deployment
+- **Event Loop Management**: Proper async handling without closure issues
+- **Queue-Based Processing**: Reliable update processing with error handling
+- **Health Monitoring**: Built-in health checks and status endpoints
+- **Token Validation**: Secure webhook endpoint with proper authentication
+
 #### 🎯 **Enhanced Profile Service**
 - **Orchestration**: Coordinates between repository and formatters
 - **Multiple Formats**: Card, expanded, compact display options
+- **Back Navigation**: Seamless navigation between views (NEW)
 - **Caching**: Intelligent caching with configurable TTL
 - **Error Handling**: Graceful degradation with fallback mechanisms
 
 #### 🗄️ **Profile Repository**
 - **Data Access**: Centralized profile data retrieval
+- **High-Volume Support**: Up to 10,000 results per query (UPDATED)
 - **API Integration**: Seamless GraphQL and legacy API support
 - **Null Safety**: Comprehensive null checking throughout
 - **Performance**: Connection pooling and query optimization
@@ -156,6 +182,7 @@ GridDigger/
 #### 🎨 **Profile Formatter**
 - **Strategy Pattern**: Pluggable formatting strategies
 - **Rich Display**: Products, assets, URLs, and metadata
+- **Navigation Controls**: Back buttons and interactive elements (NEW)
 - **Responsive**: Adapts to different display contexts
 - **Extensible**: Easy to add new formatting options
 
@@ -166,12 +193,14 @@ GridDigger/
 - **Profile Display**: < 200ms average  
 - **Cache Hit Rate**: > 85%
 - **Uptime**: 99.9% availability
+- **Result Capacity**: Up to 10,000 profiles per search
 
 ### Reliability Features
 - **Automatic Retry**: Exponential backoff for failed requests
 - **Circuit Breaker**: Prevents cascade failures
 - **Health Monitoring**: Continuous component health checks
 - **Graceful Degradation**: Maintains functionality during partial outages
+- **Event Loop Stability**: Resolved webhook server event loop issues
 
 ### Monitoring & Analytics
 - **User Interaction Tracking**: Comprehensive usage analytics
@@ -181,6 +210,16 @@ GridDigger/
 
 ## 🚀 Deployment
 
+### Railway Deployment (Recommended)
+```bash
+# Automatic deployment via railway.json
+# Uses webhook_server.py as entry point
+# Requires environment variables:
+# - TELEGRAM_BOT_TOKEN
+# - WEBHOOK_URL (Railway app URL)
+# - Database credentials
+```
+
 ### Docker Deployment
 ```bash
 # Build and run
@@ -188,25 +227,32 @@ docker build -t griddigger .
 docker run -d --name griddigger --env-file .env -p 5000:5000 griddigger
 ```
 
-### Production Deployment
+### Local Development
 ```bash
-# With gunicorn (recommended)
-gunicorn --bind 0.0.0.0:$PORT --workers 2 app:main
+# Polling mode (development)
+MODE=polling python3 run_local.py
 
-# Direct execution
-export MODE=webhook
-python3 app.py
+# Webhook mode (testing)
+MODE=webhook WEBHOOK_URL=http://localhost:5000 python3 run_local.py
 ```
 
 ### Health Checks
-- **Endpoint**: `/health` - System health status
+- **Endpoint**: `/` - System health status
 - **Database**: Connection and query performance
 - **API**: GraphQL endpoint availability
-- **Cache**: Redis connectivity and performance
+- **Bot Status**: Webhook configuration and event loop status
 
 ## 📈 Recent Updates
 
-### v2.1.0 - Expand Issue Resolution (Latest)
+### v2.2.0 - Production Deployment & Performance (Latest)
+- ✅ **NEW**: Production-ready webhook server for Railway deployment
+- ✅ **FIXED**: Event loop closure issues causing runtime errors
+- ✅ **ENHANCED**: API result limits increased to 10,000 profiles
+- ✅ **IMPROVED**: Back navigation in expanded profile views
+- ✅ **ADDED**: Comprehensive local testing support for webhook mode
+- ✅ **RESOLVED**: ConversationHandler warnings and deployment issues
+
+### v2.1.0 - Expand Issue Resolution
 - ✅ **FIXED**: Profile expand functionality - "Profile not found" error resolved
 - ✅ **FIXED**: Empty profile ID in callback data (`expand_` → `expand_254`)
 - ✅ **ENHANCED**: ProfileData creation with proper ID preservation
@@ -219,6 +265,62 @@ python3 app.py
 - ✅ **IMPROVED**: Performance optimization with hybrid search system
 
 See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
+## 🛣 Roadmap & Next Steps
+
+### 🎯 **Immediate Improvements**
+
+#### 1. **Enhanced Product & Asset Display**
+- **Expandable Product Lists**: Click to view detailed product information
+- **Asset Deep Dive**: Comprehensive asset details with market data
+- **Interactive Elements**: Buttons for product/asset specific actions
+- **Rich Formatting**: Better visual presentation of complex data
+
+#### 2. **Filter System Optimization**
+- **Remove Solana Filter**: Deprecated filter removal for cleaner interface
+- **Improved Inc Search**: Enhanced incremental search functionality
+- **Smart Defaults**: Context-aware filter presets
+- **Filter History**: Remember user's preferred filter combinations
+
+#### 3. **User Personalization**
+- **Watchlist/Favorites**: Star profiles for quick access
+- **User Profiles**: Personal settings and preferences
+- **Search History**: Quick access to recent searches
+- **Custom Notifications**: Alerts for watchlisted profiles
+
+### 🚀 **Advanced Features**
+
+#### 4. **Social & Collaboration**
+- **Profile Sharing**: Share profiles with other users
+- **Comments & Notes**: Personal annotations on profiles
+- **Community Features**: User-generated content and reviews
+- **Export Functionality**: Export watchlists and data
+
+#### 5. **Analytics & Insights**
+- **Trending Profiles**: Most viewed/searched profiles
+- **Market Insights**: Data-driven market analysis
+- **Comparative Analysis**: Side-by-side profile comparisons
+- **Custom Reports**: Personalized data reports
+
+#### 6. **Integration & API**
+- **Webhook Notifications**: Real-time profile updates
+- **Third-party Integrations**: Connect with external services
+- **API Access**: Programmatic access to bot functionality
+- **Mobile App**: Native mobile application
+
+### 🔧 **Technical Improvements**
+
+#### 7. **Performance & Scalability**
+- **Database Optimization**: Query performance improvements
+- **Caching Strategy**: Advanced caching mechanisms
+- **Load Balancing**: Multi-instance deployment support
+- **CDN Integration**: Static asset delivery optimization
+
+#### 8. **Security & Compliance**
+- **Rate Limiting**: Prevent abuse and ensure fair usage
+- **Data Privacy**: GDPR compliance and user data protection
+- **Audit Logging**: Comprehensive activity tracking
+- **Security Hardening**: Enhanced security measures
 
 ## 🤝 Contributing
 
@@ -243,10 +345,28 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 - **GraphiQL**: [Interactive API Explorer](https://cloud.hasura.io/public/graphiql?endpoint=https://maximum-grackle-73.hasura.app/v1/graphql)
 
 ### Key Queries
-- **Profile Search**: Search by name or asset ticker
+- **Profile Search**: Search by name or asset ticker (up to 10,000 results)
 - **Profile Details**: Complete profile information with relationships
 - **Filter Options**: Available filter values for UI components
 - **Advanced Filtering**: Multi-condition profile filtering
+
+### Webhook Endpoints
+- **Health Check**: `GET /` - System status and health
+- **Telegram Webhook**: `POST /<token>` - Telegram update processing
+- **Status**: Bot initialization and configuration status
+
+## 📚 Documentation
+
+### Core Documentation
+- **[CORE_FUNCTIONALITY.md](CORE_FUNCTIONALITY.md)** - Complete bot functionality and state flow documentation
+- **[FEATURE_DESIGNS.md](FEATURE_DESIGNS.md)** - Detailed feature designs and implementation roadmap
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and updates
+
+### User Flows & State Management
+- **Conversation States**: Complete state machine documentation with user journey flows
+- **Callback Handling**: Comprehensive callback pattern documentation
+- **Data Flow**: End-to-end data processing and API integration flows
+- **Error Handling**: Fallback mechanisms and edge case handling
 
 ## 🆘 Support & Resources
 
@@ -258,21 +378,30 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 ## 📊 Project Status
 
 ### Current State
-- ✅ **Production Ready**: All critical functionality working
+- ✅ **Production Ready**: All critical functionality working with webhook deployment
 - ✅ **Fully Tested**: 20/20 tests passing (100% success rate)
-- ✅ **Performance Optimized**: Sub-second response times
+- ✅ **Performance Optimized**: Sub-second response times with 10k result support
 - ✅ **Error Resilient**: Comprehensive error handling and recovery
 - ✅ **Well Documented**: Complete documentation and changelog
+- ✅ **Cloud Deployed**: Railway-ready with webhook server architecture
 
 ### Quality Metrics
 - **Test Coverage**: 100% for critical paths
 - **Code Quality**: Passes all linting and type checking
-- **Performance**: Meets all response time requirements
+- **Performance**: Meets all response time requirements with high-volume support
 - **Reliability**: 99.9% uptime with graceful degradation
 - **User Experience**: Smooth, intuitive interface with robust error handling
+- **Deployment**: Production-ready webhook server with comprehensive monitoring
+
+### Architecture Status
+- **Legacy API**: Still primary data source (heavily used by core functionality)
+- **V2 API**: Available for backward compatibility and future migration
+- **Service Layer**: Complete with enhanced profile services
+- **Webhook Server**: Production-ready with proper async handling
+- **Testing**: Comprehensive suite with local webhook testing support
 
 ---
 
 **GridDigger** - Bringing The Grid ID data to your fingertips through Telegram 🚀
 
-*Built with ❤️ for the Solana ecosystem*
+*Built with ❤️ for the blockchain ecosystem*
