@@ -30,5 +30,6 @@ def setup(application):
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(conv_handler)  # for flows
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^expand_'))
+    application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^back_to_card_'))
 
     #application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)

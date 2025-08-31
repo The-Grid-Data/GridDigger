@@ -65,6 +65,36 @@ async def expand_profile_callback(update: Update, context: ContextTypes.DEFAULT_
     await query.answer()
 
     try:
+        # Check if this is a back button callback
+        if query.data.startswith('back_to_card_'):
+            profile_id = query.data.split('_')[3].strip()
+            logger.info(f"Back to card requested for profile ID: '{profile_id}' from callback data: '{query.data}'")
+            
+            # Use enhanced service to get card format
+            formatted_profile = enhanced_profile_service.get_profile_card(profile_id)
+            
+            if not formatted_profile:
+                await query.edit_message_text(f"Profile not found. (ID: {profile_id})")
+                return
+            
+            # Get the reply markup from formatted profile
+            reply_markup = formatted_profile.get_inline_keyboard_markup()
+            
+            # Update message back to card format
+            if message_contains_media(query.message):
+                await query.edit_message_caption(
+                    caption=formatted_profile.message_text,
+                    parse_mode='Markdown',
+                    reply_markup=reply_markup
+                )
+            else:
+                await query.edit_message_text(
+                    text=formatted_profile.message_text,
+                    parse_mode='Markdown',
+                    reply_markup=reply_markup
+                )
+            return
+
         # Extract profile ID from the callback data and strip whitespace
         profile_id = query.data.split('_')[1].strip()
         logger.info(f"Expand requested for profile ID: '{profile_id}' from callback data: '{query.data}'")

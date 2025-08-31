@@ -136,6 +136,9 @@ class ExpandedFormatter(ProfileFormatter):
             # Generate URL buttons
             buttons = self._create_url_buttons(profile.urls)
             
+            # Add back button at the end
+            buttons.append([InlineKeyboardButton("← Back", callback_data=f"back_to_card_{profile.id}")])
+            
             return FormattedProfile(
                 message_text="\n".join(message_parts),
                 buttons=buttons,

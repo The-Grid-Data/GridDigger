@@ -48,7 +48,7 @@ def apply_filters(filters):
         combined_where_clause = ", ".join(final_clauses)
         where_clause = f"{{ {combined_where_clause} }}"
         root_field = filters_config["profile_filters"].get("root", "roots")
-        query = f"query queryName {{ {root_field} (where: {where_clause}) {{ id slug }} }}"
+        query = f"query queryName {{ {root_field} (limit: 10000, where: {where_clause}) {{ id slug }} }}"
         print("DEBUG: GraphQL Query:", query)
         print(f"DEBUG: GraphQL URL: {url}")
         print(f"DEBUG: GraphQL Headers: {headers}")
@@ -179,6 +179,7 @@ def search_profiles_v2(search_term=""):
     query = """
     query SearchForProfileNameOrAssetTicker($searchTerm: String1) {
       roots(
+        limit: 10000,
         where: {_or: [{profileInfos: {name: {_contains: $searchTerm}}}, {assets: {ticker: {_contains: $searchTerm}}}]}
       ) {
         id
