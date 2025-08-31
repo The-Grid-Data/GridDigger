@@ -3,6 +3,8 @@ Webhook server for GridDigger Telegram Bot on Railway
 """
 import asyncio
 import logging
+import threading
+import queue
 from flask import Flask, request, jsonify
 from telegram import Update
 from telegram.ext import Application
@@ -18,10 +20,53 @@ logger = get_logger(__name__)
 # Initialize Flask app
 app = Flask(__name__)
 
-# Global bot application
+# Global bot application and event loop
 bot_application = None
+bot_loop = None
+update_queue = queue.Queue()
 
-async def initialize_bot():
+def run_bot_loop():
+    """Run the bot's event loop in a separate thread"""
+    global bot_loop, bot_application
+    
+    bot_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(bot_loop)
+    
+    async def process_updates():
+        """Process updates from the queue"""
+        while True:
+            try:
+                # Check for updates in the queue
+                try:
+                    update_data = update_queue.get(timeout=0.1)
+                    update = Update.de_json(update_data, bot_application.bot)
+                    if update:
+                        await bot_application.process_update(update)
+                        logger.debug(f"Processed update {update.update_id}")
+                    update_queue.task_done()
+                except queue.Empty:
+                    pass
+                except Exception as e:
+                    logger.error(f"Error processing update: {e}")
+                
+                await asyncio.sleep(0.01)  # Small delay to prevent busy waiting
+                
+            except Exception as e:
+                logger.error(f"Error in update processing loop: {e}")
+                await asyncio.sleep(1)  # Longer delay on error
+    
+    try:
+        # Initialize bot in this loop
+        bot_loop.run_until_complete(initialize_bot_async())
+        # Start processing updates
+        bot_loop.run_until_complete(process_updates())
+    except Exception as e:
+        logger.error(f"Error in bot loop: {e}")
+    finally:
+        if bot_loop and not bot_loop.is_closed():
+            bot_loop.close()
+
+async def initialize_bot_async():
     """Initialize the Telegram bot application"""
     global bot_application
     
@@ -58,13 +103,14 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'GridDigger Telegram Bot',
-        'webhook_configured': bool(bot_application)
+        'webhook_configured': bool(bot_application),
+        'bot_loop_running': bot_loop is not None and not bot_loop.is_closed()
     })
 
 @app.route(f'/{Config.TELEGRAM_TOKEN}', methods=['POST'])
 def webhook():
     """Handle incoming webhook requests from Telegram"""
-    global bot_application
+    global bot_application, update_queue
     
     if not bot_application:
         logger.error("Bot application not initialized")
@@ -80,27 +126,8 @@ def webhook():
         
         logger.debug(f"Received update: {update_data}")
         
-        # Create Update object
-        update = Update.de_json(update_data, bot_application.bot)
-        
-        if update:
-            # Process the update in a new event loop
-            def process_update_sync():
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                try:
-                    loop.run_until_complete(bot_application.process_update(update))
-                finally:
-                    loop.close()
-            
-            # Run in a separate thread to avoid blocking Flask
-            import threading
-            thread = threading.Thread(target=process_update_sync)
-            thread.start()
-            
-            logger.debug(f"Processing update {update.update_id}")
-        else:
-            logger.warning("Failed to create Update object from received data")
+        # Add update to queue for processing
+        update_queue.put(update_data)
         
         return jsonify({'status': 'ok'})
         
@@ -108,46 +135,17 @@ def webhook():
         logger.error(f"Error processing webhook: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
-@app.route('/set_webhook', methods=['POST'])
-def set_webhook():
-    """Manually set webhook (for debugging)"""
-    global bot_application
-    
-    if not bot_application:
-        return jsonify({'error': 'Bot not initialized'}), 500
-    
-    try:
-        webhook_url = f"{Config.WEBHOOK_URL}/{Config.TELEGRAM_TOKEN}"
-        
-        # Run async function in sync context
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        async def _set_webhook():
-            await bot_application.bot.set_webhook(
-                url=webhook_url,
-                drop_pending_updates=True
-            )
-        
-        loop.run_until_complete(_set_webhook())
-        loop.close()
-        
-        logger.info(f"Webhook set to: {webhook_url}")
-        return jsonify({'status': 'webhook set', 'url': webhook_url})
-        
-    except Exception as e:
-        logger.error(f"Error setting webhook: {e}")
-        return jsonify({'error': str(e)}), 500
-
 def create_app():
     """Create and configure the Flask app"""
-    # Initialize bot on startup
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+    # Start the bot loop in a separate thread
+    bot_thread = threading.Thread(target=run_bot_loop, daemon=True)
+    bot_thread.start()
     
-    success = loop.run_until_complete(initialize_bot())
+    # Give the bot time to initialize
+    import time
+    time.sleep(3)
     
-    if not success:
+    if not bot_application:
         logger.error("Failed to initialize bot, exiting...")
         exit(1)
     
@@ -170,5 +168,6 @@ if __name__ == '__main__':
     flask_app.run(
         host='0.0.0.0',
         port=Config.PORT,
-        debug=False
+        debug=False,
+        threaded=True
     )

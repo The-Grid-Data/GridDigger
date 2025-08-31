@@ -52,6 +52,12 @@ def check_environment():
         'DB_PASSWORD'
     ]
     
+    # Check for webhook-specific variables if in webhook mode
+    mode = os.getenv('MODE', 'polling').lower()
+    if mode == 'webhook':
+        webhook_vars = ['WEBHOOK_URL']
+        required_vars.extend(webhook_vars)
+    
     missing_vars = []
     placeholder_vars = []
     
@@ -68,6 +74,8 @@ def check_environment():
         print("   1. Copy .env.local.template to .env.local")
         print("   2. Fill in your production credentials")
         print("   3. The script automatically loads .env.local")
+        if mode == 'webhook':
+            print("   4. For webhook mode, set WEBHOOK_URL (e.g., http://localhost:5000)")
         return False
     
     if placeholder_vars:
@@ -77,7 +85,7 @@ def check_environment():
             print(f"   - {var}={os.getenv(var)} ← Replace this")
         return False
     
-    print("✅ All required environment variables are set with real values")
+    print(f"✅ All required environment variables are set with real values (Mode: {mode})")
     return True
 
 def check_database_connection():
@@ -197,20 +205,44 @@ def run_basic_functionality_tests():
         return True
 
 def run_bot():
-    """Run the bot in polling mode"""
+    """Run the bot in the configured mode"""
     try:
-        print("\n🚀 Starting GridDigger bot in local testing mode...")
-        print("   - Mode: Polling")
+        mode = os.getenv('MODE', 'polling').lower()
+        
+        print(f"\n🚀 Starting GridDigger bot in local testing mode...")
+        print(f"   - Mode: {mode.title()}")
         print("   - Database: Production")
         print("   - GraphQL: Production endpoint")
         print("   - Logging: DEBUG level")
-        print("\n📱 Test with your Telegram bot now!")
-        print("   Send /start to begin testing")
-        print("   Press Ctrl+C to stop\n")
         
-        # Import and run the bot
-        from app import main
-        main()
+        if mode == 'webhook':
+            webhook_url = os.getenv('WEBHOOK_URL', 'http://localhost:5000')
+            port = int(os.getenv('PORT', 5000))
+            print(f"   - Webhook URL: {webhook_url}")
+            print(f"   - Port: {port}")
+            print("\n🌐 Webhook server starting...")
+            print("   You can test webhook endpoints at:")
+            print(f"   - Health check: {webhook_url}/")
+            print(f"   - Webhook endpoint: {webhook_url}/{os.getenv('TELEGRAM_BOT_TOKEN', 'TOKEN')}")
+            print("   Press Ctrl+C to stop\n")
+            
+            # Import and run the webhook server
+            from webhook_server import create_app
+            flask_app = create_app()
+            flask_app.run(
+                host='0.0.0.0',
+                port=port,
+                debug=True,
+                threaded=True
+            )
+        else:
+            print("\n📱 Test with your Telegram bot now!")
+            print("   Send /start to begin testing")
+            print("   Press Ctrl+C to stop\n")
+            
+            # Import and run the bot in polling mode
+            from app import main
+            main()
         
     except KeyboardInterrupt:
         print("\n\n🛑 Bot stopped by user")

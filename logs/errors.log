@@ -1863,3 +1863,7 @@ TypeError: 'NoneType' object is not iterable
 2025-08-31 18:00:54 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
 2025-08-31 18:01:29 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
 2025-08-31 18:03:10 - cache - [31mERROR[0m - cache:__init__:81 - Failed to initialize Redis cache: Error 61 connecting to localhost:6379. Connection refused.
+2025-08-31 18:26:11 - root - [31mERROR[0m - api:get_profiles:118 - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 18:26:13 - root - [31mERROR[0m - api:get_profiles:118 - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 18:26:15 - root - [31mERROR[0m - api:get_profiles:118 - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
+2025-08-31 18:26:17 - root - [31mERROR[0m - api:get_profiles:118 - V2 search failed, falling back to legacy: object of type 'NoneType' has no len()
