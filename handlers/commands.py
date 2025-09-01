@@ -50,12 +50,33 @@ async def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(message, reply_markup=keyboard, parse_mode='Markdown')
     return FILTER_MAIN
 
-async def open_source_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    txt = open("handlers/long_messages/open_source.txt", "r").read()
-    await update.message.reply_text(txt)
-
-
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     txt = open("handlers/long_messages/help.txt", "r").read()
     await update.message.reply_text(txt)
+
+
+async def verify_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Verify command - placeholder for future username verification in internal system
+    Currently provides dummy functionality with informative messaging
+    """
+    user = update.effective_user
+    user_id = user.id
+    username = user.username or "No username set"
+    first_name = user.first_name or "Unknown"
+    
+    # Dummy verification logic - placeholder for future implementation
+    verification_message = f"🔐 **Account Verification**\n\n"
+    verification_message += f"**User Information:**\n"
+    verification_message += f"• Name: {first_name}\n"
+    verification_message += f"• Username: @{username}\n"
+    verification_message += f"• User ID: `{user_id}`\n\n"
+    verification_message += f"**Status:** 🚧 *Verification system under development*\n\n"
+    verification_message += f"**What's Coming:**\n"
+    verification_message += f"• Username verification against internal database\n"
+    verification_message += f"• Enhanced access permissions\n"
+    verification_message += f"• Verified user badges and features\n\n"
+    verification_message += f"💡 *This feature will be available in a future update*"
+    
+    await update.message.reply_text(verification_message, parse_mode='Markdown')
 

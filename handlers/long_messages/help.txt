@@ -1,19 +1,14 @@
 Welcome to GridDigger Bot!
 
-GridDigger is your gateway to accessing and exploring the vast Solana database (Grid ID) effortlessly. Here's how you can get started:
+GridDigger is your gateway to accessing and exploring The Grid effortlessly. Here's how you can get started:
 
-You can search the entire Grid ID profiles by hitting /filters to display filters main menu, or directly search for anything by just sending a message to me
-
+You can search the entire Grid profiles by hitting /filters to display filters main menu, or directly search for anything by just sending a message to me
 
 Commands list:
-
     /start - Everything has a start!
-
     /filter - Gets filters main menu
-
     /help - i.e. recursion
-
-    /open_source - Developers are welcomed
+    /verify - Account verification (coming soon)
 
 That's it! If you have any further questions, please contact us:
-@TODO fill in here contact info
+https://t.me/+JYXG1QqcJWE2MDJk

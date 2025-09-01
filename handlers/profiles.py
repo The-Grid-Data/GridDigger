@@ -300,9 +300,10 @@ async def handle_product_detail(query, product_id: str):
         # Create buttons for URLs and back button
         buttons = []
         
-        # Add URL buttons if available
-        if product_data.get('urls'):
-            for url_obj in product_data['urls'][:3]:  # Limit to 3 URLs
+        # Add URL buttons if available with null safety
+        product_urls = product_data.get('urls', []) or []
+        if product_urls:
+            for url_obj in product_urls[:3]:  # Limit to 3 URLs
                 if url_obj and url_obj.get('url'):
                     url_type = url_obj.get('urlType', {}).get('name', 'Link')
                     # Create appropriate button text based on URL type
@@ -374,9 +375,10 @@ async def handle_asset_detail(query, asset_id: str):
         # Create buttons for URLs and back button
         buttons = []
         
-        # Add URL buttons if available
-        if asset_data.get('urls'):
-            for url_obj in asset_data['urls'][:3]:  # Limit to 3 URLs
+        # Add URL buttons if available with null safety
+        asset_urls = asset_data.get('urls', []) or []
+        if asset_urls:
+            for url_obj in asset_urls[:3]:  # Limit to 3 URLs
                 if url_obj and url_obj.get('url'):
                     url_type = url_obj.get('urlType', {}).get('name', 'Link')
                     # Create appropriate button text based on URL type
