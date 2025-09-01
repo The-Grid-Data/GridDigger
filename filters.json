@@ -9,9 +9,8 @@
     "productTypes": "productTypes { name id }",
     "productStatuses": "productStatus { name id }",
     "productLaunchingData": "products { id launchDate }",
-    "assetTypes": "assetType { name id }",
+    "assetTypes": "assetTypes { name id }",
     "assetTickers": "",
-    "assetStandards": "assetStandardSupport { name id }",
     "entityTypes": "entityTypes { name id }",
     "entityName": "",
     "entityCountry": "entities { id name country { Name id } }"
@@ -27,10 +26,9 @@
     "productTypes": "products: {productType: {id: {_eq: value}}}",
     "productStatuses": "products: {productStatus: {id: {_eq: value}}}",
     "entityTypes": "entities: {entityType: {id: {_eq: value}}}",
-    "entityName": "entities: {name: {_ilike: \"%value%\"}}",
-    "assetTickers": "assets: {ticker: {_ilike: \"%value%\"}}",
-    "assetTypes": "assets: {assetType: {id: {_eq: value}}}",
-    "assetStandards": "assets: {assetStandardSupport: {id: {_eq: value}}}"
+    "entityName": "entities: {name: {_contains: value}}",
+    "assetTickers": "assets: {ticker: {_contains: value}}",
+    "assetTypes": "assets: {assetType: {id: {_eq: value}}}"
   },
   "sub_filters": {
     "profile": [
@@ -41,7 +39,7 @@
     ],
     "product": [
       { "label": "Product Type", "type": "multiple", "query": "productTypes" },
-      { "label": "Product Sector", "type": "multiple", "query": "productStatuses" }
+      { "label": "Product Status", "type": "multiple", "query": "productStatuses" }
     ],
     "entity": [
       { "label": "Entity Type", "type": "multiple", "query": "entityTypes" },
@@ -50,8 +48,7 @@
     ],
     "asset": [
       { "label": "Ticker", "type": "searchable", "query": "assetTickers" },
-      { "label": "Asset Type", "type": "multiple", "query": "assetTypes" },
-      { "label": "Asset Standard", "type": "multiple", "query": "assetStandards" }
+      { "label": "Asset Type", "type": "multiple", "query": "assetTypes" }
     ]
   }
 }

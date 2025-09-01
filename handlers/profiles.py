@@ -7,7 +7,7 @@ import api
 from database import increment_expand_count
 from handlers import utils, FILTER_MAIN
 from handlers.filters import show_sub_filters, show_filters_main_menu
-from handlers.utils import show_profiles
+from handlers.utils import show_profiles, generate_applied_filters_text, is_valid_url, is_supported_image_format, download_and_send_image
 
 # Import new enhanced service
 from services.enhanced_profile_service import enhanced_profile_service
@@ -71,6 +71,146 @@ async def handle_filter_main_callback(update: Update, context: ContextTypes.DEFA
 
         return await show_sub_filters(update, context)
     return ConversationHandler.END
+
+
+async def load_more_profiles_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle Load More profiles callback for pagination"""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        data = context.user_data
+        
+        # Check if pagination state exists
+        if 'pagination' not in data:
+            await query.edit_message_text("Pagination state not found. Please start a new search.")
+            return
+        
+        pagination = data['pagination']
+        current_offset = pagination['current_offset']
+        batch_size = pagination['batch_size']
+        total_results = pagination['total_results']
+        all_profiles = pagination.get('all_profiles', [])
+        
+        # Calculate next batch
+        new_offset = current_offset + batch_size
+        end_offset = min(new_offset + batch_size, total_results)
+        
+        # Check if there are more profiles to load
+        if new_offset >= total_results:
+            await query.edit_message_text("No more profiles to load.")
+            return
+        
+        # Update pagination state
+        pagination['current_offset'] = new_offset
+        
+        # Get profiles for this batch
+        profiles_to_show = all_profiles[new_offset:end_offset]
+        
+        # Update the message with new pagination info
+        filter_text = generate_applied_filters_text(data)
+        
+        if filter_text and filter_text != "No filters applied":
+            message = f"🔍 **Showing filtered profiles**\n\n**Applied filters:**\n{filter_text}\n\n**Displaying:** {new_offset + 1}-{end_offset} of {total_results:,} matching profiles"
+        else:
+            message = f"📋 **Showing all profiles**\n\n**Displaying:** {new_offset + 1}-{end_offset} of {total_results:,} total profiles"
+        
+        # Add "Load More" button if there are still more results
+        reply_markup = None
+        if end_offset < total_results:
+            remaining = total_results - end_offset
+            load_more_button = InlineKeyboardButton(
+                f"📄 Load More ({remaining} remaining)",
+                callback_data='load_more_profiles'
+            )
+            reply_markup = InlineKeyboardMarkup([[load_more_button]])
+            message += f"\n\n💡 *Click 'Load More' to see the next {min(batch_size, remaining)} profiles*"
+        else:
+            message += f"\n\n✅ *All {total_results:,} profiles have been loaded*"
+        
+        # Update the message
+        await query.edit_message_text(
+            text=message,
+            reply_markup=reply_markup,
+            parse_mode='Markdown'
+        )
+        
+        # Send the new batch of profiles
+        chat_id = query.message.chat.id
+        for profile in profiles_to_show:
+            try:
+                await send_profile_message_direct(chat_id, context, profile)
+            except Exception as e:
+                await context.bot.send_message(chat_id=chat_id, text=f"Error loading profile: {e}")
+        
+        # Send monitoring message if enabled
+        if MONITORING_GROUP_ID:
+            user = update.effective_user
+            monitoring_message_text = (
+                f"User {user.id} ({user.username}) loaded more profiles "
+                f"(batch {new_offset + 1}-{end_offset} of {total_results})"
+            )
+            try:
+                await context.bot.send_message(
+                    text=monitoring_message_text,
+                    chat_id=MONITORING_GROUP_ID
+                )
+            except Exception as e:
+                print(f"Warning: Could not send monitoring message: {e}")
+                
+    except Exception as e:
+        logger.error(f"Error in load_more_profiles_callback: {e}")
+        await query.edit_message_text("Error loading more profiles. Please try again.")
+
+
+async def send_profile_message_direct(chat_id: int, context: ContextTypes.DEFAULT_TYPE, profile):
+    """Send profile message directly to chat_id (for pagination)"""
+    profile_id = profile['id']
+    
+    # Use enhanced service to get formatted profile card
+    formatted_profile = enhanced_profile_service.get_profile_card(profile_id)
+    
+    if not formatted_profile:
+        # Fallback to basic message if service fails
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text=f"*Profile ID:* {profile_id}\n*Error:* Unable to load profile",
+            parse_mode='Markdown'
+        )
+        return
+    
+    # Get reply markup from formatted profile
+    reply_markup = formatted_profile.get_inline_keyboard_markup()
+    
+    # Handle media if available
+    if formatted_profile.has_media and formatted_profile.media_url:
+        logo_url = formatted_profile.media_url
+        
+        # Check if we can display the image
+        if is_valid_url(logo_url) and is_supported_image_format(logo_url):
+            await download_and_send_image(
+                logo_url,
+                chat_id,
+                formatted_profile.message_text,
+                reply_markup,
+                context
+            )
+        else:
+            # Send as text message if image can't be displayed
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=formatted_profile.message_text,
+                parse_mode='Markdown',
+                reply_markup=reply_markup
+            )
+    else:
+        # Send as text message (no media)
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text=formatted_profile.message_text,
+            parse_mode='Markdown',
+            reply_markup=reply_markup
+        )
 
 
 async def expand_profile_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):

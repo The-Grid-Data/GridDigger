@@ -24,7 +24,21 @@ def apply_filters(filters):
         where_clause = filters_config["profile_filters"].get(filter_name)
         print(f"DEBUG: filter_name = {filter_name}, value = {value}, where_clause = {where_clause}")
         if where_clause:
-            clause = where_clause.replace('value', f'{value}')
+            # Properly quote string values for GraphQL
+            # Check if value is numeric (can be used unquoted) or string (needs quotes)
+            try:
+                # Try to convert to int/float - if successful, use unquoted
+                if '.' in str(value):
+                    float(value)
+                    formatted_value = str(value)
+                else:
+                    int(value)
+                    formatted_value = str(value)
+            except (ValueError, TypeError):
+                # If conversion fails, it's a string that needs quotes
+                formatted_value = f'"{value}"'
+            
+            clause = where_clause.replace('value', formatted_value)
             field = clause.split(":")[0].strip()
             if field in combined_clauses:
                 combined_clauses[field].append(clause)
@@ -104,20 +118,6 @@ def get_profiles(data):
                     key = 'profileNameSearch_query'
             filter_name = key.replace('_query', '')
             filters[filter_name] = value
-    print("filters", filters)
-
-    # Check if this is a simple search that can use V2 function
-    if len(filters) == 1 and 'profileNameSearch' in filters:
-        search_term = filters['profileNameSearch']
-        print(f"DEBUG: Using V2 search for simple search: '{search_term}'")
-        try:
-            results = search_profiles_v2(search_term)
-            print(f"DEBUG: V2 search returned {len(results)} results")
-            return results if results is not None else []
-        except Exception as e:
-            logging.error(f"V2 search failed, falling back to legacy: {e}")
-            # Fall through to legacy method
-
     # Solana filter removed as part of Phase 1 UX improvements
     # Users can now see all profiles without automatic filtering
 
@@ -125,6 +125,22 @@ def get_profiles(data):
         filters = {
             "profileNameSearch": "",
         }
+
+    # Check if this is a simple search that can use V2 function
+    if len(filters) == 1 and 'profileNameSearch' in filters:
+        search_term = filters['profileNameSearch']
+        
+        # If search term is empty, get ALL profiles instead of using WHERE clause
+        if not search_term or search_term.strip() == "":
+            results = get_all_profiles()
+            return results if results is not None else []
+        else:
+            try:
+                results = search_profiles_v2(search_term)
+                return results if results is not None else []
+            except Exception as e:
+                logging.error(f"V2 search failed, falling back to legacy: {e}")
+                # Fall through to legacy method
 
     filters_list = [(filter_name, value) for filter_name, value in filters.items()]
     print(f"DEBUG: filters_list = {filters_list}")
@@ -201,6 +217,35 @@ def search_profiles_v2(search_term=""):
         return response_data.get('data', {}).get('roots', [])
     except Exception as e:
         logging.error(f"Error in search_profiles_v2: {e}")
+        return []
+
+
+def get_all_profiles():
+    """
+    Get ALL profiles without any filtering - used when no search criteria are provided
+    This should return the same count as get_total_profile_count()
+    """
+    try:
+        query = """
+        query getAllProfiles {
+          roots(limit: 10000) {
+            id
+            slug
+          }
+        }
+        """
+        
+        response = requests.post(url, headers=headers, json={'query': query})
+        response_data = response.json()
+        
+        if 'errors' in response_data:
+            logging.error(f"GraphQL query error in get_all_profiles: {response_data['errors']}")
+            return []
+        
+        return response_data.get('data', {}).get('roots', [])
+        
+    except Exception as e:
+        logging.error(f"Error in get_all_profiles: {e}")
         return []
 
 

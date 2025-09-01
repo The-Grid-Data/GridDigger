@@ -2,7 +2,7 @@ from telegram.ext import ConversationHandler, CommandHandler, filters, MessageHa
 
 from handlers import FILTER_MAIN, FILTER_SUB, FILTER_CHOICES, FILTER_FILLING
 from handlers.commands import start, help_command, filter, verify_command
-from handlers.profiles import handle_filter_main_callback, expand_profile_callback
+from handlers.profiles import handle_filter_main_callback, expand_profile_callback, load_more_profiles_callback
 from handlers.filters import handle_filter_main_text, handle_filter_sub_callback, handle_filter_choices_callback, \
     handle_filter_filling_text
 
@@ -35,5 +35,6 @@ def setup(application):
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^asset_detail_'))
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^more_products_'))
     application.add_handler(CallbackQueryHandler(expand_profile_callback, pattern=r'^more_assets_'))
+    application.add_handler(CallbackQueryHandler(load_more_profiles_callback, pattern=r'^load_more_profiles$'))
 
     #application.run_polling(allowed_updates=Update.ALL_TYPES, poll_interval=0)

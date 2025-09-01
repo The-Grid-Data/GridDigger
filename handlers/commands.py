@@ -4,7 +4,7 @@ from telegram.ext import ContextTypes
 import api
 import database
 from handlers import FILTER_MAIN
-from handlers.utils import generate_applied_filters_text, create_main_menu_filter_keyboard
+from handlers.utils import generate_applied_filters_text, create_main_menu_filter_keyboard, escape_markdown
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -18,6 +18,10 @@ async def filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user_data = context.user_data
     user_data.setdefault("FILTERS", {})
     user_data.setdefault("inc_search", False)
+    
+    # Reset pagination when starting a new filter session
+    from handlers.utils import reset_pagination
+    reset_pagination(user_data)
     
     # Get total profile count for first-time users
     total_profiles = api.get_total_profile_count()
@@ -65,11 +69,15 @@ async def verify_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     username = user.username or "No username set"
     first_name = user.first_name or "Unknown"
     
+    # Escape user data to prevent Markdown parsing errors
+    escaped_first_name = escape_markdown(first_name)
+    escaped_username = escape_markdown(username)
+    
     # Dummy verification logic - placeholder for future implementation
     verification_message = f"🔐 **Account Verification**\n\n"
     verification_message += f"**User Information:**\n"
-    verification_message += f"• Name: {first_name}\n"
-    verification_message += f"• Username: @{username}\n"
+    verification_message += f"• Name: {escaped_first_name}\n"
+    verification_message += f"• Username: @{escaped_username}\n"
     verification_message += f"• User ID: `{user_id}`\n\n"
     verification_message += f"**Status:** 🚧 *Verification system under development*\n\n"
     verification_message += f"**What's Coming:**\n"

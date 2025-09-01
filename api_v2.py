@@ -304,7 +304,7 @@ class GridAPIv2:
             'profileStatuses': 'profileStatuses { id name }',
             'productTypes': 'productTypes { id name }',
             'productStatuses': 'productStatus { id name }',
-            'assetTypes': 'assetType { id name }',
+            'assetTypes': 'assetTypes { id name }',
             'assetStandards': 'assetStandardSupport { id name }',
             'entityTypes': 'entityTypes { id name }'
         }

@@ -24,6 +24,9 @@ else:
 
 def setup_logging():
     """Setup enhanced logging for local testing"""
+    # Create logs directory if it doesn't exist
+    Path('logs').mkdir(exist_ok=True)
+
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -32,9 +35,6 @@ def setup_logging():
             logging.FileHandler('logs/local_test.log', mode='a')
         ]
     )
-    
-    # Create logs directory if it doesn't exist
-    Path('logs').mkdir(exist_ok=True)
     
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)

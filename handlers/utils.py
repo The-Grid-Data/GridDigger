@@ -63,12 +63,36 @@ async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE
 
     increment_fetch_count(update.effective_user.id)
     
+    # Initialize pagination state
+    if 'pagination' not in data:
+        data['pagination'] = {
+            'current_offset': 0,
+            'batch_size': 5,
+            'total_results': len(profiles),
+            'all_profiles': profiles  # Store all profiles for pagination
+        }
+    else:
+        # Update total results and profiles if they've changed
+        data['pagination']['total_results'] = len(profiles)
+        data['pagination']['all_profiles'] = profiles
+    
+    # Get pagination info
+    pagination = data['pagination']
+    current_offset = pagination['current_offset']
+    batch_size = pagination['batch_size']
+    total_results = pagination['total_results']
+    
+    # Calculate batch to show
+    end_offset = min(current_offset + batch_size, total_results)
+    profiles_to_show = profiles[current_offset:end_offset]
+    
     # Send a monitoring message with user details (only if MONITORING_GROUP_ID is set)
     if MONITORING_GROUP_ID:
         user = update.effective_user
         monitoring_message_text = (
             f"User {user.id} ({user.username}) showed "
-            f"{min(len(profiles), 20)} of these settings:\n{generate_applied_filters_text(data)}"
+            f"{len(profiles_to_show)} profiles (batch {current_offset + 1}-{end_offset} of {total_results}) "
+            f"with settings:\n{generate_applied_filters_text(data)}"
         )
         try:
             await context.bot.send_message(
@@ -86,24 +110,37 @@ async def show_profiles(data, update: Update, context: ContextTypes.DEFAULT_TYPE
         chat_id = update.effective_chat.id
         message_id = update.effective_message.message_id
     
-    # edit the message and remove the buttons
-    # Enhanced message when showing profiles
+    # Enhanced message with pagination info
     total_profiles = api.get_total_profile_count()
     filter_text = generate_applied_filters_text(data)
     
+    # Create pagination status message
     if filter_text and filter_text != "No filters applied":
-        message = f"🔍 **Showing filtered profiles**\n\n**Applied filters:**\n{filter_text}\n\n**Displaying:** {min(len(profiles), 20)} of {len(profiles):,} matching profiles"
+        message = f"🔍 **Showing filtered profiles**\n\n**Applied filters:**\n{filter_text}\n\n**Displaying:** {current_offset + 1}-{end_offset} of {total_results:,} matching profiles"
     else:
-        message = f"📋 **Showing all profiles**\n\n**Displaying:** {min(len(profiles), 20)} of {total_profiles:,} total profiles"
+        message = f"📋 **Showing all profiles**\n\n**Displaying:** {current_offset + 1}-{end_offset} of {total_results:,} total profiles"
+    
+    # Add "Load More" button if there are more results
+    reply_markup = None
+    if end_offset < total_results:
+        remaining = total_results - end_offset
+        load_more_button = InlineKeyboardButton(
+            f"📄 Load More ({remaining} remaining)",
+            callback_data='load_more_profiles'
+        )
+        reply_markup = InlineKeyboardMarkup([[load_more_button]])
+        message += f"\n\n💡 *Click 'Load More' to see the next {min(batch_size, remaining)} profiles*"
     
     await context.bot.edit_message_text(
         chat_id=chat_id,
         message_id=message_id,
         text=message,
-        reply_markup=None,
+        reply_markup=reply_markup,
         parse_mode='Markdown'
     )
-    for profile in profiles[:20]:
+    
+    # Send the current batch of profiles (NO HARD LIMIT!)
+    for profile in profiles_to_show:
         try:
             await send_profile_message(update, context, profile)
         except Exception as e:
@@ -279,8 +316,17 @@ def convert_image(url):
 def reset_filters(data) -> bool:
     if data.get('FILTERS'):
         data['FILTERS'] = {}
+        # Reset pagination when filters change
+        if 'pagination' in data:
+            del data['pagination']
         return True
     return False
+
+
+def reset_pagination(data):
+    """Reset pagination state when starting a new search"""
+    if 'pagination' in data:
+        del data['pagination']
 
 
     # print(data)
@@ -301,39 +347,42 @@ def generate_applied_filters_text(data):
     # Iterate through the filters and extract the values
     for key, value in data["FILTERS"].items():
         if not key.endswith('_query') and value:  # Only include non-empty values
+            # Escape the value to prevent Markdown parsing errors
+            escaped_value = escape_markdown(str(value))
+            
             # Make filter names more user-friendly
             if key == 'profileNameSearch':
-                filters_text['Profile Name'] = f'"{value}"'
+                filters_text['Profile Name'] = f'"{escaped_value}"'
             elif key == 'profileDeepSearch':
-                filters_text['Deep Search'] = f'"{value}"'
+                filters_text['Deep Search'] = f'"{escaped_value}"'
             elif key == 'profileTypes':
-                filters_text['Profile Type'] = value
+                filters_text['Profile Type'] = escaped_value
             elif key == 'profileSectors':
-                filters_text['Sector'] = value
+                filters_text['Sector'] = escaped_value
             elif key == 'profileStatuses':
-                filters_text['Status'] = value
+                filters_text['Status'] = escaped_value
             elif key == 'productTypes':
-                filters_text['Product Type'] = value
+                filters_text['Product Type'] = escaped_value
             elif key == 'productStatuses':
-                filters_text['Product Status'] = value
+                filters_text['Product Status'] = escaped_value
             elif key == 'assetTickers':
-                filters_text['Asset Ticker'] = f'"{value}"'
+                filters_text['Asset Ticker'] = f'"{escaped_value}"'
             elif key == 'assetTypes':
-                filters_text['Asset Type'] = value
+                filters_text['Asset Type'] = escaped_value
             elif key == 'assetStandards':
-                filters_text['Asset Standard'] = value
+                filters_text['Asset Standard'] = escaped_value
             elif key == 'entityTypes':
-                filters_text['Entity Type'] = value
+                filters_text['Entity Type'] = escaped_value
             elif key == 'entityName':
-                filters_text['Entity Name'] = f'"{value}"'
+                filters_text['Entity Name'] = f'"{escaped_value}"'
             else:
-                filters_text[key] = value
+                filters_text[key] = escaped_value
 
     # Generate the output text with better formatting
     if not filters_text:
         return "No filters applied"
     
-    result = '\n'.join(f"• {key}: {value}" for key, value in filters_text.items())
+    result = '\n'.join(f"• {escape_markdown(key)}: {value}" for key, value in filters_text.items())
     return result
 
 

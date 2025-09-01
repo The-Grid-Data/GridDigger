@@ -1,0 +1,221 @@
+{
+  "timestamp": "2025-09-01T15:48:32.737055",
+  "test_summary": {
+    "total_tests": 22,
+    "passed_tests": 21,
+    "failed_tests": 1,
+    "success_rate": 95.45454545454545,
+    "total_time": 2.9436540603637695,
+    "baseline_count": 1983
+  },
+  "failed_tests": [
+    {
+      "filter_name": "deep_search",
+      "filter_value": "protocol",
+      "expected_count": null,
+      "actual_count": 0,
+      "execution_time": 0.08949875831604004,
+      "error_message": "No results for deep_search"
+    }
+  ],
+  "all_results": [
+    {
+      "filter_name": "no_filters",
+      "filter_value": "empty",
+      "expected_count": 1983,
+      "actual_count": 1983,
+      "execution_time": 0.17011284828186035,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileNameSearch",
+      "filter_value": "",
+      "expected_count": 1983,
+      "actual_count": 1983,
+      "execution_time": 0.15534687042236328,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileNameSearch",
+      "filter_value": "Bitcoin",
+      "expected_count": null,
+      "actual_count": 11,
+      "execution_time": 0.12195277214050293,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileNameSearch",
+      "filter_value": "Ethereum",
+      "expected_count": null,
+      "actual_count": 2,
+      "execution_time": 0.1250298023223877,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileNameSearch",
+      "filter_value": "NonExistentProtocol12345",
+      "expected_count": 0,
+      "actual_count": 0,
+      "execution_time": 0.11479496955871582,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileNameSearch",
+      "filter_value": "a",
+      "expected_count": null,
+      "actual_count": 1200,
+      "execution_time": 0.18564200401306152,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "quick_search",
+      "filter_value": "protocol",
+      "expected_count": null,
+      "actual_count": 33,
+      "execution_time": 0.11962699890136719,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "deep_search",
+      "filter_value": "protocol",
+      "expected_count": null,
+      "actual_count": 0,
+      "execution_time": 0.08949875831604004,
+      "success": false,
+      "error_message": "No results for deep_search"
+    },
+    {
+      "filter_name": "profileType",
+      "filter_value": "  (ID: 0)",
+      "expected_count": null,
+      "actual_count": 80,
+      "execution_time": 0.10426187515258789,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileType",
+      "filter_value": "Company (ID: 2)",
+      "expected_count": null,
+      "actual_count": 1177,
+      "execution_time": 0.19643402099609375,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileType",
+      "filter_value": "DAO (ID: 1)",
+      "expected_count": null,
+      "actual_count": 54,
+      "execution_time": 0.09335017204284668,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileSector",
+      "filter_value": "  (ID: 0)",
+      "expected_count": null,
+      "actual_count": 67,
+      "execution_time": 0.09900307655334473,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileSector",
+      "filter_value": "Asset Management (ID: 9)",
+      "expected_count": null,
+      "actual_count": 126,
+      "execution_time": 0.10233402252197266,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "profileSector",
+      "filter_value": "Blockchain Platforms (ID: 19)",
+      "expected_count": null,
+      "actual_count": 64,
+      "execution_time": 0.0980689525604248,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "assetTickers",
+      "filter_value": "BTC",
+      "expected_count": null,
+      "actual_count": 13,
+      "execution_time": 0.09839320182800293,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "assetTickers",
+      "filter_value": "ETH",
+      "expected_count": null,
+      "actual_count": 11,
+      "execution_time": 0.12343215942382812,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "assetTickers",
+      "filter_value": "USDC",
+      "expected_count": null,
+      "actual_count": 5,
+      "execution_time": 0.09834003448486328,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "assetTickers",
+      "filter_value": "NonExistentTicker123",
+      "expected_count": 0,
+      "actual_count": 0,
+      "execution_time": 0.09424781799316406,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "entityName",
+      "filter_value": "Foundation",
+      "expected_count": null,
+      "actual_count": 103,
+      "execution_time": 0.09777712821960449,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "entityName",
+      "filter_value": "Labs",
+      "expected_count": null,
+      "actual_count": 200,
+      "execution_time": 0.10222887992858887,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "entityName",
+      "filter_value": "Protocol",
+      "expected_count": null,
+      "actual_count": 6,
+      "execution_time": 0.098114013671875,
+      "success": true,
+      "error_message": null
+    },
+    {
+      "filter_name": "entityName",
+      "filter_value": "NonExistentEntity123",
+      "expected_count": 0,
+      "actual_count": 0,
+      "execution_time": 0.09619784355163574,
+      "success": true,
+      "error_message": null
+    }
+  ]
+}

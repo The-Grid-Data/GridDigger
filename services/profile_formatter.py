@@ -22,6 +22,36 @@ class ProfileFormatter(ABC):
     def get_supported_fields(self) -> List[str]:
         """Get list of fields this formatter supports"""
         pass
+    
+    def _validate_markdown_entities(self, text: str) -> bool:
+        """Validate that markdown entities are properly paired"""
+        if not text:
+            return True
+        
+        # Check for unmatched markdown entities that could cause parsing errors
+        entity_pairs = [
+            ('*', '*'),  # Bold
+            ('_', '_'),  # Italic
+            ('`', '`'),  # Code
+            ('[', ']'),  # Links
+        ]
+        
+        for open_char, close_char in entity_pairs:
+            open_count = text.count(open_char)
+            close_count = text.count(close_char)
+            
+            # For same character pairs (*, _, `), count must be even
+            if open_char == close_char:
+                if open_count % 2 != 0:
+                    logger.warning(f"Unmatched {open_char} entities in text: {text[:100]}...")
+                    return False
+            else:
+                # For different character pairs ([, ]), counts must match
+                if open_count != close_count:
+                    logger.warning(f"Unmatched {open_char}{close_char} entities in text: {text[:100]}...")
+                    return False
+        
+        return True
 
 
 class CardFormatter(ProfileFormatter):
@@ -129,8 +159,18 @@ class CardFormatter(ProfileFormatter):
             
             buttons.append([InlineKeyboardButton("📋 Expand Profile", callback_data=f"expand_{profile.id}")])
             
+            message_text = "\n".join(message_parts)
+            
+            # Validate markdown entities before returning
+            if not self._validate_markdown_entities(message_text):
+                logger.warning(f"Invalid markdown entities detected in profile {profile.id}, using fallback formatting")
+                # Fallback: create a simpler message without complex formatting
+                safe_name = profile.name.replace('*', '•').replace('_', '-').replace('[', '(').replace(']', ')')
+                safe_sector = (profile.sector.name if profile.sector else '-').replace('*', '•').replace('_', '-')
+                message_text = f"*Name:* {safe_name}\n*Sector:* {safe_sector}\n*Description:* Profile information available"
+            
             return FormattedProfile(
-                message_text="\n".join(message_parts),
+                message_text=message_text,
                 buttons=buttons,
                 has_media=bool(profile.logo),
                 media_url=profile.logo
@@ -148,11 +188,17 @@ class CardFormatter(ProfileFormatter):
         if not text:
             return text
         
-        # Escape problematic characters that cause entity parsing errors
-        # More comprehensive escaping to prevent "can't find end of entity" errors
-        problematic_chars = ['_', '*', '[', ']', '`', '\\', '(', ')']
+        # Use a safer approach - only escape critical markdown characters
+        # that actually cause entity parsing issues in Telegram
+        # Reference: https://core.telegram.org/bots/api#markdown-style
         
-        for char in problematic_chars:
+        # First escape backslashes to prevent double escaping
+        text = text.replace('\\', '\\\\')
+        
+        # Then escape only the critical markdown characters
+        critical_chars = ['*', '_', '`', '[', ']']
+        
+        for char in critical_chars:
             text = text.replace(char, f'\\{char}')
         
         return text
@@ -167,28 +213,38 @@ class ExpandedFormatter(ProfileFormatter):
     def format(self, profile: ProfileData) -> FormattedProfile:
         """Format profile for expanded display"""
         try:
+            # Escape all text fields to prevent Markdown parsing errors
+            safe_name = self._escape_markdown_text(profile.name)
+            safe_sector = self._escape_markdown_text(profile.sector.name if profile.sector else '-')
+            safe_type = self._escape_markdown_text(profile.profile_type.name if profile.profile_type else '-')
+            safe_status = self._escape_markdown_text(profile.status.name if profile.status else '-')
+            safe_slug = self._escape_markdown_text(profile.slug or '-')
+            safe_description_long = self._escape_markdown_text(profile.description_long or '-')
+            safe_tag_line = self._escape_markdown_text(profile.tag_line or '-')
+            
             message_parts = [
                 f"*ID:* {profile.id}",
-                f"*Name:* {profile.name}",
-                f"*Sector:* {profile.sector.name if profile.sector else '-'}",
-                f"*Type:* {profile.profile_type.name if profile.profile_type else '-'}",
-                f"*Status:* {profile.status.name if profile.status else '-'}",
+                f"*Name:* {safe_name}",
+                f"*Sector:* {safe_sector}",
+                f"*Type:* {safe_type}",
+                f"*Status:* {safe_status}",
             ]
             
             # Add founding date if available
             if profile.founding_date:
-                message_parts.append(f"*Founding Date:* {profile.founding_date}")
+                safe_founding_date = self._escape_markdown_text(str(profile.founding_date))
+                message_parts.append(f"*Founding Date:* {safe_founding_date}")
             
             # Add slug
-            message_parts.append(f"*Slug:* {profile.slug or '-'}")
+            message_parts.append(f"*Slug:* {safe_slug}")
             
             # Add descriptions
-            message_parts.append(f"*Long Description:* {profile.description_long or '-'}")
-            message_parts.append(f"*Tag Line:* {profile.tag_line or '-'}")
+            message_parts.append(f"*Long Description:* {safe_description_long}")
+            message_parts.append(f"*Tag Line:* {safe_tag_line}")
             
             # Add products (null-safe)
             if profile.products:
-                product_names = [p.name for p in profile.products if p.name and p.name != 'Unknown']
+                product_names = [self._escape_markdown_text(p.name) for p in profile.products if p.name and p.name != 'Unknown']
                 if product_names:
                     message_parts.append(f"*Main Product Type:* {', '.join(product_names)}")
                 else:
@@ -198,7 +254,7 @@ class ExpandedFormatter(ProfileFormatter):
             
             # Add assets (null-safe)
             if profile.assets:
-                asset_names = [a.name for a in profile.assets if a.name and a.name != 'Unknown']
+                asset_names = [self._escape_markdown_text(a.name) for a in profile.assets if a.name and a.name != 'Unknown']
                 if asset_names:
                     message_parts.append(f"*Issued Assets:* {', '.join(asset_names)}")
                 else:
@@ -212,13 +268,24 @@ class ExpandedFormatter(ProfileFormatter):
             # Add discovery button
             if profile.slug:
                 discovery_url = f"https://discovery.thegrid.id/profiles/{profile.slug}"
-                buttons.append([InlineKeyboardButton(f"🔍 Open {profile.name} on Discovery", url=discovery_url)])
+                safe_discovery_name = self._escape_markdown_text(profile.name)
+                buttons.append([InlineKeyboardButton(f"🔍 Open {safe_discovery_name} on Discovery", url=discovery_url)])
             
             # Add back button at the end
             buttons.append([InlineKeyboardButton("← Back", callback_data=f"back_to_card_{profile.id}")])
             
+            message_text = "\n".join(message_parts)
+            
+            # Validate markdown entities before returning
+            if not self._validate_markdown_entities(message_text):
+                logger.warning(f"Invalid markdown entities detected in expanded profile {profile.id}, using fallback formatting")
+                # Fallback: create a simpler message without complex formatting
+                safe_name = profile.name.replace('*', '•').replace('_', '-').replace('[', '(').replace(']', ')')
+                safe_sector = (profile.sector.name if profile.sector else '-').replace('*', '•').replace('_', '-')
+                message_text = f"*Name:* {safe_name}\n*Sector:* {safe_sector}\n*Description:* Expanded profile information available"
+            
             return FormattedProfile(
-                message_text="\n".join(message_parts),
+                message_text=message_text,
                 buttons=buttons,
                 has_media=bool(profile.logo),
                 media_url=profile.logo
@@ -226,8 +293,9 @@ class ExpandedFormatter(ProfileFormatter):
             
         except Exception as e:
             logger.error(f"Error formatting expanded profile {profile.id}: {e}")
+            safe_error_name = self._escape_markdown_text(profile.name)
             return FormattedProfile(
-                message_text=f"*Name:* {profile.name}\n*Error:* Unable to format expanded profile",
+                message_text=f"*Name:* {safe_error_name}\n*Error:* Unable to format expanded profile",
                 buttons=[]
             )
     
@@ -264,6 +332,26 @@ class ExpandedFormatter(ProfileFormatter):
         
         return buttons
     
+    def _escape_markdown_text(self, text: str) -> str:
+        """Escape special markdown characters to prevent Telegram parsing errors"""
+        if not text:
+            return text
+        
+        # Use a safer approach - only escape critical markdown characters
+        # that actually cause entity parsing issues in Telegram
+        # Reference: https://core.telegram.org/bots/api#markdown-style
+        
+        # First escape backslashes to prevent double escaping
+        text = text.replace('\\', '\\\\')
+        
+        # Then escape only the critical markdown characters
+        critical_chars = ['*', '_', '`', '[', ']']
+        
+        for char in critical_chars:
+            text = text.replace(char, f'\\{char}')
+        
+        return text
+    
     def get_supported_fields(self) -> List[str]:
         return [
             'id', 'name', 'sector', 'profile_type', 'status', 'founding_date',
@@ -277,7 +365,11 @@ class CompactFormatter(ProfileFormatter):
     def format(self, profile: ProfileData) -> FormattedProfile:
         """Format profile for compact display"""
         try:
-            message_text = f"*{profile.name}* ({profile.sector.name if profile.sector else 'Unknown'})"
+            # Escape text to prevent Markdown parsing errors
+            safe_name = self._escape_markdown_text(profile.name)
+            safe_sector = self._escape_markdown_text(profile.sector.name if profile.sector else 'Unknown')
+            
+            message_text = f"*{safe_name}* ({safe_sector})"
             
             buttons = [[InlineKeyboardButton("Expand", callback_data=f"expand_{profile.id}")]]
             
@@ -289,10 +381,31 @@ class CompactFormatter(ProfileFormatter):
             
         except Exception as e:
             logger.error(f"Error formatting compact profile {profile.id}: {e}")
+            safe_error_name = self._escape_markdown_text(profile.name)
             return FormattedProfile(
-                message_text=f"*{profile.name}*",
+                message_text=f"*{safe_error_name}*",
                 buttons=[]
             )
+    
+    def _escape_markdown_text(self, text: str) -> str:
+        """Escape special markdown characters to prevent Telegram parsing errors"""
+        if not text:
+            return text
+        
+        # Use a safer approach - only escape critical markdown characters
+        # that actually cause entity parsing issues in Telegram
+        # Reference: https://core.telegram.org/bots/api#markdown-style
+        
+        # First escape backslashes to prevent double escaping
+        text = text.replace('\\', '\\\\')
+        
+        # Then escape only the critical markdown characters
+        critical_chars = ['*', '_', '`', '[', ']']
+        
+        for char in critical_chars:
+            text = text.replace(char, f'\\{char}')
+        
+        return text
     
     def get_supported_fields(self) -> List[str]:
         return ['name', 'sector']
